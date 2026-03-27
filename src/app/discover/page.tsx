@@ -5,8 +5,15 @@ import DiscoverFeed from "@/components/DiscoverFeed";
 export default function DiscoverPage() {
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6 text-[var(--foreground)]">Discover Profiles</h1>
-      <DiscoverFeed />
+      <h1
+        className="animate-fade-in-up delay-0 text-2xl font-bold mb-6 text-[var(--foreground)]"
+        style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+      >
+        Discover Profiles
+      </h1>
+      <div className="animate-fade-in-up delay-1">
+        <DiscoverFeed />
+      </div>
     </div>
   );
 }

@@ -31,12 +31,17 @@ export default function DashboardPage() {
 
   if (!isConnected || !account) {
     return (
-      <div className="text-center py-16">
-        <h1 className="text-3xl font-bold mb-4 text-[var(--foreground)]">Dashboard</h1>
+      <div className="text-center py-16 animate-fade-in-up">
+        <h1
+          className="text-3xl font-bold mb-4 text-[var(--foreground)]"
+          style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+        >
+          Dashboard
+        </h1>
         <p className="text-[var(--muted)] mb-8">Connect your wallet to view your dashboard.</p>
         <button
           onClick={openConnect}
-          className="gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:opacity-90 transition-opacity"
+          className="btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:shadow-[0_8px_28px_rgba(244,63,94,0.4)] hover:scale-105 transition-all duration-300"
         >
           Connect Wallet
         </button>
@@ -45,16 +50,20 @@ export default function DashboardPage() {
   }
 
   if (loading) {
-    return <p className="text-center text-[var(--muted)] py-16">Loading...</p>;
+    return (
+      <div className="flex justify-center py-16">
+        <div className="spinner" />
+      </div>
+    );
   }
 
   if (!profile?.exists) {
     return (
-      <div className="text-center py-16">
+      <div className="text-center py-16 animate-fade-in">
         <h1 className="text-2xl font-bold mb-4 text-[var(--foreground)]">No Profile Yet</h1>
         <a
           href="/edit"
-          className="text-[var(--accent)] hover:text-[var(--accent-hover)]"
+          className="text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
         >
           Create your profile
         </a>
@@ -64,45 +73,56 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">Dashboard</h1>
+      <h1
+        className="animate-fade-in-up delay-0 text-2xl font-bold mb-2 text-[var(--foreground)]"
+        style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+      >
+        Dashboard
+      </h1>
       {username && (
-        <p className="text-sm text-[var(--muted)] mb-6">{username}</p>
+        <p className="animate-fade-in-up delay-1 text-sm text-[var(--muted)] mb-6">{username}</p>
       )}
 
+      {/* Stat cards with stagger */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-[linear-gradient(135deg,#fff7ed,#fce7f3)] rounded-2xl p-4 text-center">
+        <div className="animate-scale-in delay-1 bg-[linear-gradient(135deg,#fff7ed,#fce7f3)] rounded-2xl p-4 text-center hover-pop">
           <p className="text-2xl font-bold text-[var(--foreground)]">{formatEther(profile.totalTips)}</p>
           <p className="text-xs text-[var(--muted)]">INIT Received</p>
         </div>
-        <div className="bg-[linear-gradient(135deg,#fce7f3,#fef3c7)] rounded-2xl p-4 text-center">
+        <div className="animate-scale-in delay-2 bg-[linear-gradient(135deg,#fce7f3,#fef3c7)] rounded-2xl p-4 text-center hover-pop">
           <p className="text-2xl font-bold text-[var(--foreground)]">{profile.tipCount.toString()}</p>
           <p className="text-xs text-[var(--muted)]">Tips</p>
         </div>
-        <div className="bg-[linear-gradient(135deg,#fef3c7,#fff7ed)] rounded-2xl p-4 text-center">
+        <div className="animate-scale-in delay-3 bg-[linear-gradient(135deg,#fef3c7,#fff7ed)] rounded-2xl p-4 text-center hover-pop">
           <p className="text-2xl font-bold text-[var(--foreground)]">{profile.followerCount.toString()}</p>
           <p className="text-xs text-[var(--muted)]">Followers</p>
         </div>
       </div>
 
-      <div className="flex gap-4 mb-8">
+      <div className="animate-fade-in-up delay-4 flex gap-4 mb-8">
         <a
           href="/edit"
-          className="gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:opacity-90 transition-opacity"
+          className="btn-shimmer gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-105 transition-all duration-300"
         >
           Edit Profile
         </a>
         {username && (
           <a
             href={`/${username}`}
-            className="bg-white border-2 border-[#f0d0c0] text-[#666] px-5 py-2 rounded-xl text-sm font-medium hover:border-[var(--accent)] transition-colors"
+            className="bg-white border-2 border-[#f0d0c0] text-[#666] px-5 py-2 rounded-xl text-sm font-medium hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-200"
           >
             View Profile
           </a>
         )}
       </div>
 
-      <div>
-        <h2 className="text-lg font-semibold mb-3 text-[var(--foreground)]">Following ({followingList.length})</h2>
+      <div className="animate-fade-in-up delay-5">
+        <h2
+          className="text-lg font-semibold mb-3 text-[var(--foreground)]"
+          style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+        >
+          Following ({followingList.length})
+        </h2>
         {followingList.length === 0 ? (
           <p className="text-[var(--muted)] text-sm">
             Not following anyone yet.{" "}
@@ -110,11 +130,12 @@ export default function DashboardPage() {
           </p>
         ) : (
           <div className="space-y-2">
-            {followingList.map((addr) => (
+            {followingList.map((addr, i) => (
               <a
                 key={addr}
                 href={`/${addr}`}
-                className="block bg-white border border-[var(--card-border)] rounded-xl px-4 py-3 text-sm hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all"
+                className="animate-fade-in-up block bg-white border border-[var(--card-border)] rounded-xl px-4 py-3 text-sm hover:shadow-[0_4px_16px_rgba(244,114,182,0.1)] hover:-translate-y-0.5 transition-all duration-200"
+                style={{ animationDelay: `${500 + i * 60}ms` }}
               >
                 {addr.slice(0, 6)}...{addr.slice(-4)}
               </a>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useHexAddress } from "@initia/interwovenkit-react";
 import { tipProfile } from "@/lib/contract";
 import type { Address } from "viem";
 
@@ -9,16 +10,19 @@ type Props = {
 };
 
 export default function TipButton({ profileOwner }: Props) {
+  const hexAddress = useHexAddress();
+  const account = hexAddress as Address | undefined;
   const [amount, setAmount] = useState("0.01");
   const [loading, setLoading] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
 
   async function handleTip() {
+    if (!account) { setStatus("Connect wallet first"); return; }
     setLoading(true);
     setStatus(null);
     try {
-      await tipProfile(profileOwner, amount);
+      await tipProfile(account, profileOwner, amount);
       setStatus("Tip sent!");
       setShowInput(false);
     } catch (e: any) {
@@ -33,7 +37,7 @@ export default function TipButton({ profileOwner }: Props) {
       <div>
         <button
           onClick={() => setShowInput(true)}
-          className="gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:opacity-90 transition-opacity"
+          className="btn-shimmer gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-105 transition-all duration-300"
         >
           Tip INIT
         </button>

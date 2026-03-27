@@ -68,16 +68,18 @@ export default function DiscoverFeed() {
       </div>
 
       {loading ? (
-        <p className="text-[var(--muted)] text-center py-8">Loading profiles...</p>
+        <div className="flex justify-center py-12">
+          <div className="spinner" />
+        </div>
       ) : sorted.length === 0 ? (
-        <p className="text-[var(--muted)] text-center py-8">
+        <p className="text-[var(--muted)] text-center py-8 animate-fade-in">
           No profiles yet. Be the first to{" "}
           <a href="/edit" className="text-[var(--accent)] font-medium">create one</a>!
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {sorted.map((p) => (
-            <ProfileCard key={p.address} address={p.address} profile={p.profile} />
+          {sorted.map((p, i) => (
+            <ProfileCard key={p.address} address={p.address} profile={p.profile} index={i} />
           ))}
         </div>
       )}

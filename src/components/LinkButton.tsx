@@ -1,3 +1,5 @@
+import { detectPlatform } from "@/lib/platforms";
+
 type Props = {
   url: string;
   label: string;
@@ -10,6 +12,12 @@ const gradients = [
   "gradient-accent",
 ];
 
+const hoverShadows = [
+  "hover:shadow-[0_8px_24px_rgba(244,63,94,0.3)]",
+  "hover:shadow-[0_8px_24px_rgba(251,146,60,0.3)]",
+  "hover:shadow-[0_8px_24px_rgba(244,114,182,0.3)]",
+];
+
 const shadows = [
   "shadow-[0_3px_12px_rgba(244,63,94,0.2)]",
   "shadow-[0_3px_12px_rgba(251,146,60,0.2)]",
@@ -17,17 +25,22 @@ const shadows = [
 ];
 
 export default function LinkButton({ url, label, index = 0 }: Props) {
-  const gradientClass = gradients[index % 3];
-  const shadowClass = shadows[index % 3];
+  const i = index % 3;
+  const gradientClass = gradients[i];
+  const shadowClass = shadows[i];
+  const hoverShadowClass = hoverShadows[i];
+  const platform = detectPlatform(url);
 
   return (
     <a
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`w-full ${gradientClass} rounded-xl py-3 px-4 text-sm text-white font-medium text-center block ${shadowClass} hover:opacity-90 transition-opacity`}
+      className={`animate-fade-in-up w-full btn-shimmer ${gradientClass} rounded-xl py-3 px-4 text-sm text-white font-medium flex items-center justify-center gap-2.5 ${shadowClass} ${hoverShadowClass} hover:scale-[1.03] hover:-translate-y-0.5 transition-all duration-300`}
+      style={{ animationDelay: `${index * 80}ms` }}
     >
-      {label}
+      <span className="opacity-90 flex-shrink-0">{platform.icon}</span>
+      <span>{label}</span>
     </a>
   );
 }

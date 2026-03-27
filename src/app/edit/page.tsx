@@ -25,12 +25,17 @@ export default function EditPage() {
 
   if (!isConnected || !account) {
     return (
-      <div className="text-center py-16">
-        <h1 className="text-3xl font-bold mb-4 text-[var(--foreground)]">Create Your Profile</h1>
+      <div className="text-center py-16 animate-fade-in-up">
+        <h1
+          className="text-3xl font-bold mb-4 text-[var(--foreground)]"
+          style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+        >
+          Create Your Profile
+        </h1>
         <p className="text-[var(--muted)] mb-8">Connect your wallet to get started.</p>
         <button
           onClick={openConnect}
-          className="gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:opacity-90 transition-opacity"
+          className="btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:shadow-[0_8px_28px_rgba(244,63,94,0.4)] hover:scale-105 transition-all duration-300"
         >
           Connect Wallet
         </button>
@@ -40,8 +45,13 @@ export default function EditPage() {
 
   if (!username) {
     return (
-      <div className="text-center py-16">
-        <h1 className="text-3xl font-bold mb-4 text-[var(--foreground)]">Register Your .init Username</h1>
+      <div className="text-center py-16 animate-fade-in-up">
+        <h1
+          className="text-3xl font-bold mb-4 text-[var(--foreground)]"
+          style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+        >
+          Register Your .init Username
+        </h1>
         <p className="text-[var(--muted)] mb-4 max-w-md mx-auto">
           You need a .init username to create your InitiaLink profile.
           Your username becomes your profile URL.
@@ -53,7 +63,7 @@ export default function EditPage() {
           href="https://app.testnet.initia.xyz/usernames"
           target="_blank"
           rel="noopener noreferrer"
-          className="gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:opacity-90 transition-opacity inline-block"
+          className="btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:shadow-[0_8px_28px_rgba(244,63,94,0.4)] hover:scale-105 transition-all duration-300 inline-block"
         >
           Register Username
         </a>
@@ -65,21 +75,31 @@ export default function EditPage() {
   }
 
   if (loading) {
-    return <p className="text-center text-[var(--muted)] py-16">Loading...</p>;
+    return (
+      <div className="flex justify-center py-16">
+        <div className="spinner" />
+      </div>
+    );
   }
 
   return (
     <div className="max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-[var(--foreground)]">
+      <h1
+        className="animate-fade-in-up delay-0 text-2xl font-bold mb-6 text-[var(--foreground)]"
+        style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+      >
         {profile?.exists ? "Edit Profile" : "Create Profile"}
       </h1>
-      <p className="text-sm text-[var(--muted)] mb-6">
+      <p className="animate-fade-in-up delay-1 text-sm text-[var(--muted)] mb-6">
         {username}.init / {account.slice(0, 6)}...{account.slice(-4)}
       </p>
-      <EditProfileForm
-        existingProfile={profile}
-        onSaved={() => window.location.reload()}
-      />
+      <div className="animate-fade-in-up delay-2">
+        <EditProfileForm
+          account={account}
+          existingProfile={profile}
+          onSaved={() => window.location.reload()}
+        />
+      </div>
     </div>
   );
 }

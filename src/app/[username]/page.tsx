@@ -52,7 +52,7 @@ export default async function ProfilePage({ params }: Props) {
 
   if (!address) {
     return (
-      <div className="text-center py-16">
+      <div className="text-center py-16 animate-fade-in">
         <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">Profile Not Found</h1>
         <p className="text-[var(--muted)]">Could not resolve &quot;{decoded}&quot; to an address.</p>
       </div>
@@ -64,7 +64,7 @@ export default async function ProfilePage({ params }: Props) {
     profile = await getProfile(address);
   } catch {
     return (
-      <div className="text-center py-16">
+      <div className="text-center py-16 animate-fade-in">
         <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">Error Loading Profile</h1>
         <p className="text-[var(--muted)]">Could not fetch profile data. Make sure the appchain is running.</p>
       </div>
@@ -73,7 +73,7 @@ export default async function ProfilePage({ params }: Props) {
 
   if (!profile.exists) {
     return (
-      <div className="text-center py-16">
+      <div className="text-center py-16 animate-fade-in">
         <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">No Profile</h1>
         <p className="text-[var(--muted)]">This address has not created a profile yet.</p>
       </div>
@@ -87,40 +87,57 @@ export default async function ProfilePage({ params }: Props) {
   });
 
   return (
-    <div className="max-w-sm mx-auto text-center py-8">
-      {profile.avatarUrl ? (
-        <img
-          src={profile.avatarUrl}
-          alt={decoded}
-          className="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-[0_4px_20px_rgba(244,114,182,0.3)]"
-        />
-      ) : (
-        <div className="w-24 h-24 rounded-full gradient-accent mx-auto mb-4 shadow-[0_4px_20px_rgba(244,114,182,0.3)]"></div>
-      )}
+    <div className="max-w-sm mx-auto text-center py-8 relative">
+      {/* Subtle background orb */}
+      <div className="orb orb-pink w-48 h-48 -top-10 left-1/2 -translate-x-1/2 opacity-20" aria-hidden="true" />
 
-      <h1 className="text-2xl font-bold text-[var(--foreground)]">{decoded}</h1>
+      {/* Avatar */}
+      <div className="animate-scale-in delay-0">
+        {profile.avatarUrl ? (
+          <img
+            src={profile.avatarUrl}
+            alt={decoded}
+            className="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-[0_4px_20px_rgba(244,114,182,0.3)] animate-pulse-glow ring-3 ring-white"
+          />
+        ) : (
+          <div className="w-24 h-24 rounded-full gradient-animated mx-auto mb-4 animate-pulse-glow ring-3 ring-white" />
+        )}
+      </div>
 
-      <div className="flex justify-center gap-4 text-sm mt-1 mb-4">
+      {/* Name */}
+      <h1
+        className="animate-fade-in-up delay-1 text-2xl font-bold text-[var(--foreground)]"
+        style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+      >
+        {decoded}
+      </h1>
+
+      {/* Stats */}
+      <div className="animate-fade-in-up delay-2 flex justify-center gap-4 text-sm mt-1 mb-4">
         <span><b className="text-[var(--foreground)]">{profile.followerCount.toString()}</b> <span className="text-[var(--muted)]">followers</span></span>
         <span><b className="text-[var(--foreground)]">{profile.followingCount.toString()}</b> <span className="text-[var(--muted)]">following</span></span>
       </div>
 
+      {/* Bio */}
       {profile.bio && (
-        <p className="text-[#666] mb-6">{profile.bio}</p>
+        <p className="animate-fade-in-up delay-2 text-[#666] mb-6">{profile.bio}</p>
       )}
 
+      {/* Links with staggered entrance */}
       <div className="flex flex-col gap-3 mb-6">
         {profile.links.map((url, i) => (
           <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} />
         ))}
       </div>
 
-      <div className="flex justify-center gap-3 mb-6">
+      {/* Action buttons */}
+      <div className="animate-fade-in-up delay-4 flex justify-center gap-3 mb-6">
         <TipButton profileOwner={address} />
         <FollowButton profileOwner={address} initialFollowing={false} />
       </div>
 
-      <div className="text-xs text-[var(--muted)] space-y-1">
+      {/* Footer info */}
+      <div className="animate-fade-in delay-5 text-xs text-[var(--muted)] space-y-1">
         <p>On-chain since {createdDate}</p>
         <p>{formatEther(profile.totalTips)} INIT received ({profile.tipCount.toString()} tips)</p>
       </div>

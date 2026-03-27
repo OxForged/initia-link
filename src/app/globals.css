@@ -13,12 +13,16 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
 }
 
 * {
   box-sizing: border-box;
 }
+
+/* ============================================
+   GRADIENT UTILITIES
+   ============================================ */
 
 .gradient-primary { background: linear-gradient(135deg, #f43f5e, #f472b6); }
 .gradient-secondary { background: linear-gradient(135deg, #fb923c, #facc15); }
@@ -27,4 +31,264 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Animated gradient that shifts hue over time */
+.gradient-animated {
+  background: linear-gradient(135deg, #f43f5e, #f472b6, #fb923c, #facc15, #f43f5e);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease infinite;
+}
+
+/* Animated gradient applied to text - must combine all properties */
+.gradient-text-animated {
+  background: linear-gradient(135deg, #f43f5e, #f472b6, #fb923c, #facc15, #f43f5e);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================================
+   KEYFRAMES
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-8px) rotate(1deg); }
+  66% { transform: translateY(4px) rotate(-1deg); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(244, 114, 182, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(244, 63, 94, 0.5); }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes orbDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.05); }
+  50% { transform: translate(-20px, -60px) scale(0.95); }
+  75% { transform: translate(40px, -20px) scale(1.02); }
+}
+
+@keyframes orbDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-40px, 30px) scale(0.97); }
+  50% { transform: translate(30px, 50px) scale(1.04); }
+  75% { transform: translate(-20px, 20px) scale(0.98); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   ANIMATION UTILITIES
+   ============================================ */
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-in-down {
+  opacity: 0;
+  animation: fadeInDown 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.animate-scale-in {
+  opacity: 0;
+  animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* Stagger delays */
+.delay-0 { animation-delay: 0ms; }
+.delay-1 { animation-delay: 100ms; }
+.delay-2 { animation-delay: 200ms; }
+.delay-3 { animation-delay: 300ms; }
+.delay-4 { animation-delay: 400ms; }
+.delay-5 { animation-delay: 500ms; }
+.delay-6 { animation-delay: 600ms; }
+.delay-7 { animation-delay: 700ms; }
+.delay-8 { animation-delay: 800ms; }
+
+/* ============================================
+   FLOATING ORBS (background atmosphere)
+   ============================================ */
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.orb-pink {
+  background: radial-gradient(circle, #f472b6, #f43f5e);
+  animation: orbDrift1 12s ease-in-out infinite;
+}
+
+.orb-orange {
+  background: radial-gradient(circle, #fb923c, #facc15);
+  animation: orbDrift2 15s ease-in-out infinite;
+}
+
+.orb-rose {
+  background: radial-gradient(circle, #fda4af, #f472b6);
+  animation: orbDrift1 18s ease-in-out infinite reverse;
+}
+
+/* ============================================
+   GRAIN OVERLAY (subtle texture)
+   ============================================ */
+
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ============================================
+   INTERACTIVE STATES
+   ============================================ */
+
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(244, 63, 94, 0.2);
+}
+
+.hover-pop {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hover-pop:hover {
+  transform: scale(1.03);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+.hover-glow:hover {
+  box-shadow: 0 0 24px rgba(244, 63, 94, 0.3);
+}
+
+/* Button shimmer effect on hover */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.3) 45%,
+    rgba(255, 255, 255, 0.3) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: none;
+}
+.btn-shimmer:hover::after {
+  animation: shimmer 0.6s ease forwards;
+}
+
+/* ============================================
+   GRADIENT SPINNER (loading)
+   ============================================ */
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid #fde8e8;
+  border-top-color: #f43f5e;
+  animation: spin 0.7s linear infinite;
 }
