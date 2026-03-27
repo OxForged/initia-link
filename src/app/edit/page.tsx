@@ -7,7 +7,7 @@ import EditProfileForm from "@/components/EditProfileForm";
 import type { Address } from "viem";
 
 export default function EditPage() {
-  const { isConnected, openConnect, username } = useInterwovenKit();
+  const { isConnected, openConnect, username, initiaAddress } = useInterwovenKit();
   const hexAddress = useHexAddress();
   const account = hexAddress as Address | undefined;
 
@@ -57,7 +57,7 @@ export default function EditPage() {
           Your username becomes your profile URL.
         </p>
         <p className="text-sm text-[var(--muted)] mb-8">
-          Connected: {account.slice(0, 6)}...{account.slice(-4)}
+          Connected: {initiaAddress?.slice(0, 10)}...{initiaAddress?.slice(-4)}
         </p>
         <a
           href="https://app.testnet.initia.xyz/usernames"
@@ -91,7 +91,7 @@ export default function EditPage() {
         {profile?.exists ? "Edit Profile" : "Create Profile"}
       </h1>
       <p className="animate-fade-in-up delay-1 text-sm text-[var(--muted)] mb-6">
-        {username}.init / {account.slice(0, 6)}...{account.slice(-4)}
+        {username} / {initiaAddress?.slice(0, 10)}...{initiaAddress?.slice(-4)}
       </p>
       <div className="animate-fade-in-up delay-2">
         <EditProfileForm

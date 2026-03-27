@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { resolveUsernameToAddress } from "@/lib/username";
+import { resolveUsernameToAddress, resolveAddressToUsername } from "@/lib/username";
 import { getProfile, formatEther } from "@/lib/contract";
 import LinkButton from "@/components/LinkButton";
 import TipButton from "@/components/TipButton";
@@ -10,11 +10,24 @@ type Props = {
   params: Promise<{ username: string }>;
 };
 
+function isHexAddress(s: string): boolean {
+  return s.startsWith("0x") && s.length === 42;
+}
+
 async function resolveAddress(username: string): Promise<Address | null> {
-  if (username.startsWith("0x") && username.length === 42) {
+  if (isHexAddress(username)) {
     return username as Address;
   }
   return (await resolveUsernameToAddress(username)) as Address | null;
+}
+
+async function resolveDisplayName(decoded: string, address: Address): Promise<string> {
+  if (!isHexAddress(decoded)) return decoded;
+  try {
+    const name = await resolveAddressToUsername(address);
+    if (name) return `${name}.init`;
+  } catch {}
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -31,12 +44,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!profile.exists) {
       return { title: "Profile Not Found | InitiaLink" };
     }
+    const displayName = await resolveDisplayName(decoded, address);
     return {
-      title: `${decoded} | InitiaLink`,
-      description: profile.bio || `Check out ${decoded} on InitiaLink`,
+      title: `${displayName} | InitiaLink`,
+      description: profile.bio || `Check out ${displayName} on InitiaLink`,
       openGraph: {
-        title: `${decoded} | InitiaLink`,
-        description: profile.bio || `Check out ${decoded} on InitiaLink`,
+        title: `${displayName} | InitiaLink`,
+        description: profile.bio || `Check out ${displayName} on InitiaLink`,
         ...(profile.avatarUrl ? { images: [profile.avatarUrl] } : {}),
       },
     };
@@ -80,6 +94,7 @@ export default async function ProfilePage({ params }: Props) {
     );
   }
 
+  const displayName = await resolveDisplayName(decoded, address);
   const createdDate = new Date(Number(profile.createdAt) * 1000).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -91,17 +106,19 @@ export default async function ProfilePage({ params }: Props) {
       {/* Subtle background orb */}
       <div className="orb orb-pink w-48 h-48 -top-10 left-1/2 -translate-x-1/2 opacity-20" aria-hidden="true" />
 
-      {/* Avatar */}
-      <div className="animate-scale-in delay-0">
-        {profile.avatarUrl ? (
-          <img
-            src={profile.avatarUrl}
-            alt={decoded}
-            className="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-[0_4px_20px_rgba(244,114,182,0.3)] animate-pulse-glow ring-3 ring-white"
-          />
-        ) : (
-          <div className="w-24 h-24 rounded-full gradient-animated mx-auto mb-4 animate-pulse-glow ring-3 ring-white" />
-        )}
+      {/* Avatar with rotating gradient ring */}
+      <div className="animate-scale-in delay-0 flex justify-center mb-4">
+        <div className="avatar-ring-gradient">
+          {profile.avatarUrl ? (
+            <img
+              src={profile.avatarUrl}
+              alt={displayName}
+              className="w-24 h-24 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-24 h-24 rounded-full gradient-animated" />
+          )}
+        </div>
       </div>
 
       {/* Name */}
@@ -109,7 +126,7 @@ export default async function ProfilePage({ params }: Props) {
         className="animate-fade-in-up delay-1 text-2xl font-bold text-[var(--foreground)]"
         style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
       >
-        {decoded}
+        {displayName}
       </h1>
 
       {/* Stats */}
@@ -131,9 +148,11 @@ export default async function ProfilePage({ params }: Props) {
       </div>
 
       {/* Action buttons */}
-      <div className="animate-fade-in-up delay-4 flex justify-center gap-3 mb-6">
-        <TipButton profileOwner={address} />
-        <FollowButton profileOwner={address} initialFollowing={false} />
+      <div className="animate-fade-in-up delay-4 flex flex-col items-center gap-3 mb-6">
+        <div className="flex justify-center gap-3">
+          <TipButton profileOwner={address} />
+          <FollowButton profileOwner={address} initialFollowing={false} />
+        </div>
       </div>
 
       {/* Footer info */}

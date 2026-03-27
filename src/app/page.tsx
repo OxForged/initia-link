@@ -34,13 +34,13 @@ export default function Home() {
       <div className="animate-fade-in-up delay-3 flex gap-4">
         <a
           href="/edit"
-          className="btn-shimmer gradient-primary text-white px-8 py-3.5 rounded-xl font-semibold shadow-[0_4px_20px_rgba(244,63,94,0.35)] hover:shadow-[0_8px_32px_rgba(244,63,94,0.45)] hover:scale-105 transition-all duration-300"
+          className="btn-press btn-shimmer gradient-primary text-white px-8 py-3.5 rounded-xl font-semibold shadow-[0_4px_20px_rgba(244,63,94,0.35)] hover:shadow-[0_8px_32px_rgba(244,63,94,0.45)] hover:scale-105 transition-all duration-300"
         >
           Create Your Profile
         </a>
         <a
           href="/discover"
-          className="bg-white border-2 border-[#f0d0c0] text-[#666] px-8 py-3.5 rounded-xl font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300"
+          className="btn-press bg-white border-2 border-[#f0d0c0] text-[#666] px-8 py-3.5 rounded-xl font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300"
         >
           Discover Profiles
         </a>

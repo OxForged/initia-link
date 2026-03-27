@@ -2,18 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { getRecentProfiles, getProfile, getTotalProfiles, type Profile } from "@/lib/contract";
+import { resolveAddressToUsername } from "@/lib/username";
 import ProfileCard from "./ProfileCard";
+import { ProfileCardSkeleton } from "./Skeleton";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import type { Address } from "viem";
 
 type ProfileData = {
   address: Address;
   profile: Profile;
+  username?: string;
 };
 
 export default function DiscoverFeed() {
   const [tab, setTab] = useState<"new" | "popular">("new");
   const [profiles, setProfiles] = useState<ProfileData[]>([]);
   const [loading, setLoading] = useState(true);
+  const gridRef = useScrollReveal<HTMLDivElement>([profiles.length, tab]);
 
   useEffect(() => {
     loadProfiles();
@@ -28,8 +33,15 @@ export default function DiscoverFeed() {
 
       const data = await Promise.all(
         addresses.map(async (addr) => {
-          const profile = await getProfile(addr);
-          return { address: addr, profile };
+          const [profile, username] = await Promise.all([
+            getProfile(addr),
+            resolveAddressToUsername(addr).catch(() => null),
+          ]);
+          return {
+            address: addr,
+            profile,
+            username: username ? `${username}.init` : undefined,
+          };
         })
       );
 
@@ -51,16 +63,16 @@ export default function DiscoverFeed() {
       <div className="flex gap-3 mb-6">
         <button
           onClick={() => setTab("new")}
-          className={`text-sm font-semibold px-4 py-1.5 rounded-lg transition-all ${
-            tab === "new" ? "gradient-primary text-white" : "bg-[#f5f5f5] text-[#888]"
+          className={`btn-press text-sm font-semibold px-4 py-1.5 rounded-lg transition-all duration-200 ${
+            tab === "new" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(244,63,94,0.25)]" : "bg-[#f5f5f5] text-[#888] hover:bg-[#eee]"
           }`}
         >
           New
         </button>
         <button
           onClick={() => setTab("popular")}
-          className={`text-sm font-semibold px-4 py-1.5 rounded-lg transition-all ${
-            tab === "popular" ? "gradient-primary text-white" : "bg-[#f5f5f5] text-[#888]"
+          className={`btn-press text-sm font-semibold px-4 py-1.5 rounded-lg transition-all duration-200 ${
+            tab === "popular" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(244,63,94,0.25)]" : "bg-[#f5f5f5] text-[#888] hover:bg-[#eee]"
           }`}
         >
           Popular
@@ -68,8 +80,10 @@ export default function DiscoverFeed() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-12">
-          <div className="spinner" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <ProfileCardSkeleton key={i} />
+          ))}
         </div>
       ) : sorted.length === 0 ? (
         <p className="text-[var(--muted)] text-center py-8 animate-fade-in">
@@ -77,9 +91,11 @@ export default function DiscoverFeed() {
           <a href="/edit" className="text-[var(--accent)] font-medium">create one</a>!
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {sorted.map((p, i) => (
-            <ProfileCard key={p.address} address={p.address} profile={p.profile} index={i} />
+            <div key={p.address} className="scroll-reveal" style={{ transitionDelay: `${i * 80}ms` }}>
+              <ProfileCard address={p.address} profile={p.profile} username={p.username} />
+            </div>
           ))}
         </div>
       )}

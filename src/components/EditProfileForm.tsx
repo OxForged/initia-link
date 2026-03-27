@@ -116,7 +116,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
           onChange={(e) => setBio(e.target.value)}
           maxLength={280}
           rows={3}
-          className="w-full bg-white border border-[var(--card-border)] rounded-xl px-4 py-2 text-sm focus:border-[#f472b6] outline-none transition-colors"
+          className="w-full bg-white border border-[var(--card-border)] rounded-xl px-4 py-2 text-sm input-glow outline-none"
           placeholder="Tell the world about yourself..."
         />
         <p className="text-xs text-[var(--muted)] mt-1">{bio.length}/280</p>
@@ -129,7 +129,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
           type="url"
           value={avatarUrl}
           onChange={(e) => setAvatarUrl(e.target.value)}
-          className="w-full bg-white border border-[var(--card-border)] rounded-xl px-4 py-2 text-sm focus:border-[#f472b6] outline-none transition-colors"
+          className="w-full bg-white border border-[var(--card-border)] rounded-xl px-4 py-2 text-sm input-glow outline-none"
           placeholder="https://example.com/avatar.png"
         />
       </div>
@@ -186,14 +186,14 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                     type="text"
                     value={link.label}
                     onChange={(e) => updateLink(i, "label", e.target.value)}
-                    className="bg-[#fdf8f5] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-1/3 focus:border-[#f472b6] outline-none transition-colors"
+                    className="bg-[#fdf8f5] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-1/3 input-glow outline-none"
                     placeholder="Label"
                   />
                   <input
                     type="url"
                     value={link.url}
                     onChange={(e) => updateLink(i, "url", e.target.value)}
-                    className="bg-[#fdf8f5] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm flex-1 focus:border-[#f472b6] outline-none transition-colors"
+                    className="bg-[#fdf8f5] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm flex-1 input-glow outline-none"
                     placeholder={activePlatform?.placeholder || "https://..."}
                   />
                   <button
@@ -270,7 +270,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full btn-shimmer gradient-primary text-white py-3 rounded-xl font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
+        className="w-full btn-press btn-shimmer gradient-primary text-white py-3 rounded-xl font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
       >
         {saving ? (
           <span className="flex items-center justify-center gap-2">
@@ -281,7 +281,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
       </button>
 
       {status && (
-        <p className={`text-sm text-center ${status.includes("!") ? "text-green-500" : "text-red-500"}`}>
+        <p className={`status-slide-in text-sm text-center ${status.includes("!") ? "text-green-500" : "text-red-500"}`}>
           {status}
         </p>
       )}

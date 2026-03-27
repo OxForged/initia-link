@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
 import { getProfile, getFollowing, type Profile, formatEther } from "@/lib/contract";
+import { DashboardSkeleton } from "@/components/Skeleton";
 import type { Address } from "viem";
 
 export default function DashboardPage() {
@@ -41,7 +42,7 @@ export default function DashboardPage() {
         <p className="text-[var(--muted)] mb-8">Connect your wallet to view your dashboard.</p>
         <button
           onClick={openConnect}
-          className="btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:shadow-[0_8px_28px_rgba(244,63,94,0.4)] hover:scale-105 transition-all duration-300"
+          className="btn-press btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:shadow-[0_8px_28px_rgba(244,63,94,0.4)] hover:scale-105 transition-all duration-300"
         >
           Connect Wallet
         </button>
@@ -50,11 +51,7 @@ export default function DashboardPage() {
   }
 
   if (loading) {
-    return (
-      <div className="flex justify-center py-16">
-        <div className="spinner" />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   if (!profile?.exists) {
@@ -102,7 +99,7 @@ export default function DashboardPage() {
       <div className="animate-fade-in-up delay-4 flex gap-4 mb-8">
         <a
           href="/edit"
-          className="btn-shimmer gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-105 transition-all duration-300"
+          className="btn-press btn-shimmer gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-105 transition-all duration-300"
         >
           Edit Profile
         </a>

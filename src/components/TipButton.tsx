@@ -32,41 +32,45 @@ export default function TipButton({ profileOwner }: Props) {
 
   if (!showInput) {
     return (
-      <div>
-        <button
-          onClick={() => setShowInput(true)}
-          className="btn-shimmer gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-105 transition-all duration-300"
-        >
-          Tip INIT
-        </button>
-        {status && <p className="text-xs text-[var(--muted)] mt-1">{status}</p>}
-      </div>
+      <button
+        onClick={() => setShowInput(true)}
+        className="btn-press btn-shimmer gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-105 transition-all duration-300"
+      >
+        Tip INIT
+      </button>
     );
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <input
-        type="number"
-        step="0.001"
-        min="0.001"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className="bg-white border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-24 focus:border-[#f472b6] outline-none"
-      />
-      <button
-        onClick={handleTip}
-        disabled={loading}
-        className="gradient-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
-      >
-        {loading ? "Sending..." : "Send"}
-      </button>
-      <button
-        onClick={() => setShowInput(false)}
-        className="text-[var(--muted)] text-sm hover:text-[var(--foreground)]"
-      >
-        Cancel
-      </button>
+    <div className="flex flex-col items-center gap-2">
+      <div className="flex items-center gap-2">
+        <input
+          type="number"
+          step="0.001"
+          min="0.001"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="bg-white border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-24 input-glow outline-none"
+        />
+        <button
+          onClick={handleTip}
+          disabled={loading}
+          className="btn-press gradient-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+        >
+          {loading ? "..." : "Send"}
+        </button>
+        <button
+          onClick={() => { setShowInput(false); setStatus(null); }}
+          className="text-[var(--muted)] text-sm hover:text-[var(--foreground)] transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+      {status && (
+        <p className={`status-slide-in text-xs ${status.includes("!") ? "text-green-500" : "text-[var(--muted)]"}`}>
+          {status}
+        </p>
+      )}
     </div>
   );
 }
