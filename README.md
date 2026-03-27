@@ -1,71 +1,95 @@
-## Initia Hackathon Submission
+# InitiaLink
 
-- **Project Name**: InitiaLink
+Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
-### Project Overview
+**Track:** Gaming & Consumer (digital identity)
 
-InitiaLink is a decentralized link-in-bio platform built on an Initia EVM appchain. Your .init username becomes your profile URL. Create a profile, add links, receive tips, follow other creators, and explore the community. All data lives on-chain with no backend.
+## What is this
 
-### Implementation Detail
+InitiaLink lets you create a profile page tied to your Initia username. Add your links, write a bio, set an avatar. Other users can tip you directly (native tokens, no platform cut) and follow you. Everything is stored in a single smart contract, no backend, no database.
 
-- **The Custom Implementation**: A single Solidity contract (ProfileRegistry) handles profile CRUD, a social graph (follow/unfollow), direct tipping with reentrancy protection, and paginated discovery. No off-chain storage or indexer needed.
-- **The Native Feature**: Initia Usernames (.init) are used as profile URL paths and displayed identity throughout the app. The L1 Move view function API resolves usernames to addresses server-side, enabling SEO-friendly profile pages. InterwovenKit provides the wallet connect modal with support for Initia Wallet, Keplr, MetaMask, and more. Auto-signing keeps edit and follow actions frictionless.
+Visit `initialink.xyz/alice.init` and you see Alice's profile. She doesn't need to be online, and the visitor doesn't need a wallet to view it.
 
-### How to Run Locally
+## Why not just use Linktree
 
-1. Clone the repo and install dependencies:
-   ```
-   npm install
-   ```
-2. Copy `.env.example` to `.env` and fill in the values.
-3. Start your Initia EVM appchain (see [Initia docs](https://docs.initia.xyz/hackathon/get-started)).
-4. Compile the contract:
-   ```
-   npm run compile
-   ```
-5. Deploy the contract using a viem script (not Hardhat, due to ESM conflicts):
-   ```
-   node scripts/deploy-viem.js
-   ```
-6. Update `NEXT_PUBLIC_CONTRACT_ADDRESS` in `.env` with the deployed address.
-7. Start the frontend:
-   ```
-   npm run dev
-   ```
-8. Open `http://localhost:3000`.
+Linktree owns your profile. They host it, they control it, they charge you for premium features. If they go down or change their terms, your page disappears.
 
-### Tech Stack
+More importantly, Linktree doesn't know anything about crypto. You can't tip someone, follow them on-chain, or verify their identity through their wallet. It's just a list of links on someone else's server.
 
-- Next.js 16 (App Router) + TypeScript + Tailwind CSS v4
-- Solidity 0.8.20 + OpenZeppelin ReentrancyGuard
-- viem for all contract interaction (frontend and deploy scripts)
-- Hardhat for contract compilation only
-- InterwovenKit for multi-wallet connect and auto-signing
-- Initia L1 REST API for .init username resolution
+InitiaLink stores everything in a contract on a dedicated Initia appchain. Your profile is yours. Tips go straight to your wallet. The social graph lives on-chain. And because it runs on its own appchain, every transaction is revenue for the app, not gas burned on a shared L1.
 
-### Features
+Other alternatives and why they don't fit:
+- **Bento** -- same centralized problem as Linktree, just prettier
+- **ENS profiles** -- Ethereum only, no social features, no tipping
+- **Lens/Farcaster** -- locked to their own ecosystems, not Initia-native
 
-- **Profiles**: Bio, avatar URL, and up to 10 labeled links stored on-chain
-- **Tipping**: Send native tokens directly to any profile (min 0.001, reentrancy-protected)
-- **Social graph**: Follow and unfollow with on-chain follower/following lists
-- **Discover**: Browse new and popular profiles with paginated feeds
-- **Dashboard**: View your tip stats, follower count, and who you follow
-- **Username routing**: Visit `/<username>` to view any profile by their .init name
-- **Public profiles**: Server-rendered pages viewable without a wallet, with Open Graph meta tags for social sharing
-- **Multi-wallet**: InterwovenKit supports Initia Wallet, Keplr, MetaMask, Privy, and others
+## How it works
 
-### Contract
+One Solidity contract (`ProfileRegistry`) handles everything:
+- Profile CRUD (bio, avatar, up to 10 labeled links)
+- Tipping with reentrancy protection (min 0.001 INIT, sent directly to the profile owner)
+- Social graph (follow/unfollow, follower and following lists, paginated queries)
+- Discovery feed (newest and most popular profiles)
 
-- **ProfileRegistry.sol** at `contracts/ProfileRegistry.sol`
-- Deployed to the InitiaLink appchain at `0xdccc0dd916e38a4b2ada84694749ca8960618de8`
+The frontend resolves `.init` usernames by calling the L1 Move username module directly (BCS-encoded view functions over REST). This happens server-side, so profile pages are server-rendered with Open Graph meta tags. Share a link on Twitter or Discord and it shows the right preview.
 
-### Project Structure
+## Initia integration
+
+Three native features used:
+
+1. **Initia Usernames (.init)** -- your username is your URL. Forward resolution (name to address) and reverse resolution (address to name) both work, so even if someone shares a raw address link, the page still shows the `.init` name.
+
+2. **Auto-signing** -- `enableAutoSign` through InterwovenKit. Editing your profile, following someone, tipping -- none of these pop up a confirmation dialog. It just works.
+
+3. **InterwovenKit** -- all wallet connection and transaction signing. Supports Initia Wallet, Keplr, MetaMask, and others. Contract writes go through Cosmos `MsgCall` via `requestTxBlock`, not through the EVM provider directly.
+
+## Running locally
+
+```bash
+npm install
+cp .env.example .env
+# fill in your values
+```
+
+Start your Initia EVM appchain ([docs](https://docs.initia.xyz/hackathon/get-started)), then:
+
+```bash
+npm run compile                    # compile the contract
+node scripts/deploy-viem.js        # deploy (not hardhat, ESM conflicts)
+# copy the deployed address to NEXT_PUBLIC_CONTRACT_ADDRESS in .env
+npm run dev                        # start frontend on localhost:3000
+```
+
+## Tech
+
+- Next.js 16, TypeScript, Tailwind CSS v4
+- Solidity 0.8.20, OpenZeppelin ReentrancyGuard
+- viem for contract reads and deploy scripts
+- InterwovenKit (`@initia/interwovenkit-react`) for wallet and tx
+- Initia L1 REST API for `.init` username resolution
+
+## Pages
+
+| Route | What it does |
+|---|---|
+| `/` | Landing page |
+| `/edit` | Create or edit your profile (requires wallet) |
+| `/discover` | Browse profiles, sort by new or popular |
+| `/dashboard` | Your stats, tip history, who you follow |
+| `/alice.init` | Public profile page (server-rendered, no wallet needed) |
+
+## Contract
+
+`ProfileRegistry.sol` deployed at `0xdccc0dd916e38a4b2ada84694749ca8960618de8` on the InitiaLink appchain (`initialink-1`).
+
+## Structure
 
 ```
-contracts/           Solidity smart contracts
-src/app/             Next.js pages (/, /edit, /discover, /dashboard, /[username])
-src/components/      React components (ProfileCard, TipButton, FollowButton, etc.)
-src/lib/             Contract helpers, ABI, constants, username resolution
-scripts/             Deploy scripts
-artifacts/           Compiled contract artifacts (gitignored)
+contracts/           smart contract
+src/app/             pages (/, /edit, /discover, /dashboard, /[username])
+src/components/      UI components
+src/hooks/           useContractWrite (MsgCall writes), useScrollReveal
+src/lib/             contract reads, ABI, constants, username resolution, platform icons
+scripts/             deploy script
+.initia/             submission metadata
 ```
