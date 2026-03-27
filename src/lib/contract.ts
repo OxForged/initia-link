@@ -104,10 +104,9 @@ export async function getFollowing(address: Address, offset: bigint, limit: bigi
 
 // Write functions
 
-export async function createProfile(bio: string, avatarUrl: string, links: string[], linkLabels: string[]) {
+export async function createProfile(account: Address, bio: string, avatarUrl: string, links: string[], linkLabels: string[]) {
   const wallet = getWalletClient();
   if (!wallet) throw new Error("No wallet connected");
-  const [account] = await wallet.getAddresses();
   return wallet.writeContract({
     ...contractConfig,
     functionName: "createProfile",
@@ -116,10 +115,9 @@ export async function createProfile(bio: string, avatarUrl: string, links: strin
   });
 }
 
-export async function updateBio(newBio: string) {
+export async function updateBio(account: Address, newBio: string) {
   const wallet = getWalletClient();
   if (!wallet) throw new Error("No wallet connected");
-  const [account] = await wallet.getAddresses();
   return wallet.writeContract({
     ...contractConfig,
     functionName: "updateBio",
@@ -128,10 +126,9 @@ export async function updateBio(newBio: string) {
   });
 }
 
-export async function updateAvatar(newAvatarUrl: string) {
+export async function updateAvatar(account: Address, newAvatarUrl: string) {
   const wallet = getWalletClient();
   if (!wallet) throw new Error("No wallet connected");
-  const [account] = await wallet.getAddresses();
   return wallet.writeContract({
     ...contractConfig,
     functionName: "updateAvatar",
@@ -140,10 +137,9 @@ export async function updateAvatar(newAvatarUrl: string) {
   });
 }
 
-export async function updateLinks(links: string[], linkLabels: string[]) {
+export async function updateLinks(account: Address, links: string[], linkLabels: string[]) {
   const wallet = getWalletClient();
   if (!wallet) throw new Error("No wallet connected");
-  const [account] = await wallet.getAddresses();
   return wallet.writeContract({
     ...contractConfig,
     functionName: "updateLinks",
@@ -152,10 +148,9 @@ export async function updateLinks(links: string[], linkLabels: string[]) {
   });
 }
 
-export async function tipProfile(profileOwner: Address, amount: string) {
+export async function tipProfile(account: Address, profileOwner: Address, amount: string) {
   const wallet = getWalletClient();
   if (!wallet) throw new Error("No wallet connected");
-  const [account] = await wallet.getAddresses();
   return wallet.writeContract({
     ...contractConfig,
     functionName: "tipProfile",
@@ -165,10 +160,9 @@ export async function tipProfile(profileOwner: Address, amount: string) {
   });
 }
 
-export async function followProfile(profileOwner: Address) {
+export async function followProfile(account: Address, profileOwner: Address) {
   const wallet = getWalletClient();
   if (!wallet) throw new Error("No wallet connected");
-  const [account] = await wallet.getAddresses();
   return wallet.writeContract({
     ...contractConfig,
     functionName: "followProfile",
@@ -177,10 +171,9 @@ export async function followProfile(profileOwner: Address) {
   });
 }
 
-export async function unfollowProfile(profileOwner: Address) {
+export async function unfollowProfile(account: Address, profileOwner: Address) {
   const wallet = getWalletClient();
   if (!wallet) throw new Error("No wallet connected");
-  const [account] = await wallet.getAddresses();
   return wallet.writeContract({
     ...contractConfig,
     functionName: "unfollowProfile",
