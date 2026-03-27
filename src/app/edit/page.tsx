@@ -1,0 +1,85 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
+import { getProfile, type Profile } from "@/lib/contract";
+import EditProfileForm from "@/components/EditProfileForm";
+import type { Address } from "viem";
+
+export default function EditPage() {
+  const { isConnected, openConnect, username } = useInterwovenKit();
+  const hexAddress = useHexAddress();
+  const account = hexAddress as Address | undefined;
+
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!account) return;
+    setLoading(true);
+    getProfile(account)
+      .then(setProfile)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [account]);
+
+  if (!isConnected || !account) {
+    return (
+      <div className="text-center py-16">
+        <h1 className="text-3xl font-bold mb-4">Create Your Profile</h1>
+        <p className="text-[var(--muted)] mb-8">Connect your wallet to get started.</p>
+        <button
+          onClick={openConnect}
+          className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-6 py-3 rounded-lg font-medium transition-colors"
+        >
+          Connect Wallet
+        </button>
+      </div>
+    );
+  }
+
+  if (!username) {
+    return (
+      <div className="text-center py-16">
+        <h1 className="text-3xl font-bold mb-4">Register Your .init Username</h1>
+        <p className="text-[var(--muted)] mb-4 max-w-md mx-auto">
+          You need a .init username to create your InitiaLink profile.
+          Your username becomes your profile URL.
+        </p>
+        <p className="text-sm text-[var(--muted)] mb-8">
+          Connected: {account.slice(0, 6)}...{account.slice(-4)}
+        </p>
+        <a
+          href="https://app.testnet.initia.xyz/usernames"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-6 py-3 rounded-lg font-medium transition-colors inline-block"
+        >
+          Register Username
+        </a>
+        <p className="text-xs text-[var(--muted)] mt-4">
+          After registering, refresh this page.
+        </p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return <p className="text-center text-[var(--muted)] py-16">Loading...</p>;
+  }
+
+  return (
+    <div className="max-w-lg mx-auto">
+      <h1 className="text-2xl font-bold mb-6">
+        {profile?.exists ? "Edit Profile" : "Create Profile"}
+      </h1>
+      <p className="text-sm text-[var(--muted)] mb-6">
+        {username}.init / {account.slice(0, 6)}...{account.slice(-4)}
+      </p>
+      <EditProfileForm
+        existingProfile={profile}
+        onSaved={() => window.location.reload()}
+      />
+    </div>
+  );
+}
