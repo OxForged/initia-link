@@ -95,7 +95,6 @@ export default function EditPage() {
       </p>
       <div className="animate-fade-in-up delay-2">
         <EditProfileForm
-          account={account}
           existingProfile={profile}
           onSaved={() => window.location.reload()}
         />

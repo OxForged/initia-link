@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useHexAddress } from "@initia/interwovenkit-react";
-import { tipProfile } from "@/lib/contract";
+import { useContractWrite } from "@/hooks/useContractWrite";
 import type { Address } from "viem";
 
 type Props = {
@@ -10,19 +9,18 @@ type Props = {
 };
 
 export default function TipButton({ profileOwner }: Props) {
-  const hexAddress = useHexAddress();
-  const account = hexAddress as Address | undefined;
+  const { tipProfile, isConnected } = useContractWrite();
   const [amount, setAmount] = useState("0.01");
   const [loading, setLoading] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
 
   async function handleTip() {
-    if (!account) { setStatus("Connect wallet first"); return; }
+    if (!isConnected) { setStatus("Connect wallet first"); return; }
     setLoading(true);
     setStatus(null);
     try {
-      await tipProfile(account, profileOwner, amount);
+      await tipProfile(profileOwner, amount);
       setStatus("Tip sent!");
       setShowInput(false);
     } catch (e: any) {

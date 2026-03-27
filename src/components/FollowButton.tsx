@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useHexAddress } from "@initia/interwovenkit-react";
-import { followProfile, unfollowProfile } from "@/lib/contract";
+import { useContractWrite } from "@/hooks/useContractWrite";
 import type { Address } from "viem";
 
 type Props = {
@@ -11,20 +10,19 @@ type Props = {
 };
 
 export default function FollowButton({ profileOwner, initialFollowing }: Props) {
-  const hexAddress = useHexAddress();
-  const account = hexAddress as Address | undefined;
+  const { followProfile, unfollowProfile, isConnected } = useContractWrite();
   const [following, setFollowing] = useState(initialFollowing);
   const [loading, setLoading] = useState(false);
 
   async function handleToggle() {
-    if (!account) return;
+    if (!isConnected) return;
     setLoading(true);
     try {
       if (following) {
-        await unfollowProfile(account, profileOwner);
+        await unfollowProfile(profileOwner);
         setFollowing(false);
       } else {
-        await followProfile(account, profileOwner);
+        await followProfile(profileOwner);
         setFollowing(true);
       }
     } catch (e) {

@@ -1,4 +1,4 @@
-import { createPublicClient, http, createWalletClient, custom, formatEther, parseEther, type Address } from "viem";
+import { createPublicClient, http, formatEther, parseEther, type Address } from "viem";
 import { PROFILE_REGISTRY_ABI } from "./abi";
 import { CONTRACT_ADDRESS, CHAIN_CONFIG } from "./constants";
 
@@ -15,14 +15,6 @@ export function getPublicClient() {
   return createPublicClient({
     chain: initiaChain,
     transport: http(CHAIN_CONFIG.rpcUrl),
-  });
-}
-
-export function getWalletClient() {
-  if (typeof window === "undefined" || !window.ethereum) return null;
-  return createWalletClient({
-    chain: initiaChain,
-    transport: custom(window.ethereum),
   });
 }
 
@@ -45,7 +37,7 @@ export type Profile = {
   exists: boolean;
 };
 
-// Read functions
+// Read functions (use viem public client - these work fine via eth_call)
 
 export async function getProfile(address: Address): Promise<Profile> {
   const client = getPublicClient();
@@ -100,86 +92,6 @@ export async function getFollowing(address: Address, offset: bigint, limit: bigi
     functionName: "getFollowing",
     args: [address, offset, limit],
   }) as Address[];
-}
-
-// Write functions
-
-export async function createProfile(account: Address, bio: string, avatarUrl: string, links: string[], linkLabels: string[]) {
-  const wallet = getWalletClient();
-  if (!wallet) throw new Error("No wallet connected");
-  return wallet.writeContract({
-    ...contractConfig,
-    functionName: "createProfile",
-    args: [bio, avatarUrl, links, linkLabels],
-    account,
-  });
-}
-
-export async function updateBio(account: Address, newBio: string) {
-  const wallet = getWalletClient();
-  if (!wallet) throw new Error("No wallet connected");
-  return wallet.writeContract({
-    ...contractConfig,
-    functionName: "updateBio",
-    args: [newBio],
-    account,
-  });
-}
-
-export async function updateAvatar(account: Address, newAvatarUrl: string) {
-  const wallet = getWalletClient();
-  if (!wallet) throw new Error("No wallet connected");
-  return wallet.writeContract({
-    ...contractConfig,
-    functionName: "updateAvatar",
-    args: [newAvatarUrl],
-    account,
-  });
-}
-
-export async function updateLinks(account: Address, links: string[], linkLabels: string[]) {
-  const wallet = getWalletClient();
-  if (!wallet) throw new Error("No wallet connected");
-  return wallet.writeContract({
-    ...contractConfig,
-    functionName: "updateLinks",
-    args: [links, linkLabels],
-    account,
-  });
-}
-
-export async function tipProfile(account: Address, profileOwner: Address, amount: string) {
-  const wallet = getWalletClient();
-  if (!wallet) throw new Error("No wallet connected");
-  return wallet.writeContract({
-    ...contractConfig,
-    functionName: "tipProfile",
-    args: [profileOwner],
-    account,
-    value: parseEther(amount),
-  });
-}
-
-export async function followProfile(account: Address, profileOwner: Address) {
-  const wallet = getWalletClient();
-  if (!wallet) throw new Error("No wallet connected");
-  return wallet.writeContract({
-    ...contractConfig,
-    functionName: "followProfile",
-    args: [profileOwner],
-    account,
-  });
-}
-
-export async function unfollowProfile(account: Address, profileOwner: Address) {
-  const wallet = getWalletClient();
-  if (!wallet) throw new Error("No wallet connected");
-  return wallet.writeContract({
-    ...contractConfig,
-    functionName: "unfollowProfile",
-    args: [profileOwner],
-    account,
-  });
 }
 
 export { formatEther, parseEther };

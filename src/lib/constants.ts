@@ -11,6 +11,8 @@ export const CHAIN_CONFIG = {
   },
 };
 
+export const APPCHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID || "initialink-1";
+
 export const L1_REST_URL = process.env.NEXT_PUBLIC_L1_REST_URL || "https://rest.testnet.initia.xyz";
 
 export const USERNAME_MODULE_ADDRESS = "0x42cd8467b1c86e59bf319e5664a09b6b5840bb3fac64f5ce690b5041c530565a";

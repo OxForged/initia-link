@@ -1,29 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { createProfile, updateBio, updateAvatar, updateLinks, type Profile } from "@/lib/contract";
+import { useContractWrite } from "@/hooks/useContractWrite";
+import { type Profile } from "@/lib/contract";
 import { platforms, detectPlatform } from "@/lib/platforms";
-import type { Address } from "viem";
 
 type LinkItem = {
   url: string;
   label: string;
-  platformId: string; // tracks selected platform icon
+  platformId: string;
 };
 
 type Props = {
-  account: Address;
   existingProfile?: Profile | null;
   onSaved?: () => void;
 };
 
-/** Derive initial platform from existing URL */
 function initPlatformId(url: string): string {
   if (!url) return "website";
   return detectPlatform(url).id;
 }
 
-export default function EditProfileForm({ account, existingProfile, onSaved }: Props) {
+export default function EditProfileForm({ existingProfile, onSaved }: Props) {
+  const { createProfile, updateBio, updateAvatar, updateLinks } = useContractWrite();
   const isNew = !existingProfile?.exists;
 
   const [bio, setBio] = useState(existingProfile?.bio || "");
@@ -51,11 +50,9 @@ export default function EditProfileForm({ account, existingProfile, onSaved }: P
     const updated = [...links];
     updated[index] = { ...updated[index], [field]: value };
 
-    // Auto-detect platform when URL changes
     if (field === "url" && value.trim()) {
       const detected = detectPlatform(value);
       updated[index].platformId = detected.id;
-      // Auto-fill label if empty or if it matches a platform label
       if (!updated[index].label || platforms.some((p) => p.label === updated[index].label)) {
         updated[index].label = detected.label;
       }
@@ -88,16 +85,16 @@ export default function EditProfileForm({ account, existingProfile, onSaved }: P
 
     try {
       if (isNew) {
-        await createProfile(account, bio, avatarUrl, urls, labels);
+        await createProfile(bio, avatarUrl, urls, labels);
         setStatus("Profile created!");
       } else {
-        if (bio !== existingProfile?.bio) await updateBio(account, bio);
-        if (avatarUrl !== existingProfile?.avatarUrl) await updateAvatar(account, avatarUrl);
+        if (bio !== existingProfile?.bio) await updateBio(bio);
+        if (avatarUrl !== existingProfile?.avatarUrl) await updateAvatar(avatarUrl);
 
         const linksChanged =
           JSON.stringify(urls) !== JSON.stringify(existingProfile?.links) ||
           JSON.stringify(labels) !== JSON.stringify(existingProfile?.linkLabels);
-        if (linksChanged) await updateLinks(account, urls, labels);
+        if (linksChanged) await updateLinks(urls, labels);
 
         setStatus("Profile updated!");
       }
