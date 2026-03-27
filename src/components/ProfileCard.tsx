@@ -16,7 +16,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
   return (
     <a
       href={href}
-      className="bg-[var(--card)] border border-[var(--card-border)] rounded-xl p-5 hover:border-[var(--accent)] transition-colors block"
+      className="bg-white border border-[var(--card-border)] rounded-2xl p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.1)] hover:scale-[1.02] transition-all duration-200 block"
     >
       <div className="flex items-center gap-3 mb-3">
         {profile.avatarUrl ? (
@@ -26,19 +26,19 @@ export default function ProfileCard({ address, profile, username }: Props) {
             className="w-12 h-12 rounded-full object-cover"
           />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-[var(--accent)] flex items-center justify-center text-lg font-bold">
+          <div className="w-12 h-12 rounded-full gradient-accent flex items-center justify-center text-lg font-bold text-white">
             {displayName[0]?.toUpperCase()}
           </div>
         )}
         <div>
-          <h3 className="font-semibold">{displayName}</h3>
+          <h3 className="font-semibold text-[var(--foreground)]">{displayName}</h3>
           <p className="text-xs text-[var(--muted)]">
             {profile.followerCount.toString()} followers
           </p>
         </div>
       </div>
       {profile.bio && (
-        <p className="text-sm text-[var(--muted)] line-clamp-2">{profile.bio}</p>
+        <p className="text-sm text-[#666] line-clamp-2">{profile.bio}</p>
       )}
       <div className="flex gap-4 mt-3 text-xs text-[var(--muted)]">
         <span>{profile.links.length} links</span>

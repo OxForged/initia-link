@@ -34,13 +34,14 @@ export default function FollowButton({ profileOwner, initialFollowing }: Props) 
     <button
       onClick={handleToggle}
       disabled={loading}
-      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 ${
+      className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 disabled:opacity-50 ${
         following
-          ? "border border-[var(--card-border)] hover:border-red-500 hover:text-red-400"
-          : "bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white"
+          ? "text-white shadow-[0_2px_10px_rgba(244,63,94,0.25)]"
+          : "border-2 border-[#f472b6] text-[#f472b6] hover:bg-[#f43f5e] hover:text-white hover:border-[#f43f5e]"
       }`}
+      style={following ? { background: "linear-gradient(135deg, #f43f5e, #f472b6)" } : undefined}
     >
-      {loading ? "..." : following ? "Unfollow" : "Follow"}
+      {loading ? "..." : following ? "Following" : "Follow"}
     </button>
   );
 }

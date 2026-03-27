@@ -33,7 +33,7 @@ export default function TipButton({ profileOwner }: Props) {
       <div>
         <button
           onClick={() => setShowInput(true)}
-          className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:opacity-90 transition-opacity"
         >
           Tip INIT
         </button>
@@ -50,18 +50,18 @@ export default function TipButton({ profileOwner }: Props) {
         min="0.001"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="bg-[var(--background)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm w-24"
+        className="bg-white border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-24 focus:border-[#f472b6] outline-none"
       />
       <button
         onClick={handleTip}
         disabled={loading}
-        className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+        className="gradient-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
       >
         {loading ? "Sending..." : "Send"}
       </button>
       <button
         onClick={() => setShowInput(false)}
-        className="text-[var(--muted)] text-sm hover:text-white"
+        className="text-[var(--muted)] text-sm hover:text-[var(--foreground)]"
       >
         Cancel
       </button>

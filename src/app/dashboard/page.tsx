@@ -32,11 +32,11 @@ export default function DashboardPage() {
   if (!isConnected || !account) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-4 text-[var(--foreground)]">Dashboard</h1>
         <p className="text-[var(--muted)] mb-8">Connect your wallet to view your dashboard.</p>
         <button
           onClick={openConnect}
-          className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          className="gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:opacity-90 transition-opacity"
         >
           Connect Wallet
         </button>
@@ -51,7 +51,7 @@ export default function DashboardPage() {
   if (!profile?.exists) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-2xl font-bold mb-4">No Profile Yet</h1>
+        <h1 className="text-2xl font-bold mb-4 text-[var(--foreground)]">No Profile Yet</h1>
         <a
           href="/edit"
           className="text-[var(--accent)] hover:text-[var(--accent-hover)]"
@@ -64,22 +64,22 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-2">Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">Dashboard</h1>
       {username && (
         <p className="text-sm text-[var(--muted)] mb-6">{username}</p>
       )}
 
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-[var(--card)] border border-[var(--card-border)] rounded-xl p-4 text-center">
-          <p className="text-2xl font-bold">{formatEther(profile.totalTips)}</p>
+        <div className="bg-[linear-gradient(135deg,#fff7ed,#fce7f3)] rounded-2xl p-4 text-center">
+          <p className="text-2xl font-bold text-[var(--foreground)]">{formatEther(profile.totalTips)}</p>
           <p className="text-xs text-[var(--muted)]">INIT Received</p>
         </div>
-        <div className="bg-[var(--card)] border border-[var(--card-border)] rounded-xl p-4 text-center">
-          <p className="text-2xl font-bold">{profile.tipCount.toString()}</p>
+        <div className="bg-[linear-gradient(135deg,#fce7f3,#fef3c7)] rounded-2xl p-4 text-center">
+          <p className="text-2xl font-bold text-[var(--foreground)]">{profile.tipCount.toString()}</p>
           <p className="text-xs text-[var(--muted)]">Tips</p>
         </div>
-        <div className="bg-[var(--card)] border border-[var(--card-border)] rounded-xl p-4 text-center">
-          <p className="text-2xl font-bold">{profile.followerCount.toString()}</p>
+        <div className="bg-[linear-gradient(135deg,#fef3c7,#fff7ed)] rounded-2xl p-4 text-center">
+          <p className="text-2xl font-bold text-[var(--foreground)]">{profile.followerCount.toString()}</p>
           <p className="text-xs text-[var(--muted)]">Followers</p>
         </div>
       </div>
@@ -87,14 +87,14 @@ export default function DashboardPage() {
       <div className="flex gap-4 mb-8">
         <a
           href="/edit"
-          className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:opacity-90 transition-opacity"
         >
           Edit Profile
         </a>
         {username && (
           <a
             href={`/${username}`}
-            className="border border-[var(--card-border)] hover:border-[var(--accent)] px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            className="bg-white border-2 border-[#f0d0c0] text-[#666] px-5 py-2 rounded-xl text-sm font-medium hover:border-[var(--accent)] transition-colors"
           >
             View Profile
           </a>
@@ -102,7 +102,7 @@ export default function DashboardPage() {
       </div>
 
       <div>
-        <h2 className="text-lg font-semibold mb-3">Following ({followingList.length})</h2>
+        <h2 className="text-lg font-semibold mb-3 text-[var(--foreground)]">Following ({followingList.length})</h2>
         {followingList.length === 0 ? (
           <p className="text-[var(--muted)] text-sm">
             Not following anyone yet.{" "}
@@ -114,7 +114,7 @@ export default function DashboardPage() {
               <a
                 key={addr}
                 href={`/${addr}`}
-                className="block bg-[var(--card)] border border-[var(--card-border)] rounded-lg px-4 py-2 text-sm hover:border-[var(--accent)] transition-colors"
+                className="block bg-white border border-[var(--card-border)] rounded-xl px-4 py-3 text-sm hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all"
               >
                 {addr.slice(0, 6)}...{addr.slice(-4)}
               </a>

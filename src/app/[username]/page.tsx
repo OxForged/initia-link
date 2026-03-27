@@ -11,11 +11,9 @@ type Props = {
 };
 
 async function resolveAddress(username: string): Promise<Address | null> {
-  // If it looks like an address, use directly
   if (username.startsWith("0x") && username.length === 42) {
     return username as Address;
   }
-  // Otherwise resolve .init username
   return (await resolveUsernameToAddress(username)) as Address | null;
 }
 
@@ -55,8 +53,8 @@ export default async function ProfilePage({ params }: Props) {
   if (!address) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-2xl font-bold mb-2">Profile Not Found</h1>
-        <p className="text-[var(--muted)]">Could not resolve "{decoded}" to an address.</p>
+        <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">Profile Not Found</h1>
+        <p className="text-[var(--muted)]">Could not resolve &quot;{decoded}&quot; to an address.</p>
       </div>
     );
   }
@@ -67,7 +65,7 @@ export default async function ProfilePage({ params }: Props) {
   } catch {
     return (
       <div className="text-center py-16">
-        <h1 className="text-2xl font-bold mb-2">Error Loading Profile</h1>
+        <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">Error Loading Profile</h1>
         <p className="text-[var(--muted)]">Could not fetch profile data. Make sure the appchain is running.</p>
       </div>
     );
@@ -76,7 +74,7 @@ export default async function ProfilePage({ params }: Props) {
   if (!profile.exists) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-2xl font-bold mb-2">No Profile</h1>
+        <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">No Profile</h1>
         <p className="text-[var(--muted)]">This address has not created a profile yet.</p>
       </div>
     );
@@ -94,28 +92,26 @@ export default async function ProfilePage({ params }: Props) {
         <img
           src={profile.avatarUrl}
           alt={decoded}
-          className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+          className="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-[0_4px_20px_rgba(244,114,182,0.3)]"
         />
       ) : (
-        <div className="w-24 h-24 rounded-full bg-[var(--accent)] mx-auto mb-4 flex items-center justify-center text-3xl font-bold">
-          {decoded[0]?.toUpperCase()}
-        </div>
+        <div className="w-24 h-24 rounded-full gradient-accent mx-auto mb-4 shadow-[0_4px_20px_rgba(244,114,182,0.3)]"></div>
       )}
 
-      <h1 className="text-2xl font-bold">{decoded}</h1>
+      <h1 className="text-2xl font-bold text-[var(--foreground)]">{decoded}</h1>
 
-      <div className="flex justify-center gap-4 text-sm text-[var(--muted)] mt-1 mb-4">
-        <span>{profile.followerCount.toString()} followers</span>
-        <span>{profile.followingCount.toString()} following</span>
+      <div className="flex justify-center gap-4 text-sm mt-1 mb-4">
+        <span><b className="text-[var(--foreground)]">{profile.followerCount.toString()}</b> <span className="text-[var(--muted)]">followers</span></span>
+        <span><b className="text-[var(--foreground)]">{profile.followingCount.toString()}</b> <span className="text-[var(--muted)]">following</span></span>
       </div>
 
       {profile.bio && (
-        <p className="text-[var(--muted)] mb-6">{profile.bio}</p>
+        <p className="text-[#666] mb-6">{profile.bio}</p>
       )}
 
       <div className="flex flex-col gap-3 mb-6">
         {profile.links.map((url, i) => (
-          <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} />
+          <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} />
         ))}
       </div>
 

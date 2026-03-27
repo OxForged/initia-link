@@ -48,19 +48,19 @@ export default function DiscoverFeed() {
 
   return (
     <div>
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-3 mb-6">
         <button
           onClick={() => setTab("new")}
-          className={`text-sm font-medium pb-1 border-b-2 transition-colors ${
-            tab === "new" ? "border-[var(--accent)] text-white" : "border-transparent text-[var(--muted)]"
+          className={`text-sm font-semibold px-4 py-1.5 rounded-lg transition-all ${
+            tab === "new" ? "gradient-primary text-white" : "bg-[#f5f5f5] text-[#888]"
           }`}
         >
           New
         </button>
         <button
           onClick={() => setTab("popular")}
-          className={`text-sm font-medium pb-1 border-b-2 transition-colors ${
-            tab === "popular" ? "border-[var(--accent)] text-white" : "border-transparent text-[var(--muted)]"
+          className={`text-sm font-semibold px-4 py-1.5 rounded-lg transition-all ${
+            tab === "popular" ? "gradient-primary text-white" : "bg-[#f5f5f5] text-[#888]"
           }`}
         >
           Popular
@@ -72,7 +72,7 @@ export default function DiscoverFeed() {
       ) : sorted.length === 0 ? (
         <p className="text-[var(--muted)] text-center py-8">
           No profiles yet. Be the first to{" "}
-          <a href="/edit" className="text-[var(--accent)]">create one</a>!
+          <a href="/edit" className="text-[var(--accent)] font-medium">create one</a>!
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -11,13 +11,13 @@ export default function ConnectButton() {
       <div className="flex items-center gap-3">
         <button
           onClick={openWallet}
-          className="text-sm hover:text-[var(--accent)] transition-colors"
+          className="text-sm font-semibold gradient-primary gradient-text hover:opacity-80 transition-opacity"
         >
           {username ? username : `${address?.slice(0, 6)}...${address?.slice(-4)}`}
         </button>
         <button
           onClick={disconnect}
-          className="text-xs text-[var(--muted)] hover:text-red-400 transition-colors"
+          className="text-xs text-[var(--muted)] hover:text-red-500 transition-colors"
         >
           Disconnect
         </button>
@@ -28,7 +28,7 @@ export default function ConnectButton() {
   return (
     <button
       onClick={openConnect}
-      className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+      className="gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:opacity-90 transition-opacity"
     >
       Connect Wallet
     </button>
