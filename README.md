@@ -6,17 +6,17 @@ Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
 ## What is this
 
-InitiaLink lets you create a profile page tied to your Initia username. Add your links, write a bio, set an avatar. Other users can tip you directly (native tokens, no platform cut) and follow you. Everything is stored in a single smart contract, no backend, no database.
+InitiaLink lets you create a profile page tied to your Initia username. Add your links and bio, set an avatar. Other users can tip you (native tokens, no platform cut) and follow you. One smart contract stores everything, no backend, no database.
 
 Visit `initialink.xyz/alice.init` and you see Alice's profile. She doesn't need to be online, and the visitor doesn't need a wallet to view it.
 
 ## Why not just use Linktree
 
-Linktree owns your profile. They host it, they control it, they charge you for premium features. If they go down or change their terms, your page disappears.
+Linktree owns your profile. They host it and charge you for premium features. If they go down or change their terms, your page disappears.
 
-More importantly, Linktree doesn't know anything about crypto. You can't tip someone, follow them on-chain, or verify their identity through their wallet. It's just a list of links on someone else's server.
+Linktree also doesn't know anything about crypto. You can't tip someone, follow them on-chain, or verify their identity through their wallet. A list of links on someone else's server.
 
-InitiaLink stores everything in a contract on a dedicated Initia appchain. Your profile is yours. Tips go straight to your wallet. The social graph lives on-chain. And because it runs on its own appchain, every transaction is revenue for the app, not gas burned on a shared L1.
+InitiaLink stores everything in a contract on a dedicated Initia appchain. Your profile is yours. Tips go straight to your wallet, and the follow graph is on-chain too. Because it runs on its own appchain, transaction fees become app revenue.
 
 Other alternatives and why they don't fit:
 - **Bento** -- same centralized problem as Linktree, just prettier
@@ -27,11 +27,11 @@ Other alternatives and why they don't fit:
 
 One Solidity contract (`ProfileRegistry`) handles everything:
 - Profile CRUD (bio, avatar, up to 10 labeled links)
-- Tipping with reentrancy protection (min 0.001 INIT, sent directly to the profile owner)
+- Tipping with reentrancy protection (min 0.001 native token, sent to the profile owner)
 - Social graph (follow/unfollow, follower and following lists, paginated queries)
-- Discovery feed (newest and most popular profiles)
+- Discovery feed (newest profiles on-chain, popular sorted client-side by follower count)
 
-The frontend resolves `.init` usernames by calling the L1 Move username module directly (BCS-encoded view functions over REST). This happens server-side, so profile pages are server-rendered with Open Graph meta tags. Share a link on Twitter or Discord and it shows the right preview.
+The server resolves `.init` usernames by calling L1 Move view functions (BCS-encoded, over REST) and renders profile pages with Open Graph meta tags. Share a link on Twitter or Discord and it shows the right preview.
 
 ## Initia integration
 
@@ -39,9 +39,9 @@ Three native features used:
 
 1. **Initia Usernames (.init)** -- your username is your URL. Forward resolution (name to address) and reverse resolution (address to name) both work, so even if someone shares a raw address link, the page still shows the `.init` name.
 
-2. **Auto-signing** -- `enableAutoSign` through InterwovenKit. Editing your profile, following someone, tipping -- none of these pop up a confirmation dialog. It just works.
+2. **Auto-signing** -- `enableAutoSign` through InterwovenKit. Editing your profile, following someone, tipping -- no confirmation dialogs.
 
-3. **InterwovenKit** -- all wallet connection and transaction signing. Supports Initia Wallet, Keplr, MetaMask, and others. Contract writes go through Cosmos `MsgCall` via `requestTxBlock`, not through the EVM provider directly.
+3. **InterwovenKit** -- wallet connection and transaction signing. Supports Initia Wallet, Keplr, MetaMask, and others. Contract writes go through Cosmos `MsgCall` via `requestTxBlock`.
 
 ## Running locally
 
@@ -82,14 +82,21 @@ npm run dev                        # start frontend on localhost:3000
 
 `ProfileRegistry.sol` deployed at `0xdccc0dd916e38a4b2ada84694749ca8960618de8` on the InitiaLink appchain (`initialink-1`).
 
+## Features worth noting
+
+- Platform icons with URL auto-detection (Twitter, GitHub, Instagram, YouTube, LinkedIn, Discord, Telegram, TikTok)
+- Skeleton loading placeholders while data fetches
+- Scroll-triggered animations via Intersection Observer
+- Animated gradient avatar rings, hover effects, shimmer buttons
+
 ## Structure
 
 ```
-contracts/           smart contract
+contracts/           smart contract (ProfileRegistry.sol)
 src/app/             pages (/, /edit, /discover, /dashboard, /[username])
-src/components/      UI components
-src/hooks/           useContractWrite (MsgCall writes), useScrollReveal
+src/components/      UI components (ProfileCard, EditProfileForm, DiscoverFeed, Skeleton, etc.)
+src/hooks/           useContractWrite (MsgCall writes), useScrollReveal (Intersection Observer)
 src/lib/             contract reads, ABI, constants, username resolution, platform icons
-scripts/             deploy script
+scripts/             deploy scripts (deploy-viem.js for production, deploy.cts legacy)
 .initia/             submission metadata
 ```
