@@ -12,7 +12,8 @@ import { CONTRACT_ADDRESS, APPCHAIN_ID } from "@/lib/constants";
  * instead of wagmi/viem writeContract.
  */
 export function useContractWrite() {
-  const { initiaAddress, requestTxBlock, autoSign } = useInterwovenKit();
+  const { initiaAddress, requestTxBlock, submitTxBlock, estimateGas, autoSign } =
+    useInterwovenKit();
 
   const isAutoSignEnabled = autoSign?.isEnabledByChain?.[APPCHAIN_ID] ?? false;
 
@@ -20,29 +21,38 @@ export function useContractWrite() {
     async (input: string, value: string = "0") => {
       if (!initiaAddress) throw new Error("Wallet not connected");
 
-      // When autoSign is enabled, pass autoSign + feeDenom for headless signing.
-      // These fields exist at runtime but are missing from TxRequest types.
-      const txPayload = {
-        chainId: APPCHAIN_ID,
-        ...(isAutoSignEnabled && { autoSign: true, feeDenom: "GAS" }),
-        messages: [
-          {
-            typeUrl: "/minievm.evm.v1.MsgCall",
-            value: {
-              sender: initiaAddress,
-              contractAddr: CONTRACT_ADDRESS,
-              input,
-              value,
-              accessList: [],
-              authList: [],
-            },
+      const messages = [
+        {
+          typeUrl: "/minievm.evm.v1.MsgCall",
+          value: {
+            sender: initiaAddress,
+            contractAddr: CONTRACT_ADDRESS,
+            input,
+            value,
+            accessList: [],
+            authList: [],
           },
-        ],
-      };
+        },
+      ];
 
-      return requestTxBlock(txPayload as Parameters<typeof requestTxBlock>[0]);
+      if (isAutoSignEnabled) {
+        // Auto-sign: submitTxBlock signs with derived wallet, no approval modal
+        const gas = await estimateGas({ chainId: APPCHAIN_ID, messages });
+        const gasWithBuffer = Math.ceil(gas * 1.4);
+        return submitTxBlock({
+          chainId: APPCHAIN_ID,
+          messages,
+          fee: {
+            amount: [{ denom: "GAS", amount: String(Math.ceil(gasWithBuffer * 0.15)) }],
+            gas: String(gasWithBuffer),
+          },
+        });
+      }
+
+      // Normal: requestTxBlock shows wallet approval modal
+      return requestTxBlock({ chainId: APPCHAIN_ID, messages });
     },
-    [initiaAddress, requestTxBlock, isAutoSignEnabled]
+    [initiaAddress, requestTxBlock, submitTxBlock, estimateGas, isAutoSignEnabled]
   );
 
   const createProfile = useCallback(

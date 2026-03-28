@@ -39,7 +39,7 @@ Three native features used:
 
 1. **Initia Usernames (.init)** -- your username is your URL. Forward resolution (name to address) and reverse resolution (address to name) both work, so even if someone shares a raw address link, the page still shows the `.init` name.
 
-2. **Auto-signing** -- `enableAutoSign` through InterwovenKit. Editing your profile, following someone, tipping -- no confirmation dialogs.
+2. **Auto-signing** -- session-based auto-signing through InterwovenKit. Enable it once from the wallet dropdown, approve in your wallet, and all subsequent transactions (editing, following, tipping) go through without confirmation dialogs. Uses object-mode `enableAutoSign` with explicit `/minievm.evm.v1.MsgCall` permissions.
 
 3. **InterwovenKit** -- wallet connection and transaction signing. Supports Initia Wallet, Keplr, MetaMask, and others. Contract writes go through Cosmos `MsgCall` via `requestTxBlock`.
 
@@ -99,7 +99,7 @@ Open `http://localhost:3000`. Connect your wallet via InterwovenKit to create a 
 
 ### Getting GAS tokens
 
-The appchain uses `GAS` as its native fee token. Click the **"Get GAS"** button in the navbar after connecting your wallet. The built-in faucet sends 1 GAS per request (enough for 30+ transactions). One hour cooldown between requests.
+The appchain uses `GAS` as its native fee token. Click your username in the navbar to open the wallet dropdown, then click **"Get GAS"**. The built-in faucet sends 1 GAS per request (enough for 30+ transactions). One hour cooldown between requests.
 
 ### Live deployment
 
@@ -140,7 +140,7 @@ The node runs on a dedicated VPS with a systemd service for auto-restart. The fr
 ```
 contracts/           smart contract (ProfileRegistry.sol)
 src/app/             pages (/, /edit, /discover, /dashboard, /[username])
-src/components/      UI components (ProfileCard, EditProfileForm, DiscoverFeed, Skeleton, etc.)
+src/components/      UI components (ConnectButton w/ wallet dropdown, ProfileCard, EditProfileForm, DiscoverFeed, Skeleton, etc.)
 src/hooks/           useContractWrite (MsgCall writes), useScrollReveal (Intersection Observer)
 src/lib/             contract reads, ABI, constants, username resolution, platform icons
 scripts/             deploy scripts (deploy-viem.js for production, deploy.cts legacy)

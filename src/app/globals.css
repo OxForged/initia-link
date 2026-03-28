@@ -103,6 +103,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 
+
 @keyframes pulseGlow {
   0%, 100% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.3); }
   50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.5); }
@@ -117,6 +118,11 @@ body {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@keyframes drawUnderline {
+  from { width: 0; }
+  to { width: 120%; }
 }
 
 @keyframes shimmer {
@@ -196,8 +202,8 @@ body {
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.18;
+  filter: blur(120px);
+  opacity: 0.15;
   pointer-events: none;
   will-change: transform;
 }

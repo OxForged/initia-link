@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useInterwovenKit } from "@initia/interwovenkit-react";
+import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { APPCHAIN_ID } from "@/lib/constants";
@@ -17,6 +17,7 @@ export default function ConnectButton() {
     initiaAddress,
   } = useInterwovenKit();
 
+  const hexAddress = useHexAddress();
   const [open, setOpen] = useState(false);
   const [faucetLoading, setFaucetLoading] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -41,20 +42,23 @@ export default function ConnectButton() {
     autoSign?.isLoading || enableAutoSign.isPending || disableAutoSign.isPending;
 
   async function handleFaucet() {
-    if (!address) return;
+    if (!hexAddress) return;
     setFaucetLoading(true);
     try {
       const res = await fetch("/api/faucet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ address }),
+        body: JSON.stringify({ address: hexAddress }),
       });
       const data = await res.json();
       if (!res.ok) {
         toast.error(data.error || "Faucet request failed");
         return;
       }
-      toast.success(`Received ${data.amount} GAS!`);
+      toast.success(`Received ${data.amount} GAS!`, {
+        description: `Tx: ${data.hash}`,
+        duration: 6000,
+      });
     } catch {
       toast.error("Faucet request failed");
     } finally {

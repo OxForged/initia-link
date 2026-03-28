@@ -73,6 +73,7 @@ export default function Providers({ children }: PropsWithChildren) {
               },
             }}
             richColors
+            closeButton
           />
         </InterwovenKitProvider>
       </WagmiProvider>

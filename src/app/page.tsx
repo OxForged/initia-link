@@ -8,7 +8,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[75vh] text-center overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center min-h-[75vh] text-center overflow-visible">
       {/* Floating gradient orbs - atmospheric background */}
       <div className="orb orb-pink w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 -top-20 -left-16 sm:-left-32" aria-hidden="true" />
       <div className="orb orb-orange w-32 h-32 sm:w-44 sm:h-44 md:w-56 md:h-56 top-40 -right-12 sm:-right-24" aria-hidden="true" />
@@ -24,9 +24,9 @@ export default function Home() {
       </h1>
 
       {/* Subtitle */}
-      <p className="animate-fade-in-up delay-2 text-[#888] text-sm sm:text-base md:text-lg mb-8 sm:mb-10 max-w-xl leading-relaxed px-2">
-        Create your link-in-bio page powered by your .init username.
-        Share links, receive INIT tips, and connect with creators on Initia.
+      <p className="animate-fade-in-up delay-2 text-[#555] text-sm sm:text-base md:text-lg mb-8 sm:mb-10 max-w-xl leading-relaxed px-2">
+        Create your link-in-bio page powered by your <span className="gradient-text-animated font-semibold">.init username</span>.
+        Share links, receive <span className="gradient-text-animated font-semibold">INIT tips</span>, and connect with creators on <span className="relative font-semibold text-[var(--foreground)]">Initia<span className="absolute bottom-0 h-[2.5px] rounded-[1px] bg-[var(--accent)]" style={{ left: "-4%", animation: "drawUnderline 0.8s cubic-bezier(0.22,0.61,0.36,1) 0.8s forwards", width: 0, transform: "rotate(-0.8deg)" }} /></span>.
       </p>
 
       {/* CTA buttons */}
@@ -50,7 +50,7 @@ export default function Home() {
         <div className="card-tilt bg-white rounded-2xl p-6 text-center shadow-[0_8px_40px_rgba(0,0,0,0.08)]">
           {/* Avatar with gradient ring */}
           <div className="avatar-ring-gradient mx-auto mb-3 w-fit">
-            <div className="w-14 h-14 rounded-full gradient-animated" />
+            <img src="https://api.dicebear.com/9.x/notionists/svg?seed=alice" alt="alice.init" className="w-14 h-14 rounded-full bg-[#e0f2fe]" />
           </div>
           <h3
             className="text-lg font-bold text-[var(--foreground)] font-heading"

@@ -15,11 +15,12 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="px-4 sm:px-6 py-4 animate-fade-in-down">
+    <nav className="px-4 sm:px-6 py-4 animate-fade-in-down relative z-50">
       <div className="mx-auto max-w-4xl bg-white/85 backdrop-blur-xl rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_28px_rgba(8,145,178,0.1)] transition-shadow duration-500">
         <a
           href="/"
           className="text-xl font-bold tracking-tight text-[var(--foreground)] font-heading"
+          style={{ WebkitTextStroke: "0.2px currentColor" }}
         >
           InitiaLink
         </a>

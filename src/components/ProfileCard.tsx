@@ -16,7 +16,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
   return (
     <a
       href={href}
-      className="card-tilt bg-white border border-[var(--card-border)] rounded-2xl p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)] block"
+      className="card-tilt bg-white border border-[var(--card-border)] rounded-2xl p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)] block h-full flex flex-col"
     >
       <div className="flex items-center gap-3 mb-3">
         {profile.avatarUrl ? (
@@ -40,7 +40,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
       {profile.bio && (
         <p className="text-sm text-[#666] line-clamp-2">{profile.bio}</p>
       )}
-      <div className="flex gap-4 mt-3 text-xs text-[var(--muted)]">
+      <div className="flex gap-4 mt-auto pt-3 text-xs text-[var(--muted)]">
         <span>{profile.links.length} links</span>
         <span>{formatEther(profile.totalTips)} INIT tipped</span>
       </div>
