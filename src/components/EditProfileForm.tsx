@@ -239,7 +239,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
             <img
               src={avatarUrl}
               alt="avatar"
-              className="w-16 h-16 rounded-full mx-auto mb-3 object-cover ring-2 ring-[#d1e8ed]"
+              className="w-16 h-16 rounded-full mx-auto mb-3 object-cover ring-2 ring-[#d1e8ed] select-none pointer-events-none"
+              draggable="false"
             />
           ) : (
             <div className="w-16 h-16 rounded-full gradient-animated mx-auto mb-3 flex items-center justify-center text-xl font-bold text-white animate-pulse-glow">

@@ -113,7 +113,8 @@ export default async function ProfilePage({ params }: Props) {
             <img
               src={profile.avatarUrl}
               alt={displayName}
-              className="w-24 h-24 rounded-full object-cover"
+              className="w-24 h-24 rounded-full object-cover select-none pointer-events-none"
+              draggable="false"
             />
           ) : (
             <div className="w-24 h-24 rounded-full gradient-animated" />

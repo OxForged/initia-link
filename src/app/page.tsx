@@ -50,7 +50,7 @@ export default function Home() {
         <div className="card-tilt bg-white rounded-2xl p-6 text-center shadow-[0_8px_40px_rgba(0,0,0,0.08)]">
           {/* Avatar with gradient ring */}
           <div className="avatar-ring-gradient mx-auto mb-3 w-fit">
-            <img src="https://api.dicebear.com/9.x/notionists/svg?seed=alice" alt="alice.init" className="w-14 h-14 rounded-full bg-[#e0f2fe]" />
+            <img src="https://api.dicebear.com/9.x/notionists/svg?seed=alice" alt="alice.init" className="w-14 h-14 rounded-full bg-[#e0f2fe] select-none pointer-events-none" draggable="false" />
           </div>
           <h3
             className="text-lg font-bold text-[var(--foreground)] font-heading"

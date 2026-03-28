@@ -120,7 +120,7 @@ The node runs on a dedicated VPS with a systemd service for auto-restart. The fr
 |---|---|
 | `/` | Landing page |
 | `/edit` | Create or edit your profile (requires wallet) |
-| `/discover` | Browse profiles, sort by new or popular |
+| `/discover` | Browse profiles, search by username, sort by new or popular (followers, tip count, total tipped) |
 | `/dashboard` | Your stats, tip history, who you follow |
 | `/alice.init` | Public profile page (server-rendered, no wallet needed) |
 
@@ -131,6 +131,8 @@ The node runs on a dedicated VPS with a systemd service for auto-restart. The fr
 ## Features worth noting
 
 - Platform icons with URL auto-detection (Twitter, GitHub, Instagram, YouTube, LinkedIn, Discord, Telegram, TikTok)
+- Discover feed with username search, Load More pagination, and multi-criteria sort
+- Navbar adapts: "Create Profile" becomes "My Profile" linking to your profile page once you have one
 - Skeleton loading placeholders while data fetches
 - Scroll-triggered animations via Intersection Observer
 - Animated gradient avatar rings, hover effects, shimmer buttons

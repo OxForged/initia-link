@@ -1,18 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
+import { getProfile } from "@/lib/contract";
 import ConnectButton from "./ConnectButton";
-
-const navLinks = [
-  { href: "/discover", label: "Discover" },
-  { href: "/edit", label: "Create Profile" },
-  { href: "/dashboard", label: "Dashboard" },
-];
+import type { Address } from "viem";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { isConnected, username } = useInterwovenKit();
+  const hexAddress = useHexAddress();
+  const [hasProfile, setHasProfile] = useState(false);
+
+  useEffect(() => {
+    if (!isConnected || !hexAddress) { setHasProfile(false); return; }
+    getProfile(hexAddress as Address)
+      .then((p) => setHasProfile(p.bio !== "" || p.links.length > 0))
+      .catch(() => setHasProfile(false));
+  }, [isConnected, hexAddress]);
+
+  const profileHref = hasProfile && username ? `/${username}` : "/edit";
+  const profileLabel = hasProfile ? "My Profile" : "Create Profile";
+
+  const navLinks = [
+    { href: "/discover", label: "Discover" },
+    { href: profileHref, label: profileLabel },
+    { href: "/dashboard", label: "Dashboard" },
+  ];
 
   return (
     <nav className="px-4 sm:px-6 py-4 animate-fade-in-down relative z-50">
