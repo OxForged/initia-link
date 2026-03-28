@@ -40,7 +40,7 @@ export default function LinkButton({ url, label, index = 0 }: Props) {
       style={{ animationDelay: `${index * 80}ms` }}
     >
       <span className="opacity-90 flex-shrink-0">{platform.icon}</span>
-      <span>{label}</span>
+      <span className="truncate">{label}</span>
     </a>
   );
 }

@@ -10,43 +10,43 @@ export default function Home() {
   return (
     <div className="relative flex flex-col items-center justify-center min-h-[75vh] text-center overflow-hidden">
       {/* Floating gradient orbs - atmospheric background */}
-      <div className="orb orb-pink w-72 h-72 -top-20 -left-32" aria-hidden="true" />
-      <div className="orb orb-orange w-56 h-56 top-40 -right-24" aria-hidden="true" />
-      <div className="orb orb-rose w-48 h-48 bottom-10 left-1/4" aria-hidden="true" />
+      <div className="orb orb-pink w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 -top-20 -left-16 sm:-left-32" aria-hidden="true" />
+      <div className="orb orb-orange w-32 h-32 sm:w-44 sm:h-44 md:w-56 md:h-56 top-40 -right-12 sm:-right-24" aria-hidden="true" />
+      <div className="orb orb-rose w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 bottom-10 left-1/4" aria-hidden="true" />
 
       {/* Hero heading */}
       <h1
-        className="animate-fade-in-up delay-0 text-5xl md:text-6xl font-bold mb-4 leading-tight tracking-tight font-heading"
+        className="animate-fade-in-up delay-0 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight tracking-tight font-heading"
       >
-        Your on-chain identity.
+        Your on-chain identity
         <br />
-        <span className="gradient-text-animated">One link for everything.</span>
+        <span className="gradient-text-animated">One link for everything</span>
       </h1>
 
       {/* Subtitle */}
-      <p className="animate-fade-in-up delay-2 text-[#888] text-lg mb-10 max-w-xl leading-relaxed">
+      <p className="animate-fade-in-up delay-2 text-[#888] text-sm sm:text-base md:text-lg mb-8 sm:mb-10 max-w-xl leading-relaxed px-2">
         Create your link-in-bio page powered by your .init username.
         Share links, receive INIT tips, and connect with creators on Initia.
       </p>
 
       {/* CTA buttons */}
-      <div className="animate-fade-in-up delay-3 flex gap-4">
+      <div className="animate-fade-in-up delay-3 flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
         <a
           href="/edit"
-          className="btn-press btn-shimmer gradient-primary text-white px-8 py-3.5 rounded-xl font-semibold shadow-[0_4px_20px_rgba(8,145,178,0.3)] hover:shadow-[0_8px_32px_rgba(8,145,178,0.4)] hover:scale-105 transition-all duration-300"
+          className="btn-press btn-shimmer gradient-primary text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl font-semibold shadow-[0_4px_20px_rgba(8,145,178,0.3)] hover:shadow-[0_8px_32px_rgba(8,145,178,0.4)] hover:scale-105 transition-all duration-300 text-center"
         >
           Create Your Profile
         </a>
         <a
           href="/discover"
-          className="btn-press bg-white border-2 border-[#d1e8ed] text-[#555] px-8 py-3.5 rounded-xl font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300"
+          className="btn-press bg-white border-2 border-[#d1e8ed] text-[#555] px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300 text-center"
         >
           Discover Profiles
         </a>
       </div>
 
       {/* Preview card */}
-      <div className="animate-fade-in-up delay-5 mt-16 w-full max-w-xs">
+      <div className="animate-fade-in-up delay-5 mt-10 sm:mt-16 w-full max-w-xs">
         <div className="card-tilt bg-white rounded-2xl p-6 text-center shadow-[0_8px_40px_rgba(0,0,0,0.08)]">
           {/* Avatar with gradient ring */}
           <div className="avatar-ring-gradient mx-auto mb-3 w-fit">

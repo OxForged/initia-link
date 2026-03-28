@@ -12,14 +12,19 @@ import { CONTRACT_ADDRESS, APPCHAIN_ID } from "@/lib/constants";
  * instead of wagmi/viem writeContract.
  */
 export function useContractWrite() {
-  const { initiaAddress, requestTxBlock } = useInterwovenKit();
+  const { initiaAddress, requestTxBlock, autoSign } = useInterwovenKit();
+
+  const isAutoSignEnabled = autoSign?.isEnabledByChain?.[APPCHAIN_ID] ?? false;
 
   const sendMsgCall = useCallback(
     async (input: string, value: string = "0") => {
       if (!initiaAddress) throw new Error("Wallet not connected");
 
-      return requestTxBlock({
+      // When autoSign is enabled, pass autoSign + feeDenom for headless signing.
+      // These fields exist at runtime but are missing from TxRequest types.
+      const txPayload = {
         chainId: APPCHAIN_ID,
+        ...(isAutoSignEnabled && { autoSign: true, feeDenom: "GAS" }),
         messages: [
           {
             typeUrl: "/minievm.evm.v1.MsgCall",
@@ -33,9 +38,11 @@ export function useContractWrite() {
             },
           },
         ],
-      });
+      };
+
+      return requestTxBlock(txPayload as Parameters<typeof requestTxBlock>[0]);
     },
-    [initiaAddress, requestTxBlock]
+    [initiaAddress, requestTxBlock, isAutoSignEnabled]
   );
 
   const createProfile = useCallback(

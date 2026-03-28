@@ -45,20 +45,65 @@ Three native features used:
 
 ## Running locally
 
+### Prerequisites
+
+- Node.js 18+
+- An Initia MiniEVM appchain (created via `weave init`)
+
+### 1. Start the appchain node
+
+```bash
+/root/.weave/data/minievm@v1.2.15/minitiad start --home /root/.minitia &
+```
+
+Wait a few seconds for blocks to start producing. Verify with:
+
+```bash
+curl -s http://localhost:8545 -X POST -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1}'
+```
+
+You should see `"result":"0x8148de971a10d"` (chain ID `2274399553167629`).
+
+The node exposes three endpoints:
+- EVM RPC: `http://localhost:8545`
+- Cosmos RPC: `http://localhost:26657`
+- Cosmos REST: `http://localhost:1317`
+
+Do not use `weave initia start` on WSL (requires systemd). Run `minitiad` directly.
+
+### 2. Install and configure
+
 ```bash
 npm install
 cp .env.example .env
-# fill in your values
+# fill in DEPLOYER_PRIVATE_KEY and other values
 ```
 
-Start your Initia EVM appchain ([docs](https://docs.initia.xyz/hackathon/get-started)), then:
+### 3. Deploy the contract
 
 ```bash
-npm run compile                    # compile the contract
-node scripts/deploy-viem.js        # deploy (not hardhat, ESM conflicts)
-# copy the deployed address to NEXT_PUBLIC_CONTRACT_ADDRESS in .env
-npm run dev                        # start frontend on localhost:3000
+npm run compile                    # compile with Hardhat
+node scripts/deploy-viem.js        # deploy via viem (not hardhat run, ESM conflicts)
 ```
+
+Copy the deployed address to `NEXT_PUBLIC_CONTRACT_ADDRESS` in `.env`.
+
+### 4. Start the frontend
+
+```bash
+npm run dev                        # starts on localhost:3000
+```
+
+Open `http://localhost:3000`. Connect your wallet via InterwovenKit to create a profile.
+
+### Getting GAS tokens
+
+The appchain uses `GAS` as its native fee token. Click the **"Get GAS"** button in the navbar after connecting your wallet. The built-in faucet sends 1 GAS per request (enough for 30+ transactions). One hour cooldown between requests.
+
+### Live deployment
+
+The node runs on a dedicated VPS with a systemd service for auto-restart. The frontend is deployed on Vercel. RPC endpoints are configured via environment variables (`NEXT_PUBLIC_RPC_URL`, `NEXT_PUBLIC_COSMOS_RPC`, `NEXT_PUBLIC_COSMOS_REST`).
 
 ## Tech
 
@@ -67,6 +112,7 @@ npm run dev                        # start frontend on localhost:3000
 - viem for contract reads and deploy scripts
 - InterwovenKit (`@initia/interwovenkit-react`) for wallet and tx
 - Initia L1 REST API for `.init` username resolution
+- sonner for toast notifications
 
 ## Pages
 

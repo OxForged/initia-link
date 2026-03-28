@@ -17,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: "InitiaLink",
-  description: "Your on-chain identity. One link for everything.",
+  description: "Your on-chain identity. One link for everything",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="grain min-h-screen bg-[var(--background)] text-[var(--foreground)] font-[family-name:var(--font-body)]">
         <Providers>
           <Navbar />
-          <main className="mx-auto max-w-4xl px-6 py-8">
+          <main className="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-8">
             {children}
           </main>
         </Providers>

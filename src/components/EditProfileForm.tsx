@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useContractWrite } from "@/hooks/useContractWrite";
 import { type Profile } from "@/lib/contract";
 import { platforms, detectPlatform } from "@/lib/platforms";
+import { toast } from "sonner";
 
 type LinkItem = {
   url: string;
@@ -35,7 +36,6 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
     })) || [{ url: "", label: "", platformId: "website" }]
   );
   const [saving, setSaving] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
 
   function addLink() {
     if (links.length >= 10) return;
@@ -77,7 +77,6 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    setStatus(null);
 
     const validLinks = links.filter((l) => l.url.trim());
     const urls = validLinks.map((l) => l.url.trim());
@@ -86,7 +85,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
     try {
       if (isNew) {
         await createProfile(bio, avatarUrl, urls, labels);
-        setStatus("Profile created!");
+        toast.success("Profile created!");
       } else {
         if (bio !== existingProfile?.bio) await updateBio(bio);
         if (avatarUrl !== existingProfile?.avatarUrl) await updateAvatar(avatarUrl);
@@ -96,11 +95,11 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
           JSON.stringify(labels) !== JSON.stringify(existingProfile?.linkLabels);
         if (linksChanged) await updateLinks(urls, labels);
 
-        setStatus("Profile updated!");
+        toast.success("Profile updated!");
       }
       onSaved?.();
     } catch (e: any) {
-      setStatus(e.message?.slice(0, 150) || "Failed to save");
+      toast.error(e.message?.slice(0, 150) || "Failed to save");
     } finally {
       setSaving(false);
     }
@@ -148,7 +147,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 style={{ animationDelay: `${i * 60}ms` }}
               >
                 {/* Platform icon picker row */}
-                <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+                <div className="flex items-center gap-1.5 sm:gap-1.5 mb-3 flex-wrap">
                   {platforms.map((p) => {
                     const isActive = link.platformId === p.id;
                     return (
@@ -158,7 +157,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                         onClick={() => selectPlatform(i, p.id)}
                         title={p.label}
                         className={`
-                          w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200
+                          w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all duration-200
                           ${isActive
                             ? "gradient-primary text-white shadow-[0_2px_10px_rgba(8,145,178,0.3)] scale-110"
                             : "bg-[#f0f5f7] text-[#999] hover:bg-[#d1e8ed] hover:text-[#0891b2] hover:scale-105"
@@ -181,33 +180,35 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 )}
 
                 {/* Input fields */}
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={link.label}
-                    onChange={(e) => updateLink(i, "label", e.target.value)}
-                    className="bg-[#f0f5f7] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-1/3 input-glow outline-none"
-                    placeholder="Label"
-                  />
-                  <input
-                    type="url"
-                    value={link.url}
-                    onChange={(e) => updateLink(i, "url", e.target.value)}
-                    className="bg-[#f0f5f7] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm flex-1 input-glow outline-none"
-                    placeholder={activePlatform?.placeholder || "https://..."}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeLink(i)}
-                    className="text-[var(--muted)] hover:text-red-500 text-sm px-2 hover:scale-110 transition-all duration-200"
-                    title="Remove link"
-                  >
-                    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 6h18" />
-                      <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" />
-                      <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" />
-                    </svg>
-                  </button>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex gap-2 w-full">
+                    <input
+                      type="text"
+                      value={link.label}
+                      onChange={(e) => updateLink(i, "label", e.target.value)}
+                      className="bg-[#f0f5f7] border border-[var(--card-border)] rounded-xl px-3 py-2.5 text-sm w-1/3 sm:w-1/3 input-glow outline-none"
+                      placeholder="Label"
+                    />
+                    <input
+                      type="url"
+                      value={link.url}
+                      onChange={(e) => updateLink(i, "url", e.target.value)}
+                      className="bg-[#f0f5f7] border border-[var(--card-border)] rounded-xl px-3 py-2.5 text-sm flex-1 input-glow outline-none"
+                      placeholder={activePlatform?.placeholder || "https://..."}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeLink(i)}
+                      className="text-[var(--muted)] hover:text-red-500 text-sm px-2 min-w-[40px] min-h-[40px] flex items-center justify-center hover:scale-110 transition-all duration-200"
+                      title="Remove link"
+                    >
+                      <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 6h18" />
+                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" />
+                        <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -280,11 +281,6 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
         ) : isNew ? "Create Profile" : "Update Profile"}
       </button>
 
-      {status && (
-        <p className={`status-slide-in text-sm text-center ${status.includes("!") ? "text-green-500" : "text-red-500"}`}>
-          {status}
-        </p>
-      )}
     </form>
   );
 }

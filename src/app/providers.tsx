@@ -12,6 +12,7 @@ import {
 } from "@initia/interwovenkit-react";
 import interwovenKitStyles from "@initia/interwovenkit-react/styles.js";
 import { APPCHAIN_ID, CHAIN_CONFIG } from "@/lib/constants";
+import { Toaster } from "sonner";
 
 const COSMOS_RPC = process.env.NEXT_PUBLIC_COSMOS_RPC || "http://localhost:26657";
 const COSMOS_REST = process.env.NEXT_PUBLIC_COSMOS_REST || "http://localhost:1317";
@@ -62,8 +63,17 @@ export default function Providers({ children }: PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={wagmiConfig}>
-        <InterwovenKitProvider {...TESTNET} customChain={customChain} enableAutoSign>
+        <InterwovenKitProvider {...TESTNET} customChain={customChain} enableAutoSign={{ [APPCHAIN_ID]: ["/minievm.evm.v1.MsgCall"] }}>
           {children}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                fontFamily: "var(--font-body), system-ui, sans-serif",
+              },
+            }}
+            richColors
+          />
         </InterwovenKitProvider>
       </WagmiProvider>
     </QueryClientProvider>

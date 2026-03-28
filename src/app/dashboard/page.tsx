@@ -79,22 +79,22 @@ export default function DashboardPage() {
       )}
 
       {/* Stat cards with stagger */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="animate-scale-in delay-1 bg-[linear-gradient(135deg,#f4f9fb,#e0f2fe)] rounded-2xl p-4 text-center hover-pop">
-          <p className="text-2xl font-bold text-[var(--foreground)]">{formatEther(profile.totalTips)}</p>
-          <p className="text-xs text-[var(--muted)]">INIT Received</p>
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-8">
+        <div className="animate-scale-in delay-1 bg-[linear-gradient(135deg,#f4f9fb,#e0f2fe)] rounded-2xl p-3 sm:p-4 text-center hover-pop">
+          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{formatEther(profile.totalTips)}</p>
+          <p className="text-[10px] sm:text-xs text-[var(--muted)]">INIT Received</p>
         </div>
-        <div className="animate-scale-in delay-2 bg-[linear-gradient(135deg,#e0f2fe,#ede9fe)] rounded-2xl p-4 text-center hover-pop">
-          <p className="text-2xl font-bold text-[var(--foreground)]">{profile.tipCount.toString()}</p>
-          <p className="text-xs text-[var(--muted)]">Tips</p>
+        <div className="animate-scale-in delay-2 bg-[linear-gradient(135deg,#e0f2fe,#ede9fe)] rounded-2xl p-3 sm:p-4 text-center hover-pop">
+          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{profile.tipCount.toString()}</p>
+          <p className="text-[10px] sm:text-xs text-[var(--muted)]">Tips</p>
         </div>
-        <div className="animate-scale-in delay-3 bg-[linear-gradient(135deg,#ede9fe,#f4f9fb)] rounded-2xl p-4 text-center hover-pop">
-          <p className="text-2xl font-bold text-[var(--foreground)]">{profile.followerCount.toString()}</p>
-          <p className="text-xs text-[var(--muted)]">Followers</p>
+        <div className="animate-scale-in delay-3 bg-[linear-gradient(135deg,#ede9fe,#f4f9fb)] rounded-2xl p-3 sm:p-4 text-center hover-pop">
+          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{profile.followerCount.toString()}</p>
+          <p className="text-[10px] sm:text-xs text-[var(--muted)]">Followers</p>
         </div>
       </div>
 
-      <div className="animate-fade-in-up delay-4 flex gap-4 mb-8">
+      <div className="animate-fade-in-up delay-4 flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8">
         <a
           href="/edit"
           className="btn-press btn-shimmer gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(8,145,178,0.25)] hover:shadow-[0_6px_20px_rgba(8,145,178,0.35)] hover:scale-105 transition-all duration-300"

@@ -102,9 +102,9 @@ export default async function ProfilePage({ params }: Props) {
   });
 
   return (
-    <div className="max-w-sm mx-auto text-center py-8 relative">
+    <div className="max-w-sm mx-auto text-center py-4 sm:py-8 px-2 sm:px-0 relative">
       {/* Subtle background orb */}
-      <div className="orb orb-pink w-48 h-48 -top-10 left-1/2 -translate-x-1/2 opacity-20" aria-hidden="true" />
+      <div className="orb orb-pink w-32 h-32 sm:w-48 sm:h-48 -top-10 left-1/2 -translate-x-1/2 opacity-20" aria-hidden="true" />
 
       {/* Avatar with rotating gradient ring */}
       <div className="animate-scale-in delay-0 flex justify-center mb-4">
@@ -123,7 +123,7 @@ export default async function ProfilePage({ params }: Props) {
 
       {/* Name */}
       <h1
-        className="animate-fade-in-up delay-1 text-2xl font-bold text-[var(--foreground)] font-heading"
+        className="animate-fade-in-up delay-1 text-xl sm:text-2xl font-bold text-[var(--foreground)] font-heading"
       >
         {displayName}
       </h1>
@@ -148,7 +148,7 @@ export default async function ProfilePage({ params }: Props) {
 
       {/* Action buttons */}
       <div className="animate-fade-in-up delay-4 flex flex-col items-center gap-3 mb-6">
-        <div className="flex justify-center gap-3">
+        <div className="flex flex-col sm:flex-row justify-center gap-3 w-full sm:w-auto">
           <TipButton profileOwner={address} />
           <FollowButton profileOwner={address} initialFollowing={false} />
         </div>
