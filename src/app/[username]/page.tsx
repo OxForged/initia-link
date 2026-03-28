@@ -123,8 +123,7 @@ export default async function ProfilePage({ params }: Props) {
 
       {/* Name */}
       <h1
-        className="animate-fade-in-up delay-1 text-2xl font-bold text-[var(--foreground)]"
-        style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+        className="animate-fade-in-up delay-1 text-2xl font-bold text-[var(--foreground)] font-heading"
       >
         {displayName}
       </h1>

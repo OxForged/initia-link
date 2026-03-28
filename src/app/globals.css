@@ -1,19 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fff7ed;
+  --background: #f4f9fb;
   --foreground: #1a1a1a;
   --card: #ffffff;
-  --card-border: #fde8e8;
+  --card-border: #d1e8ed;
   --muted: #888888;
-  --accent: #f43f5e;
-  --accent-hover: #f472b6;
+  --accent: #0891b2;
+  --accent-hover: #0e7490;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+}
+
+.font-heading {
+  font-family: var(--font-heading), system-ui, sans-serif;
 }
 
 * {
@@ -24,9 +28,9 @@ body {
    GRADIENT UTILITIES
    ============================================ */
 
-.gradient-primary { background: linear-gradient(135deg, #f43f5e, #f472b6); }
-.gradient-secondary { background: linear-gradient(135deg, #fb923c, #facc15); }
-.gradient-accent { background: linear-gradient(135deg, #f472b6, #fb923c); }
+.gradient-primary { background: #0891b2; }
+.gradient-secondary { background: #8b5cf6; }
+.gradient-accent { background: linear-gradient(135deg, #0891b2, #8b5cf6); }
 .gradient-text {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -35,14 +39,14 @@ body {
 
 /* Animated gradient that shifts hue over time */
 .gradient-animated {
-  background: linear-gradient(135deg, #f43f5e, #f472b6, #fb923c, #facc15, #f43f5e);
+  background: linear-gradient(135deg, #0891b2, #8b5cf6, #0891b2);
   background-size: 300% 300%;
   animation: gradientShift 6s ease infinite;
 }
 
 /* Animated gradient applied to text - must combine all properties */
 .gradient-text-animated {
-  background: linear-gradient(135deg, #f43f5e, #f472b6, #fb923c, #facc15, #f43f5e);
+  background: linear-gradient(135deg, #0891b2, #8b5cf6, #0891b2);
   background-size: 300% 300%;
   animation: gradientShift 6s ease infinite;
   -webkit-background-clip: text;
@@ -100,8 +104,8 @@ body {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(244, 114, 182, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(244, 63, 94, 0.5); }
+  0%, 100% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.5); }
 }
 
 @keyframes scaleIn {
@@ -199,17 +203,17 @@ body {
 }
 
 .orb-pink {
-  background: radial-gradient(circle, #f472b6, #f43f5e);
+  background: radial-gradient(circle, #0891b2, #065d73);
   animation: orbDrift1 12s ease-in-out infinite;
 }
 
 .orb-orange {
-  background: radial-gradient(circle, #fb923c, #facc15);
+  background: radial-gradient(circle, #8b5cf6, #6d28d9);
   animation: orbDrift2 15s ease-in-out infinite;
 }
 
 .orb-rose {
-  background: radial-gradient(circle, #fda4af, #f472b6);
+  background: radial-gradient(circle, #0891b2, #0e7490);
   animation: orbDrift1 18s ease-in-out infinite reverse;
 }
 
@@ -239,7 +243,7 @@ body {
 }
 .hover-lift:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(244, 63, 94, 0.2);
+  box-shadow: 0 8px 30px rgba(8, 145, 178, 0.2);
 }
 
 .hover-pop {
@@ -254,7 +258,7 @@ body {
   transition: box-shadow 0.3s ease;
 }
 .hover-glow:hover {
-  box-shadow: 0 0 24px rgba(244, 63, 94, 0.3);
+  box-shadow: 0 0 24px rgba(8, 145, 178, 0.3);
 }
 
 /* Button shimmer effect on hover */
@@ -288,8 +292,8 @@ body {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 3px solid #fde8e8;
-  border-top-color: #f43f5e;
+  border: 3px solid #d1e8ed;
+  border-top-color: #0891b2;
   animation: spin 0.7s linear infinite;
 }
 
@@ -329,7 +333,7 @@ body {
 
 .card-tilt:hover {
   transform: perspective(800px) rotateX(-2deg) rotateY(3deg) translateY(-6px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(244, 114, 182, 0.18),
+  box-shadow: 0 16px 40px rgba(8, 145, 178, 0.18),
               0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
@@ -353,7 +357,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  background: conic-gradient(from 0deg, #f43f5e, #f472b6, #fb923c, #facc15, #f43f5e);
+  background: conic-gradient(from 0deg, #0891b2, #8b5cf6, #0891b2);
   animation: borderSpin 4s linear infinite;
 }
 
@@ -372,7 +376,7 @@ body {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #f0e6e0 25%, #fdf0ea 50%, #f0e6e0 75%);
+  background: linear-gradient(90deg, #dce8ec 25%, #e8f2f5 50%, #dce8ec 75%);
   background-size: 200% 100%;
   animation: shimmerSkeleton 1.5s ease-in-out infinite;
   border-radius: 8px;
@@ -387,8 +391,8 @@ body {
 }
 
 .input-glow:focus {
-  border-color: #f472b6 !important;
-  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.12);
+  border-color: #0891b2 !important;
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
 }
 
 /* ============================================
@@ -428,7 +432,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, #f43f5e, #f472b6);
+  background: linear-gradient(135deg, #0891b2, #8b5cf6);
   opacity: 0;
   transition: opacity 0.35s ease;
 }

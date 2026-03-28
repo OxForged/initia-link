@@ -144,7 +144,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
             return (
               <div
                 key={i}
-                className="animate-fade-in-up bg-white border border-[var(--card-border)] rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_20px_rgba(244,114,182,0.08)] transition-shadow duration-300"
+                className="animate-fade-in-up bg-white border border-[var(--card-border)] rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_20px_rgba(8,145,178,0.08)] transition-shadow duration-300"
                 style={{ animationDelay: `${i * 60}ms` }}
               >
                 {/* Platform icon picker row */}
@@ -160,8 +160,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                         className={`
                           w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200
                           ${isActive
-                            ? "gradient-primary text-white shadow-[0_2px_10px_rgba(244,63,94,0.3)] scale-110"
-                            : "bg-[#f8f4f0] text-[#999] hover:bg-[#fde8e8] hover:text-[#f472b6] hover:scale-105"
+                            ? "gradient-primary text-white shadow-[0_2px_10px_rgba(8,145,178,0.3)] scale-110"
+                            : "bg-[#f0f5f7] text-[#999] hover:bg-[#d1e8ed] hover:text-[#0891b2] hover:scale-105"
                           }
                         `}
                       >
@@ -174,7 +174,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 {/* Active platform indicator */}
                 {activePlatform && (
                   <div className="flex items-center gap-1.5 mb-2">
-                    <span className="text-[11px] font-semibold text-[#f472b6] uppercase tracking-wider">
+                    <span className="text-[11px] font-semibold text-[#0891b2] uppercase tracking-wider">
                       {activePlatform.label}
                     </span>
                   </div>
@@ -186,14 +186,14 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                     type="text"
                     value={link.label}
                     onChange={(e) => updateLink(i, "label", e.target.value)}
-                    className="bg-[#fdf8f5] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-1/3 input-glow outline-none"
+                    className="bg-[#f0f5f7] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-1/3 input-glow outline-none"
                     placeholder="Label"
                   />
                   <input
                     type="url"
                     value={link.url}
                     onChange={(e) => updateLink(i, "url", e.target.value)}
-                    className="bg-[#fdf8f5] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm flex-1 input-glow outline-none"
+                    className="bg-[#f0f5f7] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm flex-1 input-glow outline-none"
                     placeholder={activePlatform?.placeholder || "https://..."}
                   />
                   <button
@@ -218,9 +218,9 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
           <button
             type="button"
             onClick={addLink}
-            className="mt-3 flex items-center gap-2 text-sm text-[#f472b6] hover:text-[var(--accent)] font-medium hover:scale-105 transition-all duration-200 group"
+            className="mt-3 flex items-center gap-2 text-sm text-[#0891b2] hover:text-[var(--accent-hover)] font-medium hover:scale-105 transition-all duration-200 group"
           >
-            <span className="w-7 h-7 rounded-lg bg-[#fde8e8] flex items-center justify-center group-hover:bg-[#f472b6] group-hover:text-white transition-all duration-200">
+            <span className="w-7 h-7 rounded-lg bg-[#d1e8ed] flex items-center justify-center group-hover:bg-[#0891b2] group-hover:text-white transition-all duration-200">
               <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M12 5v14M5 12h14" />
               </svg>
@@ -233,12 +233,12 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
       {/* Live Preview */}
       <div>
         <h3 className="text-sm font-medium mb-2 text-[var(--foreground)]">Preview</h3>
-        <div className="bg-white rounded-2xl p-6 text-center max-w-sm mx-auto shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_32px_rgba(244,114,182,0.12)] transition-shadow duration-500">
+        <div className="bg-white rounded-2xl p-6 text-center max-w-sm mx-auto shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_32px_rgba(8,145,178,0.12)] transition-shadow duration-500">
           {avatarUrl ? (
             <img
               src={avatarUrl}
               alt="avatar"
-              className="w-16 h-16 rounded-full mx-auto mb-3 object-cover ring-2 ring-[#fde8e8]"
+              className="w-16 h-16 rounded-full mx-auto mb-3 object-cover ring-2 ring-[#d1e8ed]"
             />
           ) : (
             <div className="w-16 h-16 rounded-full gradient-animated mx-auto mb-3 flex items-center justify-center text-xl font-bold text-white animate-pulse-glow">
@@ -270,7 +270,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full btn-press btn-shimmer gradient-primary text-white py-3 rounded-xl font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
+        className="w-full btn-press btn-shimmer gradient-primary text-white py-3 rounded-xl font-semibold shadow-[0_2px_10px_rgba(8,145,178,0.25)] hover:shadow-[0_6px_20px_rgba(8,145,178,0.35)] hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
       >
         {saving ? (
           <span className="flex items-center justify-center gap-2">

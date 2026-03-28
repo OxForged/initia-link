@@ -28,7 +28,7 @@ export default function ConnectButton() {
   return (
     <button
       onClick={openConnect}
-      className="gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:opacity-90 transition-opacity"
+      className="gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(8,145,178,0.25)] hover:opacity-90 transition-opacity"
     >
       Connect Wallet
     </button>

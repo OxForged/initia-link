@@ -23,7 +23,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
           <img
             src={profile.avatarUrl}
             alt={displayName}
-            className="w-12 h-12 rounded-full object-cover ring-2 ring-[#fde8e8]"
+            className="w-12 h-12 rounded-full object-cover ring-2 ring-[#d1e8ed]"
           />
         ) : (
           <div className="w-12 h-12 rounded-full gradient-accent flex items-center justify-center text-lg font-bold text-white ring-2 ring-white/50">

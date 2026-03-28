@@ -13,15 +13,15 @@ const gradients = [
 ];
 
 const hoverShadows = [
-  "hover:shadow-[0_8px_24px_rgba(244,63,94,0.3)]",
-  "hover:shadow-[0_8px_24px_rgba(251,146,60,0.3)]",
-  "hover:shadow-[0_8px_24px_rgba(244,114,182,0.3)]",
+  "hover:shadow-[0_8px_24px_rgba(8,145,178,0.3)]",
+  "hover:shadow-[0_8px_24px_rgba(139,92,246,0.3)]",
+  "hover:shadow-[0_8px_24px_rgba(8,145,178,0.2)]",
 ];
 
 const shadows = [
-  "shadow-[0_3px_12px_rgba(244,63,94,0.2)]",
-  "shadow-[0_3px_12px_rgba(251,146,60,0.2)]",
-  "shadow-[0_3px_12px_rgba(244,114,182,0.2)]",
+  "shadow-[0_3px_12px_rgba(8,145,178,0.2)]",
+  "shadow-[0_3px_12px_rgba(139,92,246,0.2)]",
+  "shadow-[0_3px_12px_rgba(8,145,178,0.15)]",
 ];
 
 export default function LinkButton({ url, label, index = 0 }: Props) {

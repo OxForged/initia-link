@@ -64,7 +64,7 @@ export default function DiscoverFeed() {
         <button
           onClick={() => setTab("new")}
           className={`btn-press text-sm font-semibold px-4 py-1.5 rounded-lg transition-all duration-200 ${
-            tab === "new" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(244,63,94,0.25)]" : "bg-[#f5f5f5] text-[#888] hover:bg-[#eee]"
+            tab === "new" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(8,145,178,0.25)]" : "bg-[#f5f5f5] text-[#888] hover:bg-[#eee]"
           }`}
         >
           New
@@ -72,7 +72,7 @@ export default function DiscoverFeed() {
         <button
           onClick={() => setTab("popular")}
           className={`btn-press text-sm font-semibold px-4 py-1.5 rounded-lg transition-all duration-200 ${
-            tab === "popular" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(244,63,94,0.25)]" : "bg-[#f5f5f5] text-[#888] hover:bg-[#eee]"
+            tab === "popular" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(8,145,178,0.25)]" : "bg-[#f5f5f5] text-[#888] hover:bg-[#eee]"
           }`}
         >
           Popular

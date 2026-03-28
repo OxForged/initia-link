@@ -34,7 +34,7 @@ export default function TipButton({ profileOwner }: Props) {
     return (
       <button
         onClick={() => setShowInput(true)}
-        className="btn-press btn-shimmer gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(244,63,94,0.25)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.35)] hover:scale-105 transition-all duration-300"
+        className="btn-press btn-shimmer gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(8,145,178,0.25)] hover:shadow-[0_6px_20px_rgba(8,145,178,0.35)] hover:scale-105 transition-all duration-300"
       >
         Tip INIT
       </button>

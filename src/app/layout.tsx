@@ -1,7 +1,19 @@
 import type { Metadata } from "next";
+import { DM_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import Navbar from "@/components/Navbar";
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  weight: ["500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "InitiaLink",
@@ -10,16 +22,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="grain min-h-screen bg-[var(--background)] text-[var(--foreground)]" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+    <html lang="en" className={`${dmSans.variable} ${spaceGrotesk.variable}`}>
+      <body className="grain min-h-screen bg-[var(--background)] text-[var(--foreground)] font-[family-name:var(--font-body)]">
         <Providers>
           <Navbar />
           <main className="mx-auto max-w-4xl px-6 py-8">

@@ -14,11 +14,10 @@ export default function Navbar() {
 
   return (
     <nav className="px-6 py-4 animate-fade-in-down">
-      <div className="mx-auto max-w-4xl bg-white/85 backdrop-blur-xl rounded-2xl px-6 py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_28px_rgba(244,63,94,0.1)] transition-shadow duration-500">
+      <div className="mx-auto max-w-4xl bg-white/85 backdrop-blur-xl rounded-2xl px-6 py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_28px_rgba(8,145,178,0.1)] transition-shadow duration-500">
         <a
           href="/"
-          className="text-xl font-extrabold tracking-tight gradient-text-animated"
-          style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+          className="text-xl font-bold tracking-tight text-[var(--foreground)] font-heading"
         >
           InitiaLink
         </a>

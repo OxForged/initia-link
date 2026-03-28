@@ -29,7 +29,7 @@ export function DashboardSkeleton() {
       <div className="skeleton h-4 w-24 mb-6" />
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[0, 1, 2].map((i) => (
-          <div key={i} className="rounded-2xl p-4 bg-[linear-gradient(135deg,#fff7ed,#fce7f3)]">
+          <div key={i} className="rounded-2xl p-4 bg-[linear-gradient(135deg,#f4f9fb,#e0f2fe)]">
             <div className="skeleton h-7 w-12 mx-auto mb-2 rounded" />
             <div className="skeleton h-3 w-16 mx-auto rounded" />
           </div>

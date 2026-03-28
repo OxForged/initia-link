@@ -27,15 +27,14 @@ export default function EditPage() {
     return (
       <div className="text-center py-16 animate-fade-in-up">
         <h1
-          className="text-3xl font-bold mb-4 text-[var(--foreground)]"
-          style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
-        >
+          className="text-3xl font-bold mb-4 text-[var(--foreground)] font-heading"
+          >
           Create Your Profile
         </h1>
         <p className="text-[var(--muted)] mb-8">Connect your wallet to get started.</p>
         <button
           onClick={openConnect}
-          className="btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:shadow-[0_8px_28px_rgba(244,63,94,0.4)] hover:scale-105 transition-all duration-300"
+          className="btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_8px_28px_rgba(8,145,178,0.4)] hover:scale-105 transition-all duration-300"
         >
           Connect Wallet
         </button>
@@ -47,9 +46,8 @@ export default function EditPage() {
     return (
       <div className="text-center py-16 animate-fade-in-up">
         <h1
-          className="text-3xl font-bold mb-4 text-[var(--foreground)]"
-          style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
-        >
+          className="text-3xl font-bold mb-4 text-[var(--foreground)] font-heading"
+          >
           Register Your .init Username
         </h1>
         <p className="text-[var(--muted)] mb-4 max-w-md mx-auto">
@@ -63,7 +61,7 @@ export default function EditPage() {
           href="https://app.testnet.initia.xyz/usernames"
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(244,63,94,0.3)] hover:shadow-[0_8px_28px_rgba(244,63,94,0.4)] hover:scale-105 transition-all duration-300 inline-block"
+          className="btn-shimmer gradient-primary text-white px-6 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_8px_28px_rgba(8,145,178,0.4)] hover:scale-105 transition-all duration-300 inline-block"
         >
           Register Username
         </a>
@@ -85,8 +83,7 @@ export default function EditPage() {
   return (
     <div className="max-w-lg mx-auto">
       <h1
-        className="animate-fade-in-up delay-0 text-2xl font-bold mb-6 text-[var(--foreground)]"
-        style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+        className="animate-fade-in-up delay-0 text-2xl font-bold mb-6 text-[var(--foreground)] font-heading"
       >
         {profile?.exists ? "Edit Profile" : "Create Profile"}
       </h1>
