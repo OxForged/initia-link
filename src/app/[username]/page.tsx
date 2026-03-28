@@ -4,6 +4,8 @@ import { getProfile, formatEther } from "@/lib/contract";
 import LinkButton from "@/components/LinkButton";
 import TipButton from "@/components/TipButton";
 import FollowButton from "@/components/FollowButton";
+import EditProfileButton from "@/components/EditProfileButton";
+import ShareButton from "@/components/ShareButton";
 import type { Address } from "viem";
 
 type Props = {
@@ -151,12 +153,18 @@ export default async function ProfilePage({ params }: Props) {
       <div className="animate-fade-in-up delay-4 flex flex-col items-center gap-3 mb-6">
         <div className="flex flex-col sm:flex-row justify-center gap-3 w-full sm:w-auto">
           <TipButton profileOwner={address} />
-          <FollowButton profileOwner={address} initialFollowing={false} />
+          <FollowButton profileOwner={address} />
+          <EditProfileButton profileOwner={address} />
         </div>
       </div>
 
+      {/* Share */}
+      <div className="animate-fade-in-up delay-5 flex justify-center mb-6">
+        <ShareButton username={displayName} />
+      </div>
+
       {/* Footer info */}
-      <div className="animate-fade-in delay-5 text-xs text-[var(--muted)] space-y-1">
+      <div className="animate-fade-in delay-6 text-xs text-[var(--muted)] space-y-1">
         <p>On-chain since {createdDate}</p>
         <p>{formatEther(profile.totalTips)} INIT received ({profile.tipCount.toString()} tips)</p>
       </div>

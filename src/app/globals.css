@@ -203,7 +203,7 @@ body {
   position: absolute;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.15;
+  opacity: 0.25;
   pointer-events: none;
   will-change: transform;
 }

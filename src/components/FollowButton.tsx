@@ -1,19 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useContractWrite } from "@/hooks/useContractWrite";
+import { useHexAddress } from "@initia/interwovenkit-react";
+import { isFollowing as checkIsFollowing } from "@/lib/contract";
 import { toast } from "sonner";
 import type { Address } from "viem";
 
 type Props = {
   profileOwner: Address;
-  initialFollowing: boolean;
 };
 
-export default function FollowButton({ profileOwner, initialFollowing }: Props) {
+export default function FollowButton({ profileOwner }: Props) {
   const { followProfile, unfollowProfile, isConnected } = useContractWrite();
-  const [following, setFollowing] = useState(initialFollowing);
+  const hexAddress = useHexAddress();
+  const [following, setFollowing] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Check on-chain follow status
+  useEffect(() => {
+    if (!hexAddress) return;
+    checkIsFollowing(hexAddress as Address, profileOwner)
+      .then(setFollowing)
+      .catch(() => {});
+  }, [hexAddress, profileOwner]);
+
+  // Hide if viewing own profile
+  if (hexAddress && hexAddress.toLowerCase() === profileOwner.toLowerCase()) return null;
 
   async function handleToggle() {
     if (!isConnected) { toast.error("Connect wallet first"); return; }

@@ -133,6 +133,8 @@ The node runs on a dedicated VPS with a systemd service for auto-restart. The fr
 - Platform icons with URL auto-detection (Twitter, GitHub, Instagram, YouTube, LinkedIn, Discord, Telegram, TikTok)
 - Discover feed with username search, Load More pagination, and multi-criteria sort
 - Navbar adapts: "Create Profile" becomes "My Profile" linking to your profile page once you have one
+- Share profiles to X, Telegram, or copy link
+- Follow/Tip buttons hidden on your own profile, follow state checked on-chain
 - Skeleton loading placeholders while data fetches
 - Scroll-triggered animations via Intersection Observer
 - Animated gradient avatar rings, hover effects, shimmer buttons
