@@ -167,14 +167,19 @@ export default function DiscoverFeed() {
           ))}
         </div>
       ) : sorted.length === 0 ? (
-        <p className="text-[var(--muted)] text-center py-8 animate-fade-in">
-          {query ? (
-            <>No profiles matching &ldquo;{search.trim()}&rdquo;</>
-          ) : (
-            <>No profiles yet. Be the first to{" "}
-            <a href="/edit" className="text-[var(--accent)] font-medium">create one</a>!</>
-          )}
-        </p>
+        <div className="text-center py-12 animate-fade-in">
+          <svg className="mx-auto mb-3 w-14 h-14 text-[var(--muted)] opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803a7.5 7.5 0 0010.607 0z" />
+          </svg>
+          <p className="text-[var(--muted)]">
+            {query ? (
+              <>No profiles matching &ldquo;{search.trim()}&rdquo;</>
+            ) : (
+              <>No profiles yet. Be the first to{" "}
+              <a href="/edit" className="text-[var(--accent)] font-medium">create one</a>!</>
+            )}
+          </p>
+        </div>
       ) : (
         <>
           <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-4">

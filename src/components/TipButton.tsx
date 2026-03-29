@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useContractWrite } from "@/hooks/useContractWrite";
+import { useHexAddress } from "@initia/interwovenkit-react";
 import { toast } from "sonner";
 import type { Address } from "viem";
 
@@ -11,6 +12,10 @@ type Props = {
 
 export default function TipButton({ profileOwner }: Props) {
   const { tipProfile, isConnected } = useContractWrite();
+  const hexAddress = useHexAddress();
+
+  // Hide if viewing own profile
+  if (hexAddress && hexAddress.toLowerCase() === profileOwner.toLowerCase()) return null;
   const [amount, setAmount] = useState("0.01");
   const [loading, setLoading] = useState(false);
   const [showInput, setShowInput] = useState(false);

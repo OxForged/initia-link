@@ -43,7 +43,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
       )}
       <div className="flex gap-4 mt-auto pt-3 text-xs text-[var(--muted)]">
         <span>{profile.links.length} links</span>
-        <span>{formatEther(profile.totalTips)} INIT tipped</span>
+        <span>{formatEther(profile.totalTips)} GAS tipped</span>
       </div>
     </a>
   );

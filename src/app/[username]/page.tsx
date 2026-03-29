@@ -6,6 +6,7 @@ import TipButton from "@/components/TipButton";
 import FollowButton from "@/components/FollowButton";
 import EditProfileButton from "@/components/EditProfileButton";
 import ShareButton from "@/components/ShareButton";
+import QRButton from "@/components/QRButton";
 import type { Address } from "viem";
 
 type Props = {
@@ -158,15 +159,16 @@ export default async function ProfilePage({ params }: Props) {
         </div>
       </div>
 
-      {/* Share */}
-      <div className="animate-fade-in-up delay-5 flex justify-center mb-6">
+      {/* Share + QR */}
+      <div className="animate-fade-in-up delay-5 flex justify-center gap-2 mb-6">
         <ShareButton username={displayName} />
+        <QRButton username={displayName} />
       </div>
 
       {/* Footer info */}
       <div className="animate-fade-in delay-6 text-xs text-[var(--muted)] space-y-1">
         <p>On-chain since {createdDate}</p>
-        <p>{formatEther(profile.totalTips)} INIT received ({profile.tipCount.toString()} tips)</p>
+        <p>{formatEther(profile.totalTips)} GAS received ({profile.tipCount.toString()} tips)</p>
       </div>
     </div>
   );

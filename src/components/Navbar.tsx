@@ -17,7 +17,7 @@ export default function Navbar() {
   useEffect(() => {
     if (!isConnected || !hexAddress) { setHasProfile(false); return; }
     getProfile(hexAddress as Address)
-      .then((p) => setHasProfile(p.bio !== "" || p.links.length > 0))
+      .then((p) => setHasProfile(p.exists))
       .catch(() => setHasProfile(false));
   }, [isConnected, hexAddress]);
 

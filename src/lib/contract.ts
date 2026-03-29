@@ -94,4 +94,28 @@ export async function getFollowing(address: Address, offset: bigint, limit: bigi
   }) as Address[];
 }
 
+export type TipEvent = {
+  from: Address;
+  to: Address;
+  amount: bigint;
+  blockNumber: bigint;
+};
+
+export async function getTipsReceived(address: Address): Promise<TipEvent[]> {
+  const client = getPublicClient();
+  const logs = await client.getContractEvents({
+    ...contractConfig,
+    eventName: "TipReceived",
+    args: { to: address },
+    fromBlock: 0n,
+    toBlock: "latest",
+  });
+  return logs.map((log) => ({
+    from: (log.args as any).from as Address,
+    to: (log.args as any).to as Address,
+    amount: (log.args as any).amount as bigint,
+    blockNumber: log.blockNumber,
+  })).reverse(); // newest first
+}
+
 export { formatEther, parseEther };
