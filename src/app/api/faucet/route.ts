@@ -3,7 +3,7 @@ import { RESTClient, Wallet, MsgSend, Coin, RawKey } from "@initia/initia.js";
 
 const REST_URL = process.env.NEXT_PUBLIC_COSMOS_REST || "http://localhost:1317";
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID || "initialink-1";
-const DRIP_AMOUNT = "1000"; // 1000 GAS (0 decimals)
+const DRIP_AMOUNT = "10"; // 10 GAS (0 decimals, gas price is 0 so even 1 is enough)
 const COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
 
 const lastDrip = new Map<string, number>();
