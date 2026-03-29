@@ -4,6 +4,8 @@ Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
 **Track:** Gaming & Consumer (digital identity)
 
+**Live:** [initialink.vercel.app](https://initialink.vercel.app) | **Demo:** [coming soon]
+
 ## What is this
 
 InitiaLink lets you create a profile page tied to your Initia username. Add your links and bio, set an avatar. Other users can tip you (native tokens, no platform cut) and follow you. One Move module stores everything, no backend, no database.
@@ -46,44 +48,45 @@ Four native features used:
 
 4. **InterwovenKit** -- wallet connection and transaction signing. Supports Initia Wallet, Keplr, MetaMask, and others. Contract writes go through Cosmos `MsgExecute` via `requestTxBlock`, with BCS-encoded arguments.
 
+## Try it
+
+The fastest way: visit the [live app](https://initialink.vercel.app), connect your Initia Wallet, claim GAS from the faucet, and create a profile.
+
 ## Running locally
 
-### Prerequisites
-
-- Node.js 18+
-- An Initia MiniMove appchain (minimove binary)
-
-### 1. Start the appchain node
-
 ```bash
-export LD_LIBRARY_PATH=/root/.weave/data/minimove@v1.1.11
-/root/.weave/data/minimove@v1.1.11/minitiad start --home /root/.minitia-move &
-```
-
-Wait a few seconds for blocks to start producing. Verify with:
-
-```bash
-curl -s http://localhost:26657/status | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['sync_info']['latest_block_height'])"
-```
-
-The node exposes two endpoints:
-- Cosmos RPC: `http://localhost:26657`
-- Cosmos REST: `http://localhost:1317`
-
-Do not use `weave initia start` on WSL (requires systemd). Run `minitiad` directly.
-
-### 2. Install and configure
-
-```bash
+git clone https://github.com/user/initialink.git
+cd initialink
 npm install
 cp .env.example .env
-# fill in MODULE_ADDRESS, GAS_METADATA, and other values
+npm run dev
 ```
 
-### 3. Deploy the Move module
+Open `http://localhost:3000`, connect your wallet, and click **"Get GAS"** in the wallet dropdown to receive tokens from the faucet.
+
+<details>
+<summary><strong>Full setup from scratch (deploy your own node + module)</strong></summary>
+
+### 1. Download and start a MiniMove node
 
 ```bash
-export LD_LIBRARY_PATH=/root/.weave/data/minimove@v1.1.11
+# Download minimove binary (Linux x86_64)
+curl -sL https://github.com/initia-labs/minimove/releases/download/v1.1.11/minimove_v1.1.11_Linux_x86_64.tar.gz | tar xz -C /usr/local/bin/
+
+# Initialize the chain
+export LD_LIBRARY_PATH=/usr/local/bin
+minitiad init operator --chain-id initialink-1 --home ~/.initialink
+
+# Configure genesis (set GAS denom, add validator, fund deployer)
+# See the genesis setup in the repo wiki or contact the maintainer
+
+# Start the node
+minitiad start --home ~/.initialink
+```
+
+### 2. Deploy the Move module
+
+```bash
 minitiad move deploy \
   --path contracts/move/profile_registry \
   --upgrade-policy COMPATIBLE \
@@ -92,23 +95,29 @@ minitiad move deploy \
   --gas-prices 0GAS \
   --chain-id initialink-1 \
   --node http://localhost:26657 \
-  --home /root/.minitia-move \
+  --home ~/.initialink \
   --keyring-backend test -y
 ```
 
-Copy the module address to `NEXT_PUBLIC_MODULE_ADDRESS` in `.env`.
+### 3. Configure environment
 
-### 4. Start the frontend
+Update `.env` with your node endpoints and the deployed module address:
 
-```bash
-npm run dev                        # starts on localhost:3000
+```
+NEXT_PUBLIC_MODULE_ADDRESS=0x<your_deployer_hex_address>
+NEXT_PUBLIC_COSMOS_RPC=http://localhost:26657
+NEXT_PUBLIC_COSMOS_REST=http://localhost:1317
+NEXT_PUBLIC_GAS_METADATA=<query via: minitiad query move view 0x1 coin metadata_address --args '["address:0x1","string:GAS"]'>
 ```
 
-Open `http://localhost:3000`. Connect your wallet via InterwovenKit to create a profile.
+### 4. Run the frontend
 
-### Getting GAS tokens
+```bash
+npm install
+npm run dev
+```
 
-The appchain uses `GAS` as its native fee token (0 decimals). Click your username in the navbar to open the wallet dropdown, then click **"Get GAS"**. The built-in faucet sends 1000 GAS per request. One hour cooldown between requests.
+</details>
 
 ## Tech
 
@@ -157,9 +166,8 @@ Linktree and Bento own your data and know nothing about crypto. ENS profiles are
 
 ```
 contracts/move/profile_registry/  Move module (profile_registry.move)
-contracts/archive/                old Solidity contract (reference)
 src/app/             pages (/, /edit, /discover, /dashboard, /[username])
-src/components/      UI components (ConnectButton w/ wallet dropdown, ProfileCard, EditProfileForm, DiscoverFeed, Skeleton, etc.)
-src/hooks/           useContractWrite (MsgExecute writes), useScrollReveal (Intersection Observer)
-src/lib/             contract reads, BCS encoding, constants, username resolution, platform icons
+src/components/      UI components
+src/hooks/           useContractWrite (MsgExecute), useScrollReveal
+src/lib/             contract reads, BCS encoding, constants, username resolution
 ```

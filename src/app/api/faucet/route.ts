@@ -1,17 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { execFile } from "child_process";
-import { promisify } from "util";
+import { RESTClient, Wallet, MsgSend, Coin, RawKey } from "@initia/initia.js";
 
-const execFileAsync = promisify(execFile);
-
-const COSMOS_RPC = process.env.NEXT_PUBLIC_COSMOS_RPC || "http://localhost:26657";
+const REST_URL = process.env.NEXT_PUBLIC_COSMOS_REST || "http://localhost:1317";
+const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID || "initialink-1";
 const DRIP_AMOUNT = "1000"; // 1000 GAS (0 decimals)
 const COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
 
 const lastDrip = new Map<string, number>();
 
-const MINITIAD = "/root/.weave/data/minimove@v1.1.11/minitiad";
-const MOVE_HOME = "/root/.minitia-move";
+function getWallet() {
+  const pk = process.env.FAUCET_PRIVATE_KEY;
+  if (!pk) throw new Error("Faucet not configured");
+
+  const rest = new RESTClient(REST_URL, { chainId: CHAIN_ID, gasPrices: "0GAS", gasAdjustment: "1.5" });
+  const key = new RawKey(Buffer.from(pk.replace(/^0x/, ""), "hex"));
+  return new Wallet(rest, key);
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,34 +36,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // minitiad tx bank send requires bech32 (init1...) address
-    const recipient = address;
+    const wallet = getWallet();
+    const sender = wallet.key.accAddress;
 
-    const env = {
-      ...process.env,
-      LD_LIBRARY_PATH: "/root/.weave/data/minimove@v1.1.11:" + (process.env.LD_LIBRARY_PATH || ""),
-    };
-
-    const args = [
-      "tx", "bank", "send",
-      "deployer", recipient, `${DRIP_AMOUNT}GAS`,
-      "--chain-id", "initialink-1",
-      "--node", COSMOS_RPC,
-      "--home", MOVE_HOME,
-      "--keyring-backend", "test",
-      "--gas", "auto",
-      "--gas-adjustment", "1.5",
-      "--gas-prices", "0GAS",
-      "-y", "-o", "json",
-    ];
-
-    const { stdout } = await execFileAsync(MINITIAD, args, { env, timeout: 15000 });
-    const txResult = JSON.parse(stdout);
+    const msg = new MsgSend(sender, address, [new Coin("GAS", DRIP_AMOUNT)]);
+    const tx = await wallet.createAndSignTx({ msgs: [msg] });
+    const result = await wallet.rest.tx.broadcast(tx);
 
     lastDrip.set(lower, Date.now());
 
     return NextResponse.json({
-      hash: txResult.txhash,
+      hash: result.txhash,
       amount: DRIP_AMOUNT,
     });
   } catch (e: unknown) {
