@@ -1,121 +1,138 @@
-import { createPublicClient, http, formatEther, parseEther, type Address } from "viem";
-import { PROFILE_REGISTRY_ABI } from "./abi";
-import { CONTRACT_ADDRESS, CHAIN_CONFIG } from "./constants";
+import { MODULE_ADDRESS, MODULE_NAME, REST_URL } from "./constants";
+import { bcsEncodeAddress, bcsEncodeU64 } from "./bcs";
 
-export const initiaChain = {
-  id: parseInt(CHAIN_CONFIG.chainId) || 1,
-  name: CHAIN_CONFIG.chainName,
-  nativeCurrency: CHAIN_CONFIG.nativeCurrency,
-  rpcUrls: {
-    default: { http: [CHAIN_CONFIG.rpcUrl] },
-  },
-} as const;
+const VIEW_URL = `${REST_URL}/initia/move/v1/accounts/${MODULE_ADDRESS}/modules/${MODULE_NAME}/view_functions`;
 
-export function getPublicClient() {
-  return createPublicClient({
-    chain: initiaChain,
-    transport: http(CHAIN_CONFIG.rpcUrl),
+async function viewFunction(fnName: string, args: string[] = []): Promise<string> {
+  const res = await fetch(`${VIEW_URL}/${fnName}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type_args: [], args }),
   });
+  if (!res.ok) {
+    throw new Error(`View function ${fnName} failed: ${res.status}`);
+  }
+  const json = await res.json();
+  return json.data;
 }
 
-const contractConfig = {
-  address: CONTRACT_ADDRESS as Address,
-  abi: PROFILE_REGISTRY_ABI,
-} as const;
+// ========== Types ==========
 
 export type Profile = {
-  owner: Address;
+  owner: string;
   bio: string;
   avatarUrl: string;
   links: string[];
   linkLabels: string[];
-  totalTips: bigint;
-  tipCount: bigint;
-  followerCount: bigint;
-  followingCount: bigint;
-  createdAt: bigint;
+  totalTips: number;
+  tipCount: number;
+  followerCount: number;
+  followingCount: number;
+  createdAt: number;
   exists: boolean;
 };
 
-// Read functions (use viem public client - these work fine via eth_call)
-
-export async function getProfile(address: Address): Promise<Profile> {
-  const client = getPublicClient();
-  const result = await client.readContract({
-    ...contractConfig,
-    functionName: "getProfile",
-    args: [address],
-  });
-  return result as unknown as Profile;
-}
-
-export async function getRecentProfiles(offset: bigint, limit: bigint): Promise<Address[]> {
-  const client = getPublicClient();
-  const result = await client.readContract({
-    ...contractConfig,
-    functionName: "getRecentProfiles",
-    args: [offset, limit],
-  });
-  return result as Address[];
-}
-
-export async function getTotalProfiles(): Promise<bigint> {
-  const client = getPublicClient();
-  return await client.readContract({
-    ...contractConfig,
-    functionName: "totalProfiles",
-  }) as bigint;
-}
-
-export async function isFollowing(follower: Address, followed: Address): Promise<boolean> {
-  const client = getPublicClient();
-  return await client.readContract({
-    ...contractConfig,
-    functionName: "isFollowing",
-    args: [follower, followed],
-  }) as boolean;
-}
-
-export async function getFollowers(address: Address, offset: bigint, limit: bigint): Promise<Address[]> {
-  const client = getPublicClient();
-  return await client.readContract({
-    ...contractConfig,
-    functionName: "getFollowers",
-    args: [address, offset, limit],
-  }) as Address[];
-}
-
-export async function getFollowing(address: Address, offset: bigint, limit: bigint): Promise<Address[]> {
-  const client = getPublicClient();
-  return await client.readContract({
-    ...contractConfig,
-    functionName: "getFollowing",
-    args: [address, offset, limit],
-  }) as Address[];
-}
-
 export type TipEvent = {
-  from: Address;
-  to: Address;
-  amount: bigint;
-  blockNumber: bigint;
+  from: string;
+  to: string;
+  amount: number;
+  timestamp: number;
 };
 
-export async function getTipsReceived(address: Address): Promise<TipEvent[]> {
-  const client = getPublicClient();
-  const logs = await client.getContractEvents({
-    ...contractConfig,
-    eventName: "TipReceived",
-    args: { to: address },
-    fromBlock: 0n,
-    toBlock: "latest",
-  });
-  return logs.map((log) => ({
-    from: (log.args as any).from as Address,
-    to: (log.args as any).to as Address,
-    amount: (log.args as any).amount as bigint,
-    blockNumber: log.blockNumber,
-  })).reverse(); // newest first
+// ========== Parsers ==========
+
+function parseProfile(data: string): Profile {
+  const raw = JSON.parse(data);
+  return {
+    owner: raw.owner,
+    bio: raw.bio,
+    avatarUrl: raw.avatar_url,
+    links: raw.links || [],
+    linkLabels: raw.link_labels || [],
+    totalTips: Number(raw.total_tips),
+    tipCount: Number(raw.tip_count),
+    followerCount: Number(raw.follower_count),
+    followingCount: Number(raw.following_count),
+    createdAt: Number(raw.created_at),
+    exists: raw.exists,
+  };
 }
 
-export { formatEther, parseEther };
+function parseTipRecords(data: string): TipEvent[] {
+  const raw: Array<{ from: string; to: string; amount: string; timestamp: string }> = JSON.parse(data);
+  return raw.map((r) => ({
+    from: r.from,
+    to: r.to,
+    amount: Number(r.amount),
+    timestamp: Number(r.timestamp),
+  }));
+}
+
+// ========== Read functions ==========
+
+export async function getProfile(address: string): Promise<Profile> {
+  const data = await viewFunction("get_profile", [bcsEncodeAddress(address)]);
+  return parseProfile(data);
+}
+
+export async function getRecentProfiles(offset: number, limit: number): Promise<string[]> {
+  const data = await viewFunction("get_recent_profiles", [
+    bcsEncodeU64(offset),
+    bcsEncodeU64(limit),
+  ]);
+  return JSON.parse(data) as string[];
+}
+
+export async function getTotalProfiles(): Promise<number> {
+  const data = await viewFunction("total_profiles");
+  return Number(JSON.parse(data));
+}
+
+export async function isFollowing(follower: string, followed: string): Promise<boolean> {
+  const data = await viewFunction("is_following", [
+    bcsEncodeAddress(follower),
+    bcsEncodeAddress(followed),
+  ]);
+  return JSON.parse(data) as boolean;
+}
+
+export async function getFollowers(address: string, offset: number, limit: number): Promise<string[]> {
+  const data = await viewFunction("get_followers", [
+    bcsEncodeAddress(address),
+    bcsEncodeU64(offset),
+    bcsEncodeU64(limit),
+  ]);
+  return JSON.parse(data) as string[];
+}
+
+export async function getFollowing(address: string, offset: number, limit: number): Promise<string[]> {
+  const data = await viewFunction("get_following", [
+    bcsEncodeAddress(address),
+    bcsEncodeU64(offset),
+    bcsEncodeU64(limit),
+  ]);
+  return JSON.parse(data) as string[];
+}
+
+export async function getTipsReceived(address: string): Promise<TipEvent[]> {
+  try {
+    const data = await viewFunction("get_tips_received", [
+      bcsEncodeAddress(address),
+      bcsEncodeU64(0),
+      bcsEncodeU64(20),
+    ]);
+    return parseTipRecords(data);
+  } catch {
+    return [];
+  }
+}
+
+// ========== Formatting helpers ==========
+
+export function formatGas(amount: number | bigint): string {
+  return String(amount);
+}
+
+export function parseGas(amount: string): number {
+  return Math.floor(Number(amount));
+}

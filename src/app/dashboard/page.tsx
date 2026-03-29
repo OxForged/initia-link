@@ -2,20 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
-import { getProfile, getFollowing, getTipsReceived, type Profile, type TipEvent, formatEther } from "@/lib/contract";
+import { getProfile, getFollowing, getTipsReceived, type Profile, type TipEvent, formatGas } from "@/lib/contract";
 import { resolveAddressToUsername } from "@/lib/username";
 import { DashboardSkeleton } from "@/components/Skeleton";
-import type { Address } from "viem";
-
 type ResolvedAddress = {
-  address: Address;
+  address: string;
   username?: string;
 };
 
 export default function DashboardPage() {
   const { isConnected, openConnect, username } = useInterwovenKit();
   const hexAddress = useHexAddress();
-  const account = hexAddress as Address | undefined;
+  const account = hexAddress as string | undefined;
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [followingList, setFollowingList] = useState<ResolvedAddress[]>([]);
@@ -28,7 +26,7 @@ export default function DashboardPage() {
     setLoading(true);
     Promise.all([
       getProfile(account),
-      getFollowing(account, 0n, 50n),
+      getFollowing(account, 0, 50),
       getTipsReceived(account),
     ])
       .then(async ([p, f, t]) => {
@@ -98,7 +96,7 @@ export default function DashboardPage() {
     );
   }
 
-  function displayAddr(addr: Address) {
+  function displayAddr(addr: string) {
     const name = tipNames[addr.toLowerCase()];
     return name || `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   }
@@ -115,15 +113,15 @@ export default function DashboardPage() {
       {/* Stat cards */}
       <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-8">
         <div className="animate-scale-in delay-1 bg-[linear-gradient(135deg,#f4f9fb,#e0f2fe)] rounded-2xl p-3 sm:p-4 text-center hover-pop">
-          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{formatEther(profile.totalTips)}</p>
+          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{formatGas(profile.totalTips)}</p>
           <p className="text-[10px] sm:text-xs text-[var(--muted)]">GAS Received</p>
         </div>
         <div className="animate-scale-in delay-2 bg-[linear-gradient(135deg,#e0f2fe,#ede9fe)] rounded-2xl p-3 sm:p-4 text-center hover-pop">
-          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{profile.tipCount.toString()}</p>
+          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{profile.tipCount}</p>
           <p className="text-[10px] sm:text-xs text-[var(--muted)]">Tips</p>
         </div>
         <div className="animate-scale-in delay-3 bg-[linear-gradient(135deg,#ede9fe,#f4f9fb)] rounded-2xl p-3 sm:p-4 text-center hover-pop">
-          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{profile.followerCount.toString()}</p>
+          <p className="text-lg sm:text-2xl font-bold text-[var(--foreground)]">{profile.followerCount}</p>
           <p className="text-[10px] sm:text-xs text-[var(--muted)]">Followers</p>
         </div>
       </div>
@@ -162,7 +160,7 @@ export default function DashboardPage() {
           <div className="space-y-2">
             {tips.map((tip, i) => (
               <a
-                key={`${tip.from}-${tip.blockNumber}-${i}`}
+                key={`${tip.from}-${tip.timestamp}-${i}`}
                 href={`/${tipNames[tip.from.toLowerCase()] || tip.from}`}
                 className="animate-fade-in-up flex items-center justify-between bg-white border border-[var(--card-border)] rounded-xl px-4 py-3 hover:shadow-[0_4px_16px_rgba(8,145,178,0.1)] hover:-translate-y-0.5 transition-all duration-200"
                 style={{ animationDelay: `${500 + i * 60}ms` }}
@@ -173,7 +171,7 @@ export default function DashboardPage() {
                   </span>
                   <span className="text-sm text-[var(--foreground)] font-medium">{displayAddr(tip.from)}</span>
                 </div>
-                <span className="text-sm font-semibold text-[var(--accent)]">+{formatEther(tip.amount)} GAS</span>
+                <span className="text-sm font-semibold text-[var(--accent)]">+{formatGas(tip.amount)} GAS</span>
               </a>
             ))}
           </div>

@@ -1,33 +1,24 @@
-import { createWalletClient, http, parseEther } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import { defineChain } from "viem";
 import { NextRequest, NextResponse } from "next/server";
+import { execFile } from "child_process";
+import { promisify } from "util";
 
-const chain = defineChain({
-  id: Number(process.env.NEXT_PUBLIC_EVM_CHAIN_ID || "2274399553167629"),
-  name: "InitiaLink",
-  nativeCurrency: { name: "GAS", symbol: "GAS", decimals: 18 },
-  rpcUrls: {
-    default: { http: [process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545"] },
-  },
-});
+const execFileAsync = promisify(execFile);
 
-const DRIP_AMOUNT = "1"; // 1 GAS per request
-const COOLDOWN_MS = 60 * 60 * 1000; // 1 hour per address
+const COSMOS_RPC = process.env.NEXT_PUBLIC_COSMOS_RPC || "http://localhost:26657";
+const DRIP_AMOUNT = "1000"; // 1000 GAS (0 decimals)
+const COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
 
 const lastDrip = new Map<string, number>();
+
+const MINITIAD = "/root/.weave/data/minimove@v1.1.11/minitiad";
+const MOVE_HOME = "/root/.minitia-move";
 
 export async function POST(req: NextRequest) {
   try {
     const { address } = await req.json();
 
-    if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
-      return NextResponse.json({ error: "Invalid address" }, { status: 400 });
-    }
-
-    const pk = process.env.FAUCET_PRIVATE_KEY;
-    if (!pk) {
-      return NextResponse.json({ error: "Faucet not configured" }, { status: 500 });
+    if (!address) {
+      return NextResponse.json({ error: "Address required" }, { status: 400 });
     }
 
     // Rate limit
@@ -41,25 +32,38 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const account = privateKeyToAccount(pk as `0x${string}`);
-    const client = createWalletClient({
-      account,
-      chain,
-      transport: http(),
-    });
+    // minitiad tx bank send requires bech32 (init1...) address
+    const recipient = address;
 
-    const hash = await client.sendTransaction({
-      to: address as `0x${string}`,
-      value: parseEther(DRIP_AMOUNT),
-    });
+    const env = {
+      ...process.env,
+      LD_LIBRARY_PATH: "/root/.weave/data/minimove@v1.1.11:" + (process.env.LD_LIBRARY_PATH || ""),
+    };
+
+    const args = [
+      "tx", "bank", "send",
+      "deployer", recipient, `${DRIP_AMOUNT}GAS`,
+      "--chain-id", "initialink-1",
+      "--node", COSMOS_RPC,
+      "--home", MOVE_HOME,
+      "--keyring-backend", "test",
+      "--gas", "auto",
+      "--gas-adjustment", "1.5",
+      "--gas-prices", "0GAS",
+      "-y", "-o", "json",
+    ];
+
+    const { stdout } = await execFileAsync(MINITIAD, args, { env, timeout: 15000 });
+    const txResult = JSON.parse(stdout);
 
     lastDrip.set(lower, Date.now());
 
-    return NextResponse.json({ hash, amount: DRIP_AMOUNT });
-  } catch (e: any) {
-    return NextResponse.json(
-      { error: e.message?.slice(0, 200) || "Faucet error" },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      hash: txResult.txhash,
+      amount: DRIP_AMOUNT,
+    });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message.slice(0, 200) : "Faucet error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

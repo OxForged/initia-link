@@ -4,12 +4,10 @@ import { useState, useEffect } from "react";
 import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
 import { getProfile, type Profile } from "@/lib/contract";
 import EditProfileForm from "@/components/EditProfileForm";
-import type { Address } from "viem";
-
 export default function EditPage() {
   const { isConnected, openConnect, username, initiaAddress } = useInterwovenKit();
   const hexAddress = useHexAddress();
-  const account = hexAddress as Address | undefined;
+  const account = hexAddress as string | undefined;
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(false);

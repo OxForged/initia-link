@@ -1,10 +1,8 @@
 "use client";
 
 import { useHexAddress } from "@initia/interwovenkit-react";
-import type { Address } from "viem";
-
 type Props = {
-  profileOwner: Address;
+  profileOwner: string;
 };
 
 export default function EditProfileButton({ profileOwner }: Props) {

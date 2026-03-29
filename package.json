@@ -9,8 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run scripts/deploy.cts --network initia"
+    "move:build": "echo 'Use minitiad move build --path contracts/move/profile_registry'"
   },
   "keywords": [],
   "author": "",
@@ -18,13 +17,11 @@
   "description": "",
   "dependencies": {
     "@initia/interwovenkit-react": "^2.5.1",
-    "@openzeppelin/contracts": "^5.6.1",
     "@tailwindcss/postcss": "^4.2.2",
     "@tanstack/react-query": "^5.95.2",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "eslint": "^10.1.0",
-    "ethers": "^6.16.0",
     "next": "^16.2.1",
     "postcss": "^8.5.8",
     "react": "^19.2.4",
@@ -37,7 +34,5 @@
   },
   "type": "module",
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^6.1.2",
-    "hardhat": "^2.28.6"
   }
 }

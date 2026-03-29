@@ -6,12 +6,10 @@ import { resolveAddressToUsername } from "@/lib/username";
 import ProfileCard from "./ProfileCard";
 import { ProfileCardSkeleton } from "./Skeleton";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import type { Address } from "viem";
-
 const PAGE_SIZE = 12;
 
 type ProfileData = {
-  address: Address;
+  address: string;
   profile: Profile;
   username?: string;
 };
@@ -35,8 +33,8 @@ export default function DiscoverFeed() {
     setLoading(true);
     try {
       const total = await getTotalProfiles();
-      const limit = total > 200n ? 200n : total;
-      const addresses = await getRecentProfiles(0n, limit);
+      const limit = total > 200 ? 200 : total;
+      const addresses = await getRecentProfiles(0, limit);
 
       const data = await Promise.all(
         addresses.map(async (addr) => {

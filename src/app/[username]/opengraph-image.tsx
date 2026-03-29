@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
 import { resolveUsernameToAddress, resolveAddressToUsername } from "@/lib/username";
-import { getProfile, formatEther } from "@/lib/contract";
-import type { Address } from "viem";
+import { getProfile, formatGas } from "@/lib/contract";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
@@ -15,11 +14,11 @@ export default async function Image({ params }: { params: Promise<{ username: st
   const { username } = await params;
   const decoded = decodeURIComponent(username);
 
-  let address: Address | null = null;
+  let address: string | null = null;
   if (isHexAddress(decoded)) {
-    address = decoded as Address;
+    address = decoded;
   } else {
-    address = (await resolveUsernameToAddress(decoded).catch(() => null)) as Address | null;
+    address = await resolveUsernameToAddress(decoded).catch(() => null);
   }
 
   if (!address) {
@@ -114,11 +113,11 @@ export default async function Image({ params }: { params: Promise<{ username: st
           {/* Stats */}
           <div style={{ display: "flex", gap: 40 }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ fontSize: 32, fontWeight: 700, color: "#0891b2" }}>{profile.followerCount.toString()}</div>
+              <div style={{ fontSize: 32, fontWeight: 700, color: "#0891b2" }}>{profile.followerCount}</div>
               <div style={{ fontSize: 16, color: "#888" }}>followers</div>
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ fontSize: 32, fontWeight: 700, color: "#8b5cf6" }}>{formatEther(profile.totalTips)}</div>
+              <div style={{ fontSize: 32, fontWeight: 700, color: "#8b5cf6" }}>{formatGas(profile.totalTips)}</div>
               <div style={{ fontSize: 16, color: "#888" }}>GAS tipped</div>
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>

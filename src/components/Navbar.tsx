@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
 import { getProfile } from "@/lib/contract";
 import ConnectButton from "./ConnectButton";
-import type { Address } from "viem";
-
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -16,7 +14,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!isConnected || !hexAddress) { setHasProfile(false); return; }
-    getProfile(hexAddress as Address)
+    getProfile(hexAddress)
       .then((p) => setHasProfile(p.exists))
       .catch(() => setHasProfile(false));
   }, [isConnected, hexAddress]);

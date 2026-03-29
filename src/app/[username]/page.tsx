@@ -1,14 +1,12 @@
 import { Metadata } from "next";
 import { resolveUsernameToAddress, resolveAddressToUsername } from "@/lib/username";
-import { getProfile, formatEther } from "@/lib/contract";
+import { getProfile, formatGas } from "@/lib/contract";
 import LinkButton from "@/components/LinkButton";
 import TipButton from "@/components/TipButton";
 import FollowButton from "@/components/FollowButton";
 import EditProfileButton from "@/components/EditProfileButton";
 import ShareButton from "@/components/ShareButton";
 import QRButton from "@/components/QRButton";
-import type { Address } from "viem";
-
 type Props = {
   params: Promise<{ username: string }>;
 };
@@ -17,14 +15,14 @@ function isHexAddress(s: string): boolean {
   return s.startsWith("0x") && s.length === 42;
 }
 
-async function resolveAddress(username: string): Promise<Address | null> {
+async function resolveAddress(username: string): Promise<string | null> {
   if (isHexAddress(username)) {
-    return username as Address;
+    return username;
   }
-  return (await resolveUsernameToAddress(username)) as Address | null;
+  return await resolveUsernameToAddress(username).catch(() => null);
 }
 
-async function resolveDisplayName(decoded: string, address: Address): Promise<string> {
+async function resolveDisplayName(decoded: string, address: string): Promise<string> {
   if (!isHexAddress(decoded)) return decoded;
   try {
     const name = await resolveAddressToUsername(address);
@@ -134,8 +132,8 @@ export default async function ProfilePage({ params }: Props) {
 
       {/* Stats */}
       <div className="animate-fade-in-up delay-2 flex justify-center gap-4 text-sm mt-1 mb-4">
-        <span><b className="text-[var(--foreground)]">{profile.followerCount.toString()}</b> <span className="text-[var(--muted)]">followers</span></span>
-        <span><b className="text-[var(--foreground)]">{profile.followingCount.toString()}</b> <span className="text-[var(--muted)]">following</span></span>
+        <span><b className="text-[var(--foreground)]">{profile.followerCount}</b> <span className="text-[var(--muted)]">followers</span></span>
+        <span><b className="text-[var(--foreground)]">{profile.followingCount}</b> <span className="text-[var(--muted)]">following</span></span>
       </div>
 
       {/* Bio */}
@@ -168,7 +166,7 @@ export default async function ProfilePage({ params }: Props) {
       {/* Footer info */}
       <div className="animate-fade-in delay-6 text-xs text-[var(--muted)] space-y-1">
         <p>On-chain since {createdDate}</p>
-        <p>{formatEther(profile.totalTips)} GAS received ({profile.tipCount.toString()} tips)</p>
+        <p>{formatGas(profile.totalTips)} GAS received ({profile.tipCount} tips)</p>
       </div>
     </div>
   );

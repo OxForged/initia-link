@@ -4,10 +4,8 @@ import { useState } from "react";
 import { useContractWrite } from "@/hooks/useContractWrite";
 import { useHexAddress } from "@initia/interwovenkit-react";
 import { toast } from "sonner";
-import type { Address } from "viem";
-
 type Props = {
-  profileOwner: Address;
+  profileOwner: string;
 };
 
 export default function TipButton({ profileOwner }: Props) {
@@ -16,7 +14,7 @@ export default function TipButton({ profileOwner }: Props) {
 
   // Hide if viewing own profile
   if (hexAddress && hexAddress.toLowerCase() === profileOwner.toLowerCase()) return null;
-  const [amount, setAmount] = useState("0.01");
+  const [amount, setAmount] = useState("10");
   const [loading, setLoading] = useState(false);
   const [showInput, setShowInput] = useState(false);
 
@@ -40,7 +38,7 @@ export default function TipButton({ profileOwner }: Props) {
         onClick={() => setShowInput(true)}
         className="btn-press btn-shimmer gradient-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(8,145,178,0.25)] hover:shadow-[0_6px_20px_rgba(8,145,178,0.35)] hover:scale-105 transition-all duration-300 min-h-[44px]"
       >
-        Tip INIT
+        Tip GAS
       </button>
     );
   }
@@ -50,8 +48,8 @@ export default function TipButton({ profileOwner }: Props) {
       <div className="flex items-center gap-2">
         <input
           type="number"
-          step="0.001"
-          min="0.001"
+          step="1"
+          min="1"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           className="bg-white border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-24 input-glow outline-none"

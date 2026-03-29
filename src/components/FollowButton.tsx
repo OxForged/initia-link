@@ -5,10 +5,8 @@ import { useContractWrite } from "@/hooks/useContractWrite";
 import { useHexAddress } from "@initia/interwovenkit-react";
 import { isFollowing as checkIsFollowing } from "@/lib/contract";
 import { toast } from "sonner";
-import type { Address } from "viem";
-
 type Props = {
-  profileOwner: Address;
+  profileOwner: string;
 };
 
 export default function FollowButton({ profileOwner }: Props) {
@@ -20,7 +18,7 @@ export default function FollowButton({ profileOwner }: Props) {
   // Check on-chain follow status
   useEffect(() => {
     if (!hexAddress) return;
-    checkIsFollowing(hexAddress as Address, profileOwner)
+    checkIsFollowing(hexAddress, profileOwner)
       .then(setFollowing)
       .catch(() => {});
   }, [hexAddress, profileOwner]);

@@ -3,10 +3,10 @@
   "repo_url": "",
   "commit_sha": "",
   "rollup_chain_id": "initialink-1",
-  "deployed_address": "0xdccc0dd916e38a4b2ada84694749ca8960618de8",
-  "vm": "evm",
+  "deployed_address": "0xE6638AB1AD3530282D4FA9E13D5BC1189EC6125D",
+  "vm": "minimove",
   "native_feature": "initia-usernames",
-  "core_logic_path": "contracts/ProfileRegistry.sol",
+  "core_logic_path": "contracts/move/profile_registry/sources/profile_registry.move",
   "native_feature_frontend_path": "src/app/[username]/page.tsx",
   "demo_video_url": ""
 }

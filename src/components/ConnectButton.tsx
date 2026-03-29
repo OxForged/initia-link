@@ -42,13 +42,13 @@ export default function ConnectButton() {
     autoSign?.isLoading || enableAutoSign.isPending || disableAutoSign.isPending;
 
   async function handleFaucet() {
-    if (!hexAddress) return;
+    if (!initiaAddress) return;
     setFaucetLoading(true);
     try {
       const res = await fetch("/api/faucet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ address: hexAddress }),
+        body: JSON.stringify({ address: initiaAddress }),
       });
       const data = await res.json();
       if (!res.ok) {

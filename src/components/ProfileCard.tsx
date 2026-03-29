@@ -1,10 +1,9 @@
 "use client";
 
-import { type Profile, formatEther } from "@/lib/contract";
-import type { Address } from "viem";
+import { type Profile, formatGas } from "@/lib/contract";
 
 type Props = {
-  address: Address;
+  address: string;
   profile: Profile;
   username?: string;
 };
@@ -34,7 +33,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
         <div>
           <h3 className="font-semibold text-[var(--foreground)]">{displayName}</h3>
           <p className="text-xs text-[var(--muted)]">
-            {profile.followerCount.toString()} followers
+            {profile.followerCount} followers
           </p>
         </div>
       </div>
@@ -43,7 +42,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
       )}
       <div className="flex gap-4 mt-auto pt-3 text-xs text-[var(--muted)]">
         <span>{profile.links.length} links</span>
-        <span>{formatEther(profile.totalTips)} GAS tipped</span>
+        <span>{formatGas(profile.totalTips)} GAS tipped</span>
       </div>
     </a>
   );

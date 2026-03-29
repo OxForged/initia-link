@@ -1,9 +1,22 @@
 node_modules/
 .next/
 .env
-artifacts/
-cache/
-typechain-types/
 docs
 CLAUDE.md
 .superpowers
+.mcp.json
+
+# Move build artifacts
+contracts/move/profile_registry/build/
+
+# Old EVM artifacts (archived)
+artifacts/
+cache/
+typechain-types/
+
+# Build cache
+tsconfig.tsbuildinfo
+
+# Keys
+id_ed25519
+*.pem

@@ -1,0 +1,10 @@
+[package]
+name = "profile_registry"
+version = "0.0.0"
+
+[dependencies]
+InitiaStdlib = { git = "https://github.com/initia-labs/movevm.git", subdir = "precompile/modules/initia_stdlib", rev = "main" }
+
+[addresses]
+std = "0x1"
+profile_registry = "0xE6638AB1AD3530282D4FA9E13D5BC1189EC6125D"

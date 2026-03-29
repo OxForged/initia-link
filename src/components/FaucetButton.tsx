@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useHexAddress } from "@initia/interwovenkit-react";
+import { useInterwovenKit } from "@initia/interwovenkit-react";
 import { toast } from "sonner";
 
 export default function FaucetButton() {
-  const hexAddress = useHexAddress();
+  const { initiaAddress } = useInterwovenKit();
   const [loading, setLoading] = useState(false);
 
   async function handleDrip() {
-    if (!hexAddress) {
+    if (!initiaAddress) {
       toast.error("Connect wallet first");
       return;
     }
@@ -20,7 +20,7 @@ export default function FaucetButton() {
       const res = await fetch("/api/faucet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ address: hexAddress }),
+        body: JSON.stringify({ address: initiaAddress }),
       });
 
       const data = await res.json();
