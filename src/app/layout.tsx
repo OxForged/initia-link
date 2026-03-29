@@ -22,7 +22,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en" className={`${dmSans.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}` }} />
+      </head>
       <body className="grain min-h-screen bg-[var(--background)] text-[var(--foreground)] font-[family-name:var(--font-body)]">
         <Providers>
           <Navbar />

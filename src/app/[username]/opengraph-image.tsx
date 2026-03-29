@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { resolveUsernameToAddress, resolveAddressToUsername } from "@/lib/username";
 import { getProfile, formatGas } from "@/lib/contract";
+import { parseBioTheme, getThemeById } from "@/lib/themes";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
@@ -104,11 +105,14 @@ export default async function Image({ params }: { params: Promise<{ username: st
           </div>
 
           {/* Bio */}
-          {profile.bio && (
-            <div style={{ fontSize: 22, color: "#555", lineHeight: 1.5, marginBottom: 32, maxWidth: 600 }}>
-              {profile.bio.length > 120 ? profile.bio.slice(0, 120) + "..." : profile.bio}
-            </div>
-          )}
+          {profile.bio && (() => {
+            const { cleanBio } = parseBioTheme(profile.bio);
+            return cleanBio ? (
+              <div style={{ fontSize: 22, color: "#555", lineHeight: 1.5, marginBottom: 32, maxWidth: 600 }}>
+                {cleanBio.length > 120 ? cleanBio.slice(0, 120) + "..." : cleanBio}
+              </div>
+            ) : null;
+          })()}
 
           {/* Stats */}
           <div style={{ display: "flex", gap: 40 }}>

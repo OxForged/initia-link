@@ -38,7 +38,7 @@ The server resolves `.init` usernames by calling L1 Move view functions (BCS-enc
 
 ## Initia integration
 
-Four native features used:
+Five native features used:
 
 1. **Initia Usernames (.init)** -- your username is your URL. Forward resolution (name to address) and reverse resolution (address to name) both work, so even if someone shares a raw address link, the page still shows the `.init` name.
 
@@ -47,6 +47,8 @@ Four native features used:
 3. **Auto-signing** -- session-based auto-signing through InterwovenKit. Enable it once from the wallet dropdown, approve in your wallet, and all subsequent transactions (editing, following, tipping) go through without confirmation dialogs. Uses `/initia.move.v1.MsgExecute` permissions. Only possible on MiniMove (not MiniEVM).
 
 4. **InterwovenKit** -- wallet connection and transaction signing. Supports Initia Wallet, Keplr, MetaMask, and others. Contract writes go through Cosmos `MsgExecute` via `requestTxBlock`, with BCS-encoded arguments.
+
+5. **L1 Cross-Rollup Identity** -- each profile page queries the Initia L1 testnet for the user's INIT balance and staking positions. The appchain frontend reaches into L1 state via REST API, showing how data flows across rollup boundaries. Uses Initia's `mstaking` module for multi-asset staking queries.
 
 ## Try it
 
@@ -125,7 +127,7 @@ npm run dev
 - Move (Aptos-variant MoveVM on MiniMove rollup)
 - BCS encoding for Move view function calls and transaction args
 - InterwovenKit (`@initia/interwovenkit-react`) for wallet and tx
-- Initia L1 REST API for `.init` username resolution
+- Initia L1 REST API for `.init` username resolution and cross-rollup identity
 - sonner for toast notifications
 
 ## Pages
@@ -151,10 +153,15 @@ npm run dev
 - Dynamic Open Graph images for rich previews when sharing on Discord, X, Telegram
 - Dashboard with recent tip history (on-chain records) and following list with resolved usernames
 - Follow/Tip buttons hidden on your own profile, follow state checked on-chain
+- L1 cross-rollup identity card on profiles (INIT balance, staked amount, validator count from Initia testnet)
+- Profile themes (6 presets: Teal, Violet, Sunset, Rose, Ocean, Emerald) stored on-chain in bio field
+- Clickable follower/following counts open paginated list modal with username resolution
+- Dark mode with toggle in navbar, localStorage persistence, no flash on reload
+- Two-column edit page (form + sticky live preview) with compact link cards and section grouping
 - Auto-sign for frictionless transactions (MiniMove only)
 - Skeleton loading placeholders while data fetches
 - Scroll-triggered animations via Intersection Observer
-- Animated gradient avatar rings, hover effects, shimmer buttons
+- Animated gradient avatar rings (themed per profile), hover effects, shimmer buttons
 
 ## Who this is for
 
@@ -169,5 +176,5 @@ contracts/move/profile_registry/  Move module (profile_registry.move)
 src/app/             pages (/, /edit, /discover, /dashboard, /[username])
 src/components/      UI components
 src/hooks/           useContractWrite (MsgExecute), useScrollReveal
-src/lib/             contract reads, BCS encoding, constants, username resolution
+src/lib/             contract reads, BCS encoding, constants, username resolution, L1 identity
 ```

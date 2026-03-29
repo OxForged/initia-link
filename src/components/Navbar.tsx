@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
 import { getProfile } from "@/lib/contract";
 import ConnectButton from "./ConnectButton";
+import DarkModeToggle from "./DarkModeToggle";
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -57,6 +58,7 @@ export default function Navbar() {
               </a>
             );
           })}
+          <DarkModeToggle />
           <ConnectButton />
         </div>
 
@@ -91,8 +93,9 @@ export default function Navbar() {
               </a>
             );
           })}
-          <div className="pt-2 px-4 border-t border-[var(--card-border)]">
+          <div className="pt-2 px-4 border-t border-[var(--card-border)] flex items-center justify-between">
             <ConnectButton />
+            <DarkModeToggle />
           </div>
         </div>
       )}

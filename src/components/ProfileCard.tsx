@@ -1,6 +1,7 @@
 "use client";
 
 import { type Profile, formatGas } from "@/lib/contract";
+import { parseBioTheme } from "@/lib/themes";
 
 type Props = {
   address: string;
@@ -38,7 +39,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
         </div>
       </div>
       {profile.bio && (
-        <p className="text-sm text-[#666] line-clamp-2">{profile.bio}</p>
+        <p className="text-sm text-[#666] line-clamp-2">{parseBioTheme(profile.bio).cleanBio}</p>
       )}
       <div className="flex gap-4 mt-auto pt-3 text-xs text-[var(--muted)]">
         <span>{profile.links.length} links</span>

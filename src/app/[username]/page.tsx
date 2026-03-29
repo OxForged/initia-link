@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { AccAddress } from "@initia/initia.js";
 import { resolveUsernameToAddress, resolveAddressToUsername } from "@/lib/username";
 import { getProfile, formatGas } from "@/lib/contract";
 import LinkButton from "@/components/LinkButton";
@@ -7,12 +8,24 @@ import FollowButton from "@/components/FollowButton";
 import EditProfileButton from "@/components/EditProfileButton";
 import ShareButton from "@/components/ShareButton";
 import QRButton from "@/components/QRButton";
+import L1IdentityCard from "@/components/L1Identity";
+import FollowStats from "@/components/FollowStats";
+import ThemedProfileWrapper from "@/components/ThemedProfileWrapper";
+import { parseBioTheme, getThemeById } from "@/lib/themes";
 type Props = {
   params: Promise<{ username: string }>;
 };
 
 function isHexAddress(s: string): boolean {
   return s.startsWith("0x") && s.length === 42;
+}
+
+function hexToBech32(hex: string): string {
+  try {
+    return AccAddress.fromHex(hex.replace("0x", ""));
+  } catch {
+    return "";
+  }
 }
 
 async function resolveAddress(username: string): Promise<string | null> {
@@ -46,12 +59,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       return { title: "Profile Not Found | InitiaLink" };
     }
     const displayName = await resolveDisplayName(decoded, address);
+    const { cleanBio } = parseBioTheme(profile.bio);
     return {
       title: `${displayName} | InitiaLink`,
-      description: profile.bio || `Check out ${displayName} on InitiaLink`,
+      description: cleanBio || `Check out ${displayName} on InitiaLink`,
       openGraph: {
         title: `${displayName} | InitiaLink`,
-        description: profile.bio || `Check out ${displayName} on InitiaLink`,
+        description: cleanBio || `Check out ${displayName} on InitiaLink`,
         ...(profile.avatarUrl ? { images: [profile.avatarUrl] } : {}),
       },
     };
@@ -96,6 +110,8 @@ export default async function ProfilePage({ params }: Props) {
   }
 
   const displayName = await resolveDisplayName(decoded, address);
+  const { cleanBio, themeId } = parseBioTheme(profile.bio);
+  const theme = getThemeById(themeId);
   const createdDate = new Date(Number(profile.createdAt) * 1000).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -103,71 +119,82 @@ export default async function ProfilePage({ params }: Props) {
   });
 
   return (
-    <div className="max-w-sm mx-auto text-center py-4 sm:py-8 px-2 sm:px-0 relative">
-      {/* Subtle background orb */}
-      <div className="orb orb-pink w-32 h-32 sm:w-48 sm:h-48 -top-10 left-1/2 -translate-x-1/2 opacity-20" aria-hidden="true" />
+    <ThemedProfileWrapper theme={theme}>
+      <div className="max-w-sm mx-auto text-center py-4 sm:py-8 px-2 sm:px-0 relative">
+        {/* Themed background orbs */}
+        <div
+          className="orb w-32 h-32 sm:w-48 sm:h-48 -top-10 left-1/2 -translate-x-1/2 opacity-20"
+          style={{ background: `radial-gradient(circle, var(--theme-orb1), transparent)`, animation: "orbDrift1 12s ease-in-out infinite" }}
+          aria-hidden="true"
+        />
 
-      {/* Avatar with rotating gradient ring */}
-      <div className="animate-scale-in delay-0 flex justify-center mb-4">
-        <div className="avatar-ring-gradient">
-          {profile.avatarUrl ? (
-            <img
-              src={profile.avatarUrl}
-              alt={displayName}
-              className="w-24 h-24 rounded-full object-cover select-none pointer-events-none"
-              draggable="false"
-            />
-          ) : (
-            <div className="w-24 h-24 rounded-full gradient-animated" />
-          )}
+        {/* Avatar with themed rotating gradient ring */}
+        <div className="animate-scale-in delay-0 flex justify-center mb-4">
+          <div className="themed-avatar-ring">
+            {profile.avatarUrl ? (
+              <img
+                src={profile.avatarUrl}
+                alt={displayName}
+                className="w-24 h-24 rounded-full object-cover select-none pointer-events-none"
+                draggable="false"
+              />
+            ) : (
+              <div
+                className="w-24 h-24 rounded-full"
+                style={{ background: `linear-gradient(135deg, var(--theme-gradient-from), var(--theme-gradient-to))` }}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Name */}
+        <h1 className="animate-fade-in-up delay-1 text-xl sm:text-2xl font-bold text-[var(--foreground)] font-heading">
+          {displayName}
+        </h1>
+
+        {/* Stats (clickable, opens follower/following list) */}
+        <FollowStats
+          profileOwner={address}
+          followerCount={profile.followerCount}
+          followingCount={profile.followingCount}
+        />
+
+        {/* Bio */}
+        {cleanBio && (
+          <p className="animate-fade-in-up delay-2 text-[#666] mb-6">{cleanBio}</p>
+        )}
+
+        {/* Links with staggered entrance */}
+        <div className="flex flex-col gap-3 mb-6">
+          {profile.links.map((url, i) => (
+            <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} themed />
+          ))}
+        </div>
+
+        {/* Action buttons */}
+        <div className="animate-fade-in-up delay-4 flex flex-col items-center gap-3 mb-6">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 w-full sm:w-auto">
+            <TipButton profileOwner={address} />
+            <FollowButton profileOwner={address} />
+            <EditProfileButton profileOwner={address} />
+          </div>
+        </div>
+
+        {/* L1 Cross-Rollup Identity */}
+        <L1IdentityCard initAddress={hexToBech32(address)} />
+
+        {/* Share + QR */}
+        <div className="animate-fade-in-up delay-5 flex justify-center gap-2 mb-6">
+          <ShareButton username={displayName} />
+          <QRButton username={displayName} />
+        </div>
+
+        {/* Footer info */}
+        <div className="animate-fade-in delay-6 text-xs text-[var(--muted)] space-y-1">
+          <p>On-chain since {createdDate}</p>
+          <p>{formatGas(profile.totalTips)} GAS received ({profile.tipCount} tips)</p>
         </div>
       </div>
-
-      {/* Name */}
-      <h1
-        className="animate-fade-in-up delay-1 text-xl sm:text-2xl font-bold text-[var(--foreground)] font-heading"
-      >
-        {displayName}
-      </h1>
-
-      {/* Stats */}
-      <div className="animate-fade-in-up delay-2 flex justify-center gap-4 text-sm mt-1 mb-4">
-        <span><b className="text-[var(--foreground)]">{profile.followerCount}</b> <span className="text-[var(--muted)]">followers</span></span>
-        <span><b className="text-[var(--foreground)]">{profile.followingCount}</b> <span className="text-[var(--muted)]">following</span></span>
-      </div>
-
-      {/* Bio */}
-      {profile.bio && (
-        <p className="animate-fade-in-up delay-2 text-[#666] mb-6">{profile.bio}</p>
-      )}
-
-      {/* Links with staggered entrance */}
-      <div className="flex flex-col gap-3 mb-6">
-        {profile.links.map((url, i) => (
-          <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} />
-        ))}
-      </div>
-
-      {/* Action buttons */}
-      <div className="animate-fade-in-up delay-4 flex flex-col items-center gap-3 mb-6">
-        <div className="flex flex-col sm:flex-row justify-center gap-3 w-full sm:w-auto">
-          <TipButton profileOwner={address} />
-          <FollowButton profileOwner={address} />
-          <EditProfileButton profileOwner={address} />
-        </div>
-      </div>
-
-      {/* Share + QR */}
-      <div className="animate-fade-in-up delay-5 flex justify-center gap-2 mb-6">
-        <ShareButton username={displayName} />
-        <QRButton username={displayName} />
-      </div>
-
-      {/* Footer info */}
-      <div className="animate-fade-in delay-6 text-xs text-[var(--muted)] space-y-1">
-        <p>On-chain since {createdDate}</p>
-        <p>{formatGas(profile.totalTips)} GAS received ({profile.tipCount} tips)</p>
-      </div>
-    </div>
+    </ThemedProfileWrapper>
   );
 }

@@ -79,15 +79,15 @@ export default function EditPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto">
-      <h1
-        className="animate-fade-in-up delay-0 text-2xl font-bold mb-6 text-[var(--foreground)] font-heading"
-      >
-        {profile?.exists ? "Edit Profile" : "Create Profile"}
-      </h1>
-      <p className="animate-fade-in-up delay-1 text-sm text-[var(--muted)] mb-6">
-        {username} / {initiaAddress?.slice(0, 10)}...{initiaAddress?.slice(-4)}
-      </p>
+    <div className="max-w-3xl mx-auto">
+      <div className="mb-6">
+        <h1 className="animate-fade-in-up delay-0 text-2xl font-bold text-[var(--foreground)] font-heading">
+          {profile?.exists ? "Edit Profile" : "Create Profile"}
+        </h1>
+        <p className="animate-fade-in-up delay-1 text-sm text-[var(--muted)] mt-1">
+          {username} / {initiaAddress?.slice(0, 10)}...{initiaAddress?.slice(-4)}
+        </p>
+      </div>
       <div className="animate-fade-in-up delay-2">
         <EditProfileForm
           existingProfile={profile}
