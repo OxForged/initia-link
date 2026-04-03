@@ -158,6 +158,7 @@ npm run dev
 - Clickable follower/following counts open paginated list modal with username resolution
 - Dark mode with toggle in navbar, localStorage persistence, no flash on reload
 - Two-column edit page (form + sticky live preview) with compact link cards and section grouping
+- Guided onboarding stepper for new users (connect wallet, get GAS, register .init, create profile)
 - Auto-sign for frictionless transactions (MiniMove only)
 - Skeleton loading placeholders while data fetches
 - Scroll-triggered animations via Intersection Observer

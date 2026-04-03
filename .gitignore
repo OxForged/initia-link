@@ -1,10 +1,14 @@
+# Dependencies
 node_modules/
+
+# Next.js
 .next/
+tsconfig.tsbuildinfo
+
+# Environment & secrets
 .env
-docs
-CLAUDE.md
-.superpowers
-.mcp.json
+*.pem
+id_ed25519
 
 # Move build artifacts
 contracts/move/profile_registry/build/
@@ -14,9 +18,10 @@ artifacts/
 cache/
 typechain-types/
 
-# Build cache
-tsconfig.tsbuildinfo
+# AI tooling
+CLAUDE.md
+.superpowers
+.mcp.json
 
-# Keys
-id_ed25519
-*.pem
+# Generated docs
+docs/
