@@ -4,13 +4,13 @@ Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
 **Track:** Gaming & Consumer (digital identity)
 
-**Live:** [initialink.vercel.app](https://initialink.vercel.app) | **Demo:** [coming soon]
+**Repo:** [github.com/jordi-stack/initia-link](https://github.com/jordi-stack/initia-link)
 
 ## What is this
 
 InitiaLink lets you create a profile page tied to your Initia username. Add your links and bio, set an avatar. Other users can tip you (native tokens, no platform cut) and follow you. One Move module stores everything, no backend, no database.
 
-Visit `initialink.xyz/alice.init` and you see Alice's profile. She doesn't need to be online, and the visitor doesn't need a wallet to view it.
+Visit `yourapp.com/alice.init` and you see Alice's profile. She doesn't need to be online, and the visitor doesn't need a wallet to view it.
 
 ## Why not just use Linktree
 
@@ -31,7 +31,7 @@ One Move module (`profile_registry`) handles everything:
 - Profile CRUD (bio, avatar, up to 10 labeled links)
 - Tipping via `coin::transfer` (min 1 GAS, sent directly to the profile owner)
 - Social graph (follow/unfollow, follower and following lists, paginated queries)
-- Discovery feed (newest profiles on-chain, popular sorted client-side by follower count)
+- Discovery feed (newest profiles on-chain, popular sorted by overall score, followers, tip count, or total tipped)
 - Tip history stored on-chain (view function, no event log parsing needed)
 
 The server resolves `.init` usernames by calling L1 Move view functions (BCS-encoded, over REST) and renders profile pages with Open Graph meta tags. Share a link on Twitter or Discord and it shows the right preview.
@@ -50,24 +50,56 @@ Five native features used:
 
 5. **L1 Cross-Rollup Identity** -- each profile page queries the Initia L1 testnet for the user's INIT balance and staking positions. The appchain frontend reaches into L1 state via REST API, showing how data flows across rollup boundaries. Uses Initia's `mstaking` module for multi-asset staking queries.
 
-## Try it
+## Architecture
 
-The fastest way: visit the [live app](https://initialink.vercel.app), connect your Initia Wallet, claim GAS from the faucet, and create a profile.
+```mermaid
+graph TB
+    subgraph Browser
+        FE["Next.js Frontend<br/>(App Router + SSR)"]
+        IK["InterwovenKit<br/>(Wallet + Tx Signing)"]
+    end
+
+    subgraph VPS["VPS (38.49.213.194)"]
+        NODE["minitiad<br/>MiniMove Node"]
+        RPC["Cosmos RPC :26657"]
+        REST["Cosmos REST :1317"]
+        NODE --- RPC
+        NODE --- REST
+    end
+
+    subgraph Appchain["InitiaLink Appchain (initialink-1)"]
+        MOD["profile_registry<br/>Move Module"]
+        STATE["On-chain State<br/>Profiles / Follows / Tips"]
+        MOD --- STATE
+    end
+
+    subgraph L1["Initia L1 Testnet"]
+        USER_MOD["usernames Module<br/>(.init Resolution)"]
+        BANK["Bank + mStaking<br/>(INIT Balance)"]
+    end
+
+    FE -- "View Functions<br/>(BCS + REST)" --> REST
+    IK -- "MsgExecute<br/>(Create/Edit/Tip/Follow)" --> RPC
+    REST -- "Read State" --> MOD
+    RPC -- "Write State" --> MOD
+    FE -- "Username Lookup<br/>(BCS + REST)" --> USER_MOD
+    FE -- "L1 Identity<br/>(Balance + Staking)" --> BANK
+    FE -- "/api/faucet<br/>(@initia/initia.js)" --> REST
+```
 
 ## Running locally
 
 ```bash
-git clone https://github.com/user/initialink.git
-cd initialink
+git clone https://github.com/jordi-stack/initia-link.git
+cd initia-link
 npm install
 cp .env.example .env
 npm run dev
 ```
 
-Open `http://localhost:3000`, connect your wallet, and click **"Get GAS"** in the wallet dropdown to receive tokens from the faucet.
+Open `http://localhost:3000`, connect your wallet, and the onboarding stepper walks you through getting GAS and creating a profile.
 
-<details>
-<summary><strong>Full setup from scratch (deploy your own node + module)</strong></summary>
+## Full setup from scratch
 
 ### 1. Download and start a MiniMove node
 
@@ -119,14 +151,13 @@ npm install
 npm run dev
 ```
 
-</details>
-
 ## Tech
 
 - Next.js 16, TypeScript, Tailwind CSS v4
 - Move (Aptos-variant MoveVM on MiniMove rollup)
 - BCS encoding for Move view function calls and transaction args
 - InterwovenKit (`@initia/interwovenkit-react`) for wallet and tx
+- `@initia/initia.js` for faucet (server-side tx signing)
 - Initia L1 REST API for `.init` username resolution and cross-rollup identity
 - sonner for toast notifications
 
@@ -135,7 +166,7 @@ npm run dev
 | Route | What it does |
 |---|---|
 | `/` | Landing page |
-| `/edit` | Create or edit your profile (requires wallet) |
+| `/edit` | Guided onboarding (connect, faucet, username) then create/edit profile |
 | `/discover` | Browse profiles, search by username, sort by new or popular (followers, tip count, total tipped) |
 | `/dashboard` | Your stats, recent tips received, who you follow |
 | `/alice.init` | Public profile page (server-rendered, no wallet needed) |
@@ -166,16 +197,16 @@ npm run dev
 
 ## Who this is for
 
-Crypto-native creators, builders, and community members who want a single landing page tied to their on-chain identity. Someone who already has an `.init` username and wants to share all their socials, receive tips, and build a follower base without trusting a centralized platform.
-
-Linktree and Bento own your data and know nothing about crypto. ENS profiles are Ethereum-only with no social features. Lens and Farcaster are locked to their own ecosystems. InitiaLink combines link-in-bio with on-chain tipping, a follow graph, and Initia username identity, all running on a dedicated appchain where the app controls its own fees and throughput.
+Crypto-native creators, builders, and community members who want a single landing page tied to their on-chain identity. You already have an `.init` username and want to share your socials, receive tips, and build a follower base without trusting a centralized platform. InitiaLink runs on a dedicated appchain where the app controls its own fees and throughput.
 
 ## Structure
 
 ```
 contracts/move/profile_registry/  Move module (profile_registry.move)
 src/app/             pages (/, /edit, /discover, /dashboard, /[username])
-src/components/      UI components
+src/app/api/         API routes (faucet, l1-identity)
+src/components/      UI components (Navbar, EditProfileForm, DarkModeToggle, FollowListModal, etc.)
 src/hooks/           useContractWrite (MsgExecute), useScrollReveal
-src/lib/             contract reads, BCS encoding, constants, username resolution, L1 identity
+src/lib/             contract reads, BCS encoding, constants, username resolution, themes, L1 identity
+public/              favicon
 ```
