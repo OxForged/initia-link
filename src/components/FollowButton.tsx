@@ -7,13 +7,15 @@ import { isFollowing as checkIsFollowing } from "@/lib/contract";
 import { toast } from "sonner";
 type Props = {
   profileOwner: string;
+  variant?: "default" | "hero";
 };
 
-export default function FollowButton({ profileOwner }: Props) {
+export default function FollowButton({ profileOwner, variant = "default" }: Props) {
   const { followProfile, unfollowProfile, isConnected } = useContractWrite();
   const hexAddress = useHexAddress();
   const [following, setFollowing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const isHero = variant === "hero";
 
   // Check on-chain follow status
   useEffect(() => {
@@ -44,6 +46,18 @@ export default function FollowButton({ profileOwner }: Props) {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (isHero) {
+    return (
+      <button
+        onClick={handleToggle}
+        disabled={loading}
+        className="btn-hero-solid btn-press px-5 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-50 min-h-[44px]"
+      >
+        {loading ? "..." : following ? "Following" : "Follow"}
+      </button>
+    );
   }
 
   return (

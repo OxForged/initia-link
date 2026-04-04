@@ -5,6 +5,7 @@ import type { L1Identity } from "@/lib/l1-identity";
 
 type Props = {
   initAddress: string;
+  variant?: "default" | "compact";
 };
 
 function formatInit(amount: number): string {
@@ -13,9 +14,10 @@ function formatInit(amount: number): string {
   return amount.toLocaleString("en-US", { maximumFractionDigits: 2 });
 }
 
-export default function L1IdentityCard({ initAddress }: Props) {
+export default function L1IdentityCard({ initAddress, variant = "default" }: Props) {
   const [data, setData] = useState<L1Identity | null>(null);
   const [loading, setLoading] = useState(true);
+  const isCompact = variant === "compact";
 
   useEffect(() => {
     if (!initAddress) return;
@@ -28,6 +30,21 @@ export default function L1IdentityCard({ initAddress }: Props) {
   }, [initAddress]);
 
   if (loading) {
+    if (isCompact) {
+      return (
+        <div>
+          <div className="flex items-center gap-1.5 mb-2">
+            <div className="skeleton w-[18px] h-[18px] rounded-full" />
+            <div className="skeleton h-3 w-16 rounded" />
+          </div>
+          <div className="flex gap-2">
+            <div className="skeleton h-10 flex-1 rounded-[10px]" />
+            <div className="skeleton h-10 flex-1 rounded-[10px]" />
+            <div className="skeleton h-10 flex-1 rounded-[10px]" />
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="animate-fade-in-up delay-5 mb-6">
         <div className="bg-white border border-[var(--card-border)] rounded-2xl p-4">
@@ -44,10 +61,41 @@ export default function L1IdentityCard({ initAddress }: Props) {
 
   if (!data) return null;
 
+  if (isCompact) {
+    return (
+      <div>
+        <div className="flex items-center gap-1.5 mb-2">
+          <div className="w-[18px] h-[18px] rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0891b2, #8b5cf6)' }}>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
+            </svg>
+          </div>
+          <span className="text-[11px] font-bold text-[var(--foreground)]">INITIA L1</span>
+          <span className="text-[9px] text-[#999] bg-[#f4f9fb] px-1.5 py-0.5 rounded" style={{ lineHeight: 1 }}>Cross-Rollup</span>
+        </div>
+        <div className="flex gap-2">
+          <div className="l1-chip c1 flex-1" style={{ background: 'linear-gradient(135deg, #f0fdfa, #e0f2fe)' }}>
+            <div className="l1-chip-value font-heading text-[#0891b2]">{formatInit(data.initBalance)}</div>
+            <div className="l1-chip-label">INIT</div>
+          </div>
+          <div className="l1-chip c2 flex-1" style={{ background: 'linear-gradient(135deg, #e0f2fe, #ede9fe)' }}>
+            <div className="l1-chip-value font-heading text-[#6366f1]">{formatInit(data.totalStaked)}</div>
+            <div className="l1-chip-label">Staked</div>
+          </div>
+          <div className="l1-chip c3 flex-1" style={{ background: 'linear-gradient(135deg, #f5f3ff, #ede9fe)' }}>
+            <div className="l1-chip-value font-heading text-[#8b5cf6]">{data.validatorCount}</div>
+            <div className="l1-chip-label">Validators</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="animate-fade-in-up delay-5 mb-6">
       <div className="bg-white border border-[var(--card-border)] rounded-2xl p-4 hover-pop">
-        {/* Header */}
         <div className="flex items-center gap-2 mb-3">
           <div className="w-5 h-5 rounded-full gradient-accent flex items-center justify-center">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -61,26 +109,19 @@ export default function L1IdentityCard({ initAddress }: Props) {
           </span>
           <span className="text-[10px] text-[var(--muted)]">Cross-Rollup</span>
         </div>
-
-        {/* Stats grid */}
         <div className="grid grid-cols-3 gap-2">
-          {/* INIT Balance */}
           <div className="bg-[linear-gradient(135deg,#f4f9fb,#e0f2fe)] rounded-xl p-2.5 text-center">
             <p className="text-sm sm:text-base font-bold text-[var(--foreground)]">
               {formatInit(data.initBalance)}
             </p>
             <p className="text-[10px] text-[var(--muted)]">INIT</p>
           </div>
-
-          {/* Staked */}
           <div className="bg-[linear-gradient(135deg,#e0f2fe,#ede9fe)] rounded-xl p-2.5 text-center">
             <p className="text-sm sm:text-base font-bold text-[var(--foreground)]">
               {formatInit(data.totalStaked)}
             </p>
             <p className="text-[10px] text-[var(--muted)]">Staked</p>
           </div>
-
-          {/* Validators */}
           <div className="bg-[linear-gradient(135deg,#ede9fe,#f4f9fb)] rounded-xl p-2.5 text-center">
             <p className="text-sm sm:text-base font-bold text-[var(--foreground)]">
               {data.validatorCount}

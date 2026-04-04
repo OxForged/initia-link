@@ -5,11 +5,13 @@ import { toast } from "sonner";
 
 type Props = {
   username: string;
+  variant?: "default" | "compact";
 };
 
-export default function ShareButton({ username }: Props) {
+export default function ShareButton({ username, variant = "default" }: Props) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const isCompact = variant === "compact";
 
   const url = typeof window !== "undefined"
     ? `${window.location.origin}/${username}`
@@ -35,9 +37,12 @@ export default function ShareButton({ username }: Props) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="btn-press bg-white border-2 border-[var(--card-border)] text-[#555] px-5 py-2.5 rounded-xl text-sm font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300 min-h-[44px] inline-flex items-center gap-1.5"
+        className={isCompact
+          ? "btn-footer-compact bg-[#f4f9fb] border border-[#d1e8ed] text-[#888] py-1.5 px-3 rounded-[7px] text-[10px] font-medium hover:border-[var(--theme-accent,#0891b2)] hover:text-[var(--theme-accent,#0891b2)] transition-all duration-200 inline-flex items-center gap-1"
+          : "btn-press bg-white border-2 border-[var(--card-border)] text-[#555] px-5 py-2.5 rounded-xl text-sm font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300 min-h-[44px] inline-flex items-center gap-1.5"
+        }
       >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className={isCompact ? "w-3 h-3" : "w-4 h-4"} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
         </svg>
         Share

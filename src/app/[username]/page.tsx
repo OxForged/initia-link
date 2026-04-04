@@ -120,79 +120,139 @@ export default async function ProfilePage({ params }: Props) {
 
   return (
     <ThemedProfileWrapper theme={theme}>
-      <div className="max-w-sm mx-auto text-center py-4 sm:py-8 px-2 sm:px-0 relative">
-        {/* Themed background orbs */}
-        <div
-          className="orb w-32 h-32 sm:w-48 sm:h-48 -top-10 left-1/2 -translate-x-1/2 opacity-20"
-          style={{ background: `radial-gradient(circle, var(--theme-orb1), transparent)`, animation: "orbDrift1 12s ease-in-out infinite" }}
-          aria-hidden="true"
-        />
+      <div className="max-w-lg mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Unified profile block */}
+        <div className="profile-block rounded-2xl overflow-visible" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
 
-        {/* Avatar with themed rotating gradient ring */}
-        <div className="animate-scale-in delay-0 flex justify-center mb-4">
-          <div className="themed-avatar-ring">
-            {profile.avatarUrl ? (
-              <img
-                src={profile.avatarUrl}
-                alt={displayName}
-                className="w-24 h-24 rounded-full object-cover select-none pointer-events-none"
-                draggable="false"
-              />
-            ) : (
-              <div
-                className="w-24 h-24 rounded-full"
-                style={{ background: `linear-gradient(135deg, var(--theme-gradient-from), var(--theme-gradient-to))` }}
-              />
-            )}
+          {/* === HERO SECTION === */}
+          <div
+            className="relative rounded-t-2xl overflow-hidden text-center"
+            style={{
+              padding: '40px 24px 36px',
+              background: `linear-gradient(165deg, var(--theme-gradient-from, #0891b2) 0%, var(--theme-gradient-to, #8b5cf6) 100%)`,
+            }}
+          >
+            {/* Mesh overlay */}
+            <div
+              className="absolute inset-0 z-[1] pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 80% 50% at 20% 40%, rgba(6,182,212,0.35) 0%, transparent 70%), radial-gradient(ellipse 60% 60% at 85% 15%, rgba(139,92,246,0.4) 0%, transparent 70%)`,
+              }}
+            />
+
+            {/* Noise */}
+            <div className="hero-noise" aria-hidden="true" />
+
+            {/* Orbs */}
+            <div
+              className="hero-orb"
+              style={{ width: 120, height: 120, background: 'rgba(6,182,212,0.22)', top: -20, left: -15, animation: 'heroFloat1 8s ease-in-out infinite' }}
+              aria-hidden="true"
+            />
+            <div
+              className="hero-orb"
+              style={{ width: 90, height: 90, background: 'rgba(167,139,250,0.18)', bottom: 0, right: 5, animation: 'heroFloat2 10s ease-in-out infinite' }}
+              aria-hidden="true"
+            />
+
+            {/* Hero content */}
+            <div className="relative z-10">
+              {/* Avatar with spinning ring */}
+              <div className="animate-scale-in mb-4">
+                <div className="hero-avatar-ring">
+                  {profile.avatarUrl ? (
+                    <img
+                      src={profile.avatarUrl}
+                      alt={displayName}
+                      className="w-[98px] h-[98px] rounded-full object-cover select-none pointer-events-none"
+                      style={{ border: '3px solid rgba(255,255,255,0.2)' }}
+                      draggable="false"
+                    />
+                  ) : (
+                    <div
+                      className="w-[98px] h-[98px] rounded-full"
+                      style={{ background: `linear-gradient(135deg, var(--theme-gradient-from), var(--theme-gradient-to))`, border: '3px solid rgba(255,255,255,0.2)' }}
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* Username */}
+              <h1
+                className="animate-fade-in-up delay-1 font-heading font-bold text-white"
+                style={{ fontSize: 26, textShadow: '0 2px 16px rgba(0,0,0,0.12)' }}
+              >
+                {displayName}
+              </h1>
+
+              {/* Bio */}
+              {cleanBio && (
+                <p className="animate-fade-in-up delay-1 text-white/80 text-sm mt-1">{cleanBio}</p>
+              )}
+
+              {/* Follow stats */}
+              <div className="animate-fade-in-up delay-2 mt-3">
+                <FollowStats
+                  profileOwner={address}
+                  followerCount={profile.followerCount}
+                  followingCount={profile.followingCount}
+                  variant="hero"
+                />
+              </div>
+
+              {/* CTA buttons */}
+              <div className="animate-fade-in-up delay-2 flex justify-center gap-2.5 mt-4">
+                <TipButton profileOwner={address} variant="hero" />
+                <FollowButton profileOwner={address} variant="hero" />
+                <EditProfileButton profileOwner={address} variant="hero" />
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Name */}
-        <h1 className="animate-fade-in-up delay-1 text-xl sm:text-2xl font-bold text-[var(--foreground)] font-heading">
-          {displayName}
-        </h1>
+          {/* === LINKS SECTION === */}
+          {profile.links.length > 0 && (
+            <div className="profile-section bg-white border-t border-[#e8f1f4]" style={{ padding: '14px 20px' }}>
+              <div className="profile-section-label">Links</div>
+              <div className="flex flex-col gap-2">
+                {profile.links.map((url, i) => (
+                  <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} themed />
+                ))}
+              </div>
+            </div>
+          )}
 
-        {/* Stats (clickable, opens follower/following list) */}
-        <FollowStats
-          profileOwner={address}
-          followerCount={profile.followerCount}
-          followingCount={profile.followingCount}
-        />
-
-        {/* Bio */}
-        {cleanBio && (
-          <p className="animate-fade-in-up delay-2 text-[#666] mb-6">{cleanBio}</p>
-        )}
-
-        {/* Links with staggered entrance */}
-        <div className="flex flex-col gap-3 mb-6">
-          {profile.links.map((url, i) => (
-            <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} themed />
-          ))}
-        </div>
-
-        {/* Action buttons */}
-        <div className="animate-fade-in-up delay-4 flex flex-col items-center gap-3 mb-6">
-          <div className="flex flex-col sm:flex-row justify-center gap-3 w-full sm:w-auto">
-            <TipButton profileOwner={address} />
-            <FollowButton profileOwner={address} />
-            <EditProfileButton profileOwner={address} />
+          {/* === ON-CHAIN STATS SECTION === */}
+          <div className="profile-section bg-white border-t border-[#e8f1f4]" style={{ padding: '14px 20px' }}>
+            <div className="profile-section-label">On-chain</div>
+            <div className="flex gap-2">
+              <div className="stat-chip teal-bg flex-1" style={{ background: 'linear-gradient(135deg, #f0fdfa, #e0f2fe)' }}>
+                <div className="stat-chip-value font-heading text-[#0891b2]">{formatGas(profile.totalTips)}</div>
+                <div className="stat-chip-label">GAS received</div>
+              </div>
+              <div className="stat-chip purple-bg flex-1" style={{ background: 'linear-gradient(135deg, #f5f3ff, #ede9fe)' }}>
+                <div className="stat-chip-value font-heading text-[#8b5cf6]">{profile.tipCount}</div>
+                <div className="stat-chip-label">Tips</div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* L1 Cross-Rollup Identity */}
-        <L1IdentityCard initAddress={hexToBech32(address)} />
+          {/* === L1 IDENTITY SECTION === */}
+          <div className="profile-section bg-white border-t border-[#e8f1f4]" style={{ padding: '14px 20px' }}>
+            <L1IdentityCard initAddress={hexToBech32(address)} variant="compact" />
+          </div>
 
-        {/* Share + QR */}
-        <div className="animate-fade-in-up delay-5 flex justify-center gap-2 mb-6">
-          <ShareButton username={displayName} />
-          <QRButton username={displayName} />
-        </div>
+          {/* === FOOTER BAR === */}
+          <div
+            className="profile-footer bg-white border-t border-[#e8f1f4] flex items-center justify-between"
+            style={{ padding: '10px 20px', borderRadius: '0 0 24px 24px' }}
+          >
+            <div className="text-[10px] text-[#bbb]">On-chain since {createdDate}</div>
+            <div className="flex gap-1.5">
+              <ShareButton username={displayName} variant="compact" />
+              <QRButton username={displayName} variant="compact" />
+            </div>
+          </div>
 
-        {/* Footer info */}
-        <div className="animate-fade-in delay-6 text-xs text-[var(--muted)] space-y-1">
-          <p>On-chain since {createdDate}</p>
-          <p>{formatGas(profile.totalTips)} GAS received ({profile.tipCount} tips)</p>
         </div>
       </div>
     </ThemedProfileWrapper>

@@ -35,7 +35,7 @@ export default function LinkButton({ url, label, index = 0, themed }: Props) {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="animate-fade-in-up w-full btn-shimmer rounded-xl py-3 px-4 text-sm text-white font-medium flex items-center justify-center gap-2.5 hover:scale-[1.03] hover:-translate-y-0.5 transition-all duration-300"
+        className="animate-fade-in-up w-full link-sweep rounded-xl py-3 px-4 text-sm text-white font-medium flex items-center justify-center gap-2.5 hover:-translate-y-0.5 transition-all duration-300"
         style={{
           animationDelay: `${index * 80}ms`,
           background: `linear-gradient(135deg, var(--theme-gradient-from), var(--theme-gradient-to))`,
@@ -59,7 +59,7 @@ export default function LinkButton({ url, label, index = 0, themed }: Props) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`animate-fade-in-up w-full btn-shimmer ${gradientClass} rounded-xl py-3 px-4 text-sm text-white font-medium flex items-center justify-center gap-2.5 ${shadowClass} ${hoverShadowClass} hover:scale-[1.03] hover:-translate-y-0.5 transition-all duration-300`}
+      className={`animate-fade-in-up w-full link-sweep ${gradientClass} rounded-xl py-3 px-4 text-sm text-white font-medium flex items-center justify-center gap-2.5 ${shadowClass} ${hoverShadowClass} hover:-translate-y-0.5 transition-all duration-300`}
       style={{ animationDelay: `${index * 80}ms` }}
     >
       <span className="opacity-90 flex-shrink-0">{platform.icon}</span>
