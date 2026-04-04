@@ -124,11 +124,11 @@ export default async function ProfilePage({ params }: Props) {
         {/* Unified profile block */}
         <div className="profile-block rounded-2xl overflow-visible" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
 
-          {/* === HERO SECTION === */}
+          {/* === BANNER (avatar only) === */}
           <div
             className="relative rounded-t-2xl overflow-hidden text-center"
             style={{
-              padding: '40px 24px 36px',
+              padding: '32px 24px 20px',
               background: `linear-gradient(165deg, var(--theme-gradient-from, #0891b2) 0%, var(--theme-gradient-to, #8b5cf6) 100%)`,
             }}
           >
@@ -139,11 +139,7 @@ export default async function ProfilePage({ params }: Props) {
                 background: `radial-gradient(ellipse 80% 50% at 20% 40%, rgba(6,182,212,0.35) 0%, transparent 70%), radial-gradient(ellipse 60% 60% at 85% 15%, rgba(139,92,246,0.4) 0%, transparent 70%)`,
               }}
             />
-
-            {/* Noise */}
             <div className="hero-noise" aria-hidden="true" />
-
-            {/* Orbs */}
             <div
               className="hero-orb"
               style={{ width: 120, height: 120, background: 'rgba(6,182,212,0.22)', top: -20, left: -15, animation: 'heroFloat1 8s ease-in-out infinite' }}
@@ -155,10 +151,9 @@ export default async function ProfilePage({ params }: Props) {
               aria-hidden="true"
             />
 
-            {/* Hero content */}
+            {/* Avatar only in banner */}
             <div className="relative z-10">
-              {/* Avatar with spinning ring */}
-              <div className="animate-scale-in mb-4">
+              <div className="animate-scale-in">
                 <div className="hero-avatar-ring">
                   {profile.avatarUrl ? (
                     <img
@@ -176,36 +171,41 @@ export default async function ProfilePage({ params }: Props) {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* Username */}
-              <h1
-                className="animate-fade-in-up delay-1 font-heading font-bold text-white"
-                style={{ fontSize: 26, textShadow: '0 2px 16px rgba(0,0,0,0.12)' }}
-              >
-                {displayName}
-              </h1>
+          {/* === IDENTITY SECTION (white bg) === */}
+          <div className="bg-white text-center" style={{ padding: '16px 24px 18px' }}>
+            {/* Username - large and prominent */}
+            <h1
+              className="animate-fade-in-up delay-1 font-heading font-bold text-[var(--foreground)]"
+              style={{ fontSize: 28, letterSpacing: '-0.5px' }}
+            >
+              {displayName}
+            </h1>
 
-              {/* Bio */}
-              {cleanBio && (
-                <p className="animate-fade-in-up delay-1 text-white/80 text-sm mt-1">{cleanBio}</p>
-              )}
+            {/* Bio - muted, smaller, constrained width */}
+            {cleanBio && (
+              <p className="animate-fade-in-up delay-1 text-[var(--muted)] text-sm mt-2 max-w-xs mx-auto leading-relaxed">{cleanBio}</p>
+            )}
 
-              {/* Follow stats */}
-              <div className="animate-fade-in-up delay-2 mt-3">
-                <FollowStats
-                  profileOwner={address}
-                  followerCount={profile.followerCount}
-                  followingCount={profile.followingCount}
-                  variant="hero"
-                />
-              </div>
+            {/* Divider */}
+            <div className="animate-fade-in-up delay-2 mx-auto mt-4 mb-3" style={{ width: 40, height: 2, borderRadius: 1, background: 'linear-gradient(90deg, var(--theme-gradient-from, #0891b2), var(--theme-gradient-to, #8b5cf6))' }} />
 
-              {/* CTA buttons */}
-              <div className="animate-fade-in-up delay-2 flex justify-center gap-2.5 mt-4">
-                <TipButton profileOwner={address} variant="hero" />
-                <FollowButton profileOwner={address} variant="hero" />
-                <EditProfileButton profileOwner={address} variant="hero" />
-              </div>
+            {/* Follow stats */}
+            <div>
+              <FollowStats
+                profileOwner={address}
+                followerCount={profile.followerCount}
+                followingCount={profile.followingCount}
+              />
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex justify-center gap-2.5 mt-3">
+              <TipButton profileOwner={address} />
+              <FollowButton profileOwner={address} />
+              <EditProfileButton profileOwner={address} />
             </div>
           </div>
 
@@ -215,7 +215,7 @@ export default async function ProfilePage({ params }: Props) {
               <div className="profile-section-label">Links</div>
               <div className="flex flex-col gap-2">
                 {profile.links.map((url, i) => (
-                  <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} themed />
+                  <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} />
                 ))}
               </div>
             </div>

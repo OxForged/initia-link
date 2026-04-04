@@ -8,7 +8,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-[80vh] overflow-visible -mx-4 sm:-mx-6 px-0" style={{ maxWidth: 'calc(100vw - 2rem)', width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+    <div className="relative min-h-[80vh] overflow-visible">
       {/* Atmospheric orbs */}
       <div
         className="fixed top-[-8rem] right-[-10rem] w-[500px] h-[500px] rounded-full opacity-25 pointer-events-none z-0"
@@ -22,7 +22,7 @@ export default function Home() {
       />
 
       {/* Hero: 2-column layout */}
-      <section className="max-w-5xl mx-auto px-6 sm:px-8 pt-8 sm:pt-12 lg:pt-20 pb-12 lg:pb-20">
+      <section className="pt-4 sm:pt-8 lg:pt-12 pb-8 lg:pb-16">
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-center">
 
           {/* Left: Text */}

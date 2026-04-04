@@ -7,63 +7,36 @@ type Props = {
   themed?: boolean;
 };
 
-const gradients = [
-  "gradient-primary",
-  "gradient-secondary",
-  "gradient-accent",
-];
+const iconColors: Record<string, { bg: string; text: string; hoverBorder: string }> = {
+  twitter: { bg: "bg-purple-50", text: "text-[#8b5cf6]", hoverBorder: "hover:border-purple-200" },
+  github: { bg: "bg-gray-100", text: "text-gray-700", hoverBorder: "hover:border-gray-300" },
+  instagram: { bg: "bg-pink-50", text: "text-pink-500", hoverBorder: "hover:border-pink-200" },
+  youtube: { bg: "bg-red-50", text: "text-red-500", hoverBorder: "hover:border-red-200" },
+  linkedin: { bg: "bg-blue-50", text: "text-blue-600", hoverBorder: "hover:border-blue-200" },
+  discord: { bg: "bg-indigo-50", text: "text-indigo-500", hoverBorder: "hover:border-indigo-200" },
+  telegram: { bg: "bg-sky-50", text: "text-sky-500", hoverBorder: "hover:border-sky-200" },
+  tiktok: { bg: "bg-gray-100", text: "text-gray-800", hoverBorder: "hover:border-gray-300" },
+  website: { bg: "bg-teal-50", text: "text-[#0891b2]", hoverBorder: "hover:border-teal-200" },
+};
 
-const hoverShadows = [
-  "hover:shadow-[0_8px_24px_rgba(8,145,178,0.3)]",
-  "hover:shadow-[0_8px_24px_rgba(139,92,246,0.3)]",
-  "hover:shadow-[0_8px_24px_rgba(8,145,178,0.2)]",
-];
+const defaultColors = { bg: "bg-teal-50", text: "text-[#0891b2]", hoverBorder: "hover:border-teal-200" };
 
-const shadows = [
-  "shadow-[0_3px_12px_rgba(8,145,178,0.2)]",
-  "shadow-[0_3px_12px_rgba(139,92,246,0.2)]",
-  "shadow-[0_3px_12px_rgba(8,145,178,0.15)]",
-];
-
-export default function LinkButton({ url, label, index = 0, themed }: Props) {
+export default function LinkButton({ url, label, index = 0 }: Props) {
   const platform = detectPlatform(url);
-
-  if (themed) {
-    const opacity = index % 2 === 0 ? 1 : 0.85;
-    return (
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="animate-fade-in-up w-full link-sweep rounded-xl py-3 px-4 text-sm text-white font-medium flex items-center justify-center gap-2.5 hover:-translate-y-0.5 transition-all duration-300"
-        style={{
-          animationDelay: `${index * 80}ms`,
-          background: `linear-gradient(135deg, var(--theme-gradient-from), var(--theme-gradient-to))`,
-          opacity,
-          boxShadow: `0 3px 12px var(--theme-shadow)`,
-        }}
-      >
-        <span className="opacity-90 flex-shrink-0">{platform.icon}</span>
-        <span className="truncate">{label}</span>
-      </a>
-    );
-  }
-
-  const i = index % 3;
-  const gradientClass = gradients[i];
-  const shadowClass = shadows[i];
-  const hoverShadowClass = hoverShadows[i];
+  const colors = iconColors[platform.id] || defaultColors;
 
   return (
     <a
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`animate-fade-in-up w-full link-sweep ${gradientClass} rounded-xl py-3 px-4 text-sm text-white font-medium flex items-center justify-center gap-2.5 ${shadowClass} ${hoverShadowClass} hover:-translate-y-0.5 transition-all duration-300`}
+      className={`animate-fade-in-up w-full flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-white border border-gray-100 shadow-sm ${colors.hoverBorder} hover:shadow-md hover:translate-x-0.5 transition-all duration-200`}
       style={{ animationDelay: `${index * 80}ms` }}
     >
-      <span className="opacity-90 flex-shrink-0">{platform.icon}</span>
-      <span className="truncate">{label}</span>
+      <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}>
+        <span className="text-base sm:text-lg">{platform.icon}</span>
+      </div>
+      <span className="font-semibold text-[var(--foreground)] text-sm truncate">{label}</span>
     </a>
   );
 }
