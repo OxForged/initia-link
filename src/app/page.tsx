@@ -89,7 +89,6 @@ export default function Home() {
                       className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-[var(--card)] object-cover bg-[var(--card)] select-none pointer-events-none"
                       draggable="false"
                     />
-                    <div className="absolute bottom-1.5 right-1.5 w-4 h-4 bg-green-400 border-2 border-[var(--card)] rounded-full" />
                   </div>
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 hidden group-hover/avatar:flex items-center gap-1 rounded-full py-1 px-2.5 text-[10px] font-semibold text-white z-10 shadow-lg whitespace-nowrap" style={{ background: 'linear-gradient(135deg, #0891b2, #8b5cf6)' }}>
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
