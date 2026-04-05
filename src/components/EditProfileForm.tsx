@@ -110,7 +110,18 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
       }
       onSaved?.();
     } catch (e: any) {
-      toast.error(e.message?.slice(0, 150) || "Failed to save");
+      const msg = e.message || "";
+      if (msg.includes("0x10003")) {
+        toast.error("Bio too long. Keep it under 250 characters (theme data uses the rest).");
+      } else if (msg.includes("0x10004")) {
+        toast.error("Avatar URL too long.");
+      } else if (msg.includes("0x10005")) {
+        toast.error("Too many links (max 10).");
+      } else if (msg.includes("0x10001")) {
+        toast.error("Profile already exists.");
+      } else {
+        toast.error(msg.slice(0, 150) || "Failed to save");
+      }
     } finally {
       setSaving(false);
     }

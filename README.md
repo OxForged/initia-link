@@ -4,13 +4,15 @@ Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
 **Track:** Gaming & Consumer
 
+**Live:** [initia-link.vercel.app](https://initia-link.vercel.app/)
+
 **Repo:** [github.com/jordi-stack/initia-link](https://github.com/jordi-stack/initia-link)
 
 ## What is this
 
 initiaLink lets you create a profile page tied to your initia username. Add your links and bio, set an avatar. Other users can tip you (native tokens, no platform cut) and follow you. One Move module stores everything, no backend, no database.
 
-Visit `yourapp.com/alice.init` and you see Alice's profile. She doesn't need to be online, and the visitor doesn't need a wallet to view it.
+Visit `initia-link.vercel.app/alice.init` and you see Alice's profile. She doesn't need to be online, and the visitor doesn't need a wallet to view it.
 
 ## Why on-chain
 
@@ -84,7 +86,7 @@ graph TD
 | Cosmos REST | `http://38.49.213.194:1317` |
 | Chain ID | `initialink-1` |
 | VM | MiniMove (Aptos MoveVM) |
-| Deploy TX | `09DA5492E7AA8A47F6A701B4565EBCEB0045945DD9E9F77A07909F90BEEB0ECC` |
+| Deploy TX | [09DA5492...BEEB0ECC](http://38.49.213.194:26657/tx?hash=0x09DA5492E7AA8A47F6A701B4565EBCEB0045945DD9E9F77A07909F90BEEB0ECC) |
 
 Verify the node is running: `curl http://38.49.213.194:26657/status`
 
@@ -197,7 +199,7 @@ npm run dev
 ```
 contracts/move/profile_registry/  Move module (profile_registry.move)
 src/app/             pages (/, /edit, /discover, /dashboard, /[username])
-src/app/api/         API routes (faucet, l1-identity)
+src/app/api/         API routes (faucet, l1-identity, view proxy, balance proxy)
 src/components/      UI components
 src/hooks/           useContractWrite (MsgExecute), useScrollReveal
 src/lib/             contract reads, BCS encoding, username resolution, themes
