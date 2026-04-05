@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { APPCHAIN_ID } from "@/lib/constants";
+import { APPCHAIN_ID, REST_URL } from "@/lib/constants";
 
 export default function ConnectButton() {
   const {
@@ -20,7 +20,24 @@ export default function ConnectButton() {
   const hexAddress = useHexAddress();
   const [open, setOpen] = useState(false);
   const [faucetLoading, setFaucetLoading] = useState(false);
+  const [gasBalance, setGasBalance] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
+
+  // Fetch GAS balance when dropdown opens
+  useEffect(() => {
+    if (!open || !initiaAddress) return;
+    const url = typeof window !== "undefined"
+      ? `/api/balance?address=${initiaAddress}`
+      : `${REST_URL}/cosmos/bank/v1beta1/balances/${initiaAddress}`;
+    fetch(url)
+      .then((r) => r.json())
+      .then((d) => {
+        const balances = d.balances || [];
+        const gas = balances.find((b: any) => b.denom === "GAS");
+        setGasBalance(gas ? gas.amount : "0");
+      })
+      .catch(() => setGasBalance(null));
+  }, [open, initiaAddress]);
 
   const isAutoSign = autoSign?.isEnabledByChain?.[APPCHAIN_ID] ?? false;
 
@@ -113,6 +130,14 @@ export default function ConnectButton() {
 
       {open && (
         <div className="absolute right-0 top-full mt-2 w-56 bg-[var(--card)] rounded-2xl shadow-[0_8px_32px_rgba(8,145,178,0.12)] border border-[var(--card-border)] py-2 animate-scale-in z-50">
+          {/* GAS Balance */}
+          {gasBalance !== null && (
+            <div className="px-4 py-2.5 flex items-center justify-between text-sm">
+              <span className="text-[var(--foreground)] font-medium">Balance</span>
+              <span className="font-bold text-[var(--accent)]">{gasBalance} GAS</span>
+            </div>
+          )}
+
           {/* Auto-Sign toggle */}
           <button
             onClick={() =>
