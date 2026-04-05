@@ -4,6 +4,21 @@ import { bcsEncodeAddress, bcsEncodeU64 } from "./bcs";
 const VIEW_URL = `${REST_URL}/initia/move/v1/accounts/${MODULE_ADDRESS}/modules/${MODULE_NAME}/view_functions`;
 
 async function viewFunction(fnName: string, args: string[] = []): Promise<string> {
+  // In browser, use API proxy to avoid mixed content (HTTPS -> HTTP)
+  if (typeof window !== "undefined") {
+    const res = await fetch("/api/view", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fnName, args }),
+    });
+    if (!res.ok) {
+      throw new Error(`View function ${fnName} failed: ${res.status}`);
+    }
+    const json = await res.json();
+    return json.data;
+  }
+
+  // Server-side: direct call
   const res = await fetch(`${VIEW_URL}/${fnName}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
