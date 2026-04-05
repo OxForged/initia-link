@@ -167,7 +167,21 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
 
       {/* Identity in white area */}
       <div className="bg-[var(--card)] text-center px-5 pt-3 pb-4">
-        <p className="text-sm text-[var(--muted)] mb-1">{bio || "Your bio here..."}</p>
+        <p className="text-sm text-[var(--muted)] mb-3">{bio || "Your bio here..."}</p>
+        <div className="flex justify-center gap-2">
+          <span
+            className="px-4 py-1.5 rounded-xl text-xs font-semibold text-white"
+            style={{ background: `linear-gradient(135deg, ${selectedTheme.gradient[0]}, ${selectedTheme.gradient[1]})` }}
+          >
+            Tip GAS
+          </span>
+          <span
+            className="px-4 py-1.5 rounded-xl text-xs font-semibold border-2"
+            style={{ borderColor: selectedTheme.accent, color: selectedTheme.accent }}
+          >
+            Follow
+          </span>
+        </div>
       </div>
 
       {/* Links as icon-box */}
@@ -490,8 +504,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
         </form>
 
         {/* ── Right column: Sticky Preview (desktop only) ── */}
-        <div className="hidden lg:block w-72 shrink-0">
-          <div className="sticky top-24">
+        <div className="hidden lg:block w-72 shrink-0 self-start sticky top-24">
+          <div>
             <h3 className="text-sm font-semibold text-[var(--muted)] uppercase tracking-wider mb-3">Preview</h3>
             {previewCard}
           </div>

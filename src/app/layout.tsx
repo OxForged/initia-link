@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}` }} />
       </head>
-      <body className="grain min-h-screen bg-[var(--background)] text-[var(--foreground)] font-[family-name:var(--font-body)]">
+      <body className="grain min-h-screen bg-[var(--background)] text-[var(--foreground)] font-[family-name:var(--font-body)]" suppressHydrationWarning>
         <Providers>
           <Navbar />
           <main className="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-8">

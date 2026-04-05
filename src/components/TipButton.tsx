@@ -51,7 +51,7 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
         className={`btn-press px-5 py-2.5 rounded-xl text-sm font-semibold min-h-[44px] ${
           isHero
             ? "btn-glass text-white"
-            : "btn-shimmer gradient-primary text-white shadow-[0_2px_10px_rgba(8,145,178,0.25)] hover:shadow-[0_6px_20px_rgba(8,145,178,0.35)] hover:scale-105 transition-all duration-300"
+            : "btn-shimmer gradient-primary text-white hover:scale-105 transition-all duration-300"
         }`}
       >
         Tip GAS

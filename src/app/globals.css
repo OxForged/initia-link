@@ -502,7 +502,7 @@ html.theme-transition *::after {
    ============================================ */
 
 [style*="--theme-accent"] .gradient-primary {
-  background: var(--theme-accent);
+  background: linear-gradient(135deg, var(--theme-gradient-from), var(--theme-gradient-to));
 }
 
 [style*="--theme-accent"] .gradient-secondary {
