@@ -45,20 +45,46 @@ Five native features used:
 
 ## Architecture
 
-```
-Browser                          initiaLink Appchain (initialink-1)
-┌──────────────────────┐         ┌─────────────────────────────────┐
-│  Next.js Frontend    │ ──────> │  REST :1317  ──> profile_registry│
-│  (App Router + SSR)  │  reads  │                   Move Module   │
-│                      │         │                       │         │
-│  InterwovenKit       │ ──────> │  RPC :26657  ──> On-chain State │
-│  (Wallet + Tx)       │ writes  │               Profiles/Follows  │
-└──────────────────────┘         └─────────────────────────────────┘
-         │                                    VPS 38.49.213.194
-         │
-         │  initia L1 Testnet
-         ├──────> .init Username Resolution (BCS + REST)
-         └──────> L1 Identity: INIT Balance + mStaking
+```mermaid
+graph TD
+    subgraph Client["&nbsp;&nbsp;&nbsp;&nbsp; Browser &nbsp;&nbsp;&nbsp;&nbsp;"]
+        direction LR
+        FE["&nbsp; Next.js 16 · App Router · SSR &nbsp;"]
+        IK["&nbsp; InterwovenKit · Wallet &nbsp;"]
+    end
+
+    IK -->|"MsgExecute · BCS args"| RPC
+    FE -->|"View Functions · BCS"| REST
+    FE -->|"Faucet · @initia/initia.js"| REST
+
+    subgraph VPS["&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VPS 38.49.213.194 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"]
+        subgraph Appchain["&nbsp;&nbsp;&nbsp;&nbsp; initiaLink Appchain · initialink-1 · MiniMove &nbsp;&nbsp;&nbsp;&nbsp;"]
+            direction LR
+            RPC["&nbsp;&nbsp; Cosmos RPC :26657 &nbsp;&nbsp;"]
+            REST["&nbsp;&nbsp; Cosmos REST :1317 &nbsp;&nbsp;"]
+        end
+    end
+
+    RPC --> MOD
+    REST --> MOD
+
+    subgraph Contract["&nbsp;&nbsp;&nbsp;&nbsp; profile_registry · Move Module &nbsp;&nbsp;&nbsp;&nbsp;"]
+        MOD["&nbsp; create_profile · update_bio · update_avatar · update_links &nbsp;"]
+        TIP["&nbsp; tip_profile · follow · unfollow &nbsp;"]
+        VIEWS["&nbsp; get_profile · get_followers · get_following · get_tips &nbsp;"]
+        STATE[("&nbsp; Profiles · Follows · Tips &nbsp;")]
+        MOD --- STATE
+        TIP --- STATE
+        VIEWS --- STATE
+    end
+
+    FE -.->|".init Username Resolution"| L1_USER
+    FE -.->|"INIT Balance · mStaking Delegations"| L1_BANK
+
+    subgraph L1["&nbsp;&nbsp;&nbsp;&nbsp; initia L1 Testnet &nbsp;&nbsp;&nbsp;&nbsp;"]
+        L1_USER["&nbsp; usernames Module &nbsp;"]
+        L1_BANK["&nbsp; Bank + mStaking &nbsp;"]
+    end
 ```
 
 ## Live appchain
