@@ -68,7 +68,7 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
         >
           Tip GAS
         </button>
-        <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-white rounded-xl shadow-[0_8px_32px_rgba(8,145,178,0.15)] border border-[var(--card-border)] p-3 animate-scale-in z-50 min-w-[220px]">
+        <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-[var(--card)] rounded-xl shadow-[0_8px_32px_rgba(8,145,178,0.15)] border border-[var(--card-border)] p-3 animate-scale-in z-50 min-w-[220px]">
           <div className="flex items-center gap-2">
             <input
               type="number"
@@ -76,7 +76,7 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
               min="1"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="bg-white border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm w-20 input-glow outline-none text-[var(--foreground)]"
+              className="bg-[var(--card)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm w-20 input-glow outline-none text-[var(--foreground)]"
             />
             <button
               onClick={handleTip}
@@ -106,7 +106,7 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
           min="1"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          className="bg-white border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-24 input-glow outline-none"
+          className="bg-[var(--card)] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-24 input-glow outline-none text-[var(--foreground)]"
         />
         <button
           onClick={handleTip}

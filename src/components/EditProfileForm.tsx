@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useContractWrite } from "@/hooks/useContractWrite";
 import { type Profile } from "@/lib/contract";
 import { platforms, detectPlatform } from "@/lib/platforms";
-import { THEMES, type ThemeId, parseBioTheme, encodeBioTheme } from "@/lib/themes";
+import { THEMES, type ThemeId, parseBioTheme, encodeBioTheme, resolveTheme } from "@/lib/themes";
 import { toast } from "sonner";
 
 type LinkItem = {
@@ -27,9 +27,11 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
   const { createProfile, updateBio, updateAvatar, updateLinks } = useContractWrite();
   const isNew = !existingProfile?.exists;
 
-  const { cleanBio: initialBio, themeId: initialTheme } = parseBioTheme(existingProfile?.bio || "");
+  const { cleanBio: initialBio, themeId: initialTheme, customColors: initialCustom } = parseBioTheme(existingProfile?.bio || "");
   const [bio, setBio] = useState(initialBio);
   const [theme, setTheme] = useState<ThemeId>(initialTheme);
+  const [customColor1, setCustomColor1] = useState(initialCustom?.[0] || "#0891b2");
+  const [customColor2, setCustomColor2] = useState(initialCustom?.[1] || "#8b5cf6");
   const [avatarUrl, setAvatarUrl] = useState(existingProfile?.avatarUrl || "");
   const [links, setLinks] = useState<LinkItem[]>(
     existingProfile?.links?.map((url, i) => ({
@@ -89,7 +91,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
     const urls = validLinks.map((l) => l.url.trim());
     const labels = validLinks.map((l) => l.label.trim() || l.url.trim());
 
-    const encodedBio = encodeBioTheme(bio, theme);
+    const encodedBio = encodeBioTheme(bio, theme, theme === "custom" ? [customColor1, customColor2] : undefined);
 
     try {
       if (isNew) {
@@ -114,53 +116,88 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
     }
   }
 
-  const selectedTheme = THEMES.find((t) => t.id === theme) || THEMES[0];
+  const selectedTheme = resolveTheme(theme, theme === "custom" ? [customColor1, customColor2] : undefined);
+
+  // ── Icon color map for preview link buttons ──
+  const previewIconColors: Record<string, { bg: string; text: string }> = {
+    twitter: { bg: "bg-purple-50", text: "text-[#8b5cf6]" },
+    github: { bg: "bg-gray-100", text: "text-gray-700" },
+    instagram: { bg: "bg-pink-50", text: "text-pink-500" },
+    youtube: { bg: "bg-red-50", text: "text-red-500" },
+    linkedin: { bg: "bg-blue-50", text: "text-blue-600" },
+    discord: { bg: "bg-indigo-50", text: "text-indigo-500" },
+    telegram: { bg: "bg-sky-50", text: "text-sky-500" },
+    tiktok: { bg: "bg-gray-100", text: "text-gray-800" },
+    website: { bg: "bg-teal-50", text: "text-[#0891b2]" },
+  };
+  const defaultIconColors = { bg: "bg-teal-50", text: "text-[#0891b2]" };
 
   // ── Preview Card (shared between desktop sidebar and mobile modal) ──
   const previewCard = (
     <div
-      className="bg-white rounded-2xl p-6 text-center transition-all duration-500"
+      className="rounded-2xl overflow-hidden transition-all duration-500"
       style={{ boxShadow: `0 4px 24px ${selectedTheme.shadow}` }}
     >
-      {avatarUrl ? (
-        <img
-          src={avatarUrl}
-          alt="avatar"
-          className="w-20 h-20 rounded-full mx-auto mb-3 object-cover select-none pointer-events-none"
-          style={{ border: `3px solid ${selectedTheme.accent}` }}
-          draggable="false"
-        />
-      ) : (
-        <div
-          className="w-20 h-20 rounded-full mx-auto mb-3 flex items-center justify-center text-2xl font-bold text-white"
-          style={{ background: `linear-gradient(135deg, ${selectedTheme.gradient[0]}, ${selectedTheme.gradient[1]})` }}
-        >
-          ?
+      {/* Banner gradient (avatar only) */}
+      <div
+        className="relative text-center overflow-hidden"
+        style={{
+          padding: '24px 20px 16px',
+          background: `linear-gradient(165deg, ${selectedTheme.gradient[0]} 0%, ${selectedTheme.gradient[1]} 100%)`,
+          borderRadius: '16px 16px 0 0',
+        }}
+      >
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt="avatar"
+            className="w-16 h-16 rounded-full mx-auto object-cover select-none pointer-events-none"
+            style={{ border: '3px solid rgba(255,255,255,0.3)' }}
+            draggable="false"
+          />
+        ) : (
+          <div
+            className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-xl font-bold text-white/60"
+            style={{ background: 'rgba(255,255,255,0.15)', border: '3px solid rgba(255,255,255,0.2)' }}
+          >
+            ?
+          </div>
+        )}
+      </div>
+
+      {/* Identity in white area */}
+      <div className="bg-[var(--card)] text-center px-5 pt-3 pb-4">
+        <p className="text-sm text-[var(--muted)] mb-1">{bio || "Your bio here..."}</p>
+      </div>
+
+      {/* Links as icon-box */}
+      {links.filter((l) => l.url.trim()).length > 0 && (
+        <div className="bg-[var(--card)] border-t border-[var(--card-border)] px-4 py-3">
+          <div className="flex flex-col gap-1.5">
+            {links
+              .filter((l) => l.url.trim())
+              .map((l, i) => {
+                const platform = detectPlatform(l.url);
+                const colors = previewIconColors[platform.id] || defaultIconColors;
+                return (
+                  <div
+                    key={i}
+                    className={`flex items-center gap-2.5 p-2 rounded-xl bg-[var(--card)] border border-[var(--card-border)] shadow-sm`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}>
+                      <span className="text-sm">{platform.icon}</span>
+                    </div>
+                    <span className="font-semibold text-[var(--foreground)] text-xs truncate">{l.label || l.url}</span>
+                  </div>
+                );
+              })}
+          </div>
         </div>
       )}
-      <p className="text-sm text-[#666] mb-4">{bio || "Your bio here..."}</p>
-      <div className="flex flex-col gap-2">
-        {links
-          .filter((l) => l.url.trim())
-          .map((l, i) => {
-            const platform = detectPlatform(l.url);
-            return (
-              <div
-                key={i}
-                className="rounded-xl py-2.5 px-4 text-sm text-white flex items-center justify-center gap-2"
-                style={{
-                  background: `linear-gradient(135deg, ${selectedTheme.gradient[0]}, ${selectedTheme.gradient[1]})`,
-                  opacity: i % 2 === 0 ? 1 : 0.85,
-                }}
-              >
-                <span className="opacity-90">{platform.icon}</span>
-                <span className="truncate">{l.label || l.url}</span>
-              </div>
-            );
-          })}
-      </div>
       {links.filter((l) => l.url.trim()).length === 0 && (
-        <p className="text-xs text-[var(--muted)]">Add links to see them here</p>
+        <div className="bg-[var(--card)] border-t border-[var(--card-border)] px-4 py-3">
+          <p className="text-xs text-[var(--muted)] text-center">Add links to see them here</p>
+        </div>
       )}
     </div>
   );
@@ -173,7 +210,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
         <form onSubmit={handleSubmit} className="flex-1 min-w-0 space-y-4">
 
           {/* ═══ Section 1: Identity ═══ */}
-          <section className="bg-white rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
+          <section className="bg-[var(--card)] rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
             <h2 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-4">Identity</h2>
 
             {/* Avatar with inline preview */}
@@ -202,7 +239,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                   type="url"
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="w-full bg-[#f0f5f7] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm input-glow outline-none"
+                  className="w-full bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm input-glow outline-none"
                   placeholder="https://example.com/avatar.png"
                 />
               </div>
@@ -216,7 +253,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 onChange={(e) => setBio(e.target.value)}
                 maxLength={280}
                 rows={2}
-                className="w-full bg-[#f0f5f7] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm input-glow outline-none resize-none"
+                className="w-full bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm input-glow outline-none resize-none"
                 placeholder="Tell the world about yourself..."
               />
               <p className="text-xs text-[var(--muted)] mt-0.5 text-right">{bio.length}/280</p>
@@ -224,15 +261,15 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
           </section>
 
           {/* ═══ Section 2: Theme ═══ */}
-          <section className="bg-white rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
+          <section className="bg-[var(--card)] rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
             <h2 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-3">Theme</h2>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
               {THEMES.map((t) => (
                 <button
                   key={t.id}
                   type="button"
                   onClick={() => setTheme(t.id)}
-                  className={`relative rounded-xl p-2.5 text-center transition-all duration-200 ${
+                  className={`relative rounded-xl p-2 text-center transition-all duration-200 ${
                     theme === t.id
                       ? "scale-105"
                       : "hover:scale-105"
@@ -241,14 +278,14 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                     background: `linear-gradient(135deg, ${t.gradient[0]}15, ${t.gradient[1]}15)`,
                     ...(theme === t.id
                       ? { boxShadow: `0 0 0 2px ${t.accent}, 0 4px 12px ${t.shadow}` }
-                      : { border: "1px solid #e5e7eb" }),
+                      : { border: "1px solid var(--card-border)" }),
                   }}
                 >
                   <div
                     className="w-5 h-5 rounded-full mx-auto mb-1"
                     style={{ background: `linear-gradient(135deg, ${t.gradient[0]}, ${t.gradient[1]})` }}
                   />
-                  <span className="text-[11px] font-medium text-[var(--foreground)]">{t.label}</span>
+                  <span className="text-[10px] font-medium text-[var(--foreground)]">{t.label}</span>
                   {theme === t.id && (
                     <div
                       className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
@@ -261,11 +298,75 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                   )}
                 </button>
               ))}
+              {/* Custom color option */}
+              <button
+                type="button"
+                onClick={() => setTheme("custom")}
+                className={`relative rounded-xl p-2 text-center transition-all duration-200 ${
+                  theme === "custom" ? "scale-105" : "hover:scale-105"
+                }`}
+                style={{
+                  background: theme === "custom"
+                    ? `linear-gradient(135deg, ${customColor1}15, ${customColor2}15)`
+                    : undefined,
+                  ...(theme === "custom"
+                    ? { boxShadow: `0 0 0 2px ${customColor1}, 0 4px 12px ${customColor1}40` }
+                    : { border: "1px solid var(--card-border)" }),
+                }}
+              >
+                <div
+                  className="w-5 h-5 rounded-full mx-auto mb-1"
+                  style={{
+                    background: theme === "custom"
+                      ? `linear-gradient(135deg, ${customColor1}, ${customColor2})`
+                      : "conic-gradient(#ef4444, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444)",
+                  }}
+                />
+                <span className="text-[10px] font-medium text-[var(--foreground)]">Custom</span>
+                {theme === "custom" && (
+                  <div
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
+                    style={{ background: customColor1 }}
+                  >
+                    <svg width="8" height="8" viewBox="0 0 16 16" fill="none">
+                      <path d="M3 8l4 4 6-7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                )}
+              </button>
             </div>
+            {/* Custom color pickers */}
+            {theme === "custom" && (
+              <div className="flex items-center gap-4 mt-3 p-3 rounded-xl bg-[var(--surface)] border border-[var(--card-border)]">
+                <div className="flex items-center gap-2">
+                  <label className="text-[11px] text-[var(--muted)] font-medium">From</label>
+                  <input
+                    type="color"
+                    value={customColor1}
+                    onChange={(e) => setCustomColor1(e.target.value)}
+                    className="w-8 h-8 rounded-lg cursor-pointer border-0 p-0"
+                    style={{ background: "none" }}
+                  />
+                  <span className="text-[11px] text-[var(--muted)] font-mono">{customColor1}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label className="text-[11px] text-[var(--muted)] font-medium">To</label>
+                  <input
+                    type="color"
+                    value={customColor2}
+                    onChange={(e) => setCustomColor2(e.target.value)}
+                    className="w-8 h-8 rounded-lg cursor-pointer border-0 p-0"
+                    style={{ background: "none" }}
+                  />
+                  <span className="text-[11px] text-[var(--muted)] font-mono">{customColor2}</span>
+                </div>
+                <div className="ml-auto w-16 h-6 rounded-lg" style={{ background: `linear-gradient(135deg, ${customColor1}, ${customColor2})` }} />
+              </div>
+            )}
           </section>
 
           {/* ═══ Section 3: Links ═══ */}
-          <section className="bg-white rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
+          <section className="bg-[var(--card)] rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
             <h2 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-3">
               Links <span className="normal-case font-normal">({links.length}/10)</span>
             </h2>
@@ -277,7 +378,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 return (
                   <div
                     key={i}
-                    className="animate-fade-in-up bg-[#f8fbfc] border border-[var(--card-border)] rounded-xl p-3 transition-shadow duration-200"
+                    className="animate-fade-in-up bg-[var(--surface)] border border-[var(--card-border)] rounded-xl p-3 transition-shadow duration-200"
                     style={{ animationDelay: `${i * 40}ms` }}
                   >
                     {/* Top row: icon + label + delete */}
@@ -294,7 +395,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                         type="text"
                         value={link.label}
                         onChange={(e) => updateLink(i, "label", e.target.value)}
-                        className="bg-[#f0f5f7] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm flex-1 min-w-0 input-glow outline-none"
+                        className="bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm flex-1 min-w-0 input-glow outline-none"
                         placeholder="Label"
                       />
                       <button
@@ -314,7 +415,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                         type="url"
                         value={link.url}
                         onChange={(e) => updateLink(i, "url", e.target.value)}
-                        className="bg-[#f0f5f7] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm w-full input-glow outline-none"
+                        className="bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm w-full input-glow outline-none"
                         placeholder={activePlatform.placeholder || "https://..."}
                       />
                     </div>
@@ -335,7 +436,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                                   w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200
                                   ${isActive
                                     ? "gradient-primary text-white shadow-[0_2px_8px_rgba(8,145,178,0.3)] scale-110"
-                                    : "bg-[#f0f5f7] text-[#999] hover:bg-[#d1e8ed] hover:text-[#0891b2] hover:scale-105"
+                                    : "bg-[var(--surface)] text-[var(--muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--accent)] hover:scale-105"
                                   }
                                 `}
                               >
@@ -355,9 +456,9 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
               <button
                 type="button"
                 onClick={addLink}
-                className="mt-3 flex items-center gap-2 text-sm text-[#0891b2] hover:text-[var(--accent-hover)] font-medium hover:scale-105 transition-all duration-200 group"
+                className="mt-3 flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-hover)] font-medium hover:scale-105 transition-all duration-200 group"
               >
-                <span className="w-7 h-7 rounded-lg bg-[#d1e8ed] flex items-center justify-center group-hover:bg-[#0891b2] group-hover:text-white transition-all duration-200">
+                <span className="w-7 h-7 rounded-lg bg-[var(--surface)] flex items-center justify-center group-hover:bg-[var(--accent)] group-hover:text-white transition-all duration-200">
                   <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                     <path d="M12 5v14M5 12h14" />
                   </svg>
@@ -374,8 +475,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
               disabled={saving}
               className="w-full btn-press btn-shimmer text-white py-3 rounded-xl font-semibold hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
               style={{
-                background: `linear-gradient(135deg, ${selectedTheme.gradient[0]}, ${selectedTheme.gradient[1]})`,
-                boxShadow: `0 4px 16px ${selectedTheme.shadow}`,
+                background: `linear-gradient(135deg, #0891b2, #8b5cf6)`,
+                boxShadow: `0 4px 16px rgba(8,145,178,0.25)`,
               }}
             >
               {saving ? (
@@ -429,7 +530,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 <h3 className="text-sm font-semibold text-[var(--muted)] uppercase tracking-wider">Preview</h3>
                 <button
                   onClick={() => setShowMobilePreview(false)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />

@@ -105,7 +105,7 @@ export default function DiscoverFeed() {
           <button
             onClick={() => setTab("new")}
             className={`btn-press text-sm font-semibold px-4 py-1.5 rounded-lg transition-all duration-200 ${
-              tab === "new" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(8,145,178,0.25)]" : "bg-[#f5f5f5] text-[#888] hover:bg-[#eee]"
+              tab === "new" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(8,145,178,0.25)]" : "bg-[var(--surface)] text-[var(--muted)] hover:bg-[var(--surface-hover)]"
             }`}
           >
             New
@@ -113,7 +113,7 @@ export default function DiscoverFeed() {
           <button
             onClick={() => setTab("popular")}
             className={`btn-press text-sm font-semibold px-4 py-1.5 rounded-lg transition-all duration-200 ${
-              tab === "popular" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(8,145,178,0.25)]" : "bg-[#f5f5f5] text-[#888] hover:bg-[#eee]"
+              tab === "popular" ? "gradient-primary text-white shadow-[0_2px_8px_rgba(8,145,178,0.25)]" : "bg-[var(--surface)] text-[var(--muted)] hover:bg-[var(--surface-hover)]"
             }`}
           >
             Popular
@@ -122,7 +122,7 @@ export default function DiscoverFeed() {
             <div className="relative" ref={sortRef}>
               <button
                 onClick={() => setSortOpen(!sortOpen)}
-                className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-xl bg-white border border-[var(--card-border)] text-[var(--foreground)] hover:border-[var(--accent)] transition-colors"
+                className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-xl bg-[var(--card)] border border-[var(--card-border)] text-[var(--foreground)] hover:border-[var(--accent)] transition-colors"
               >
                 {{ score: "Overall", followers: "Followers", tipCount: "Tip Count", totalTips: "Total Tipped" }[sortBy]}
                 <svg className={`w-3.5 h-3.5 text-[var(--accent)] transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -130,7 +130,7 @@ export default function DiscoverFeed() {
                 </svg>
               </button>
               {sortOpen && (
-                <div className="absolute left-0 top-full mt-1.5 w-40 bg-white rounded-xl shadow-[0_8px_32px_rgba(8,145,178,0.12)] border border-[var(--card-border)] py-1.5 animate-scale-in z-50">
+                <div className="absolute left-0 top-full mt-1.5 w-40 bg-[var(--card)] rounded-xl shadow-[0_8px_32px_rgba(8,145,178,0.12)] border border-[var(--card-border)] py-1.5 animate-scale-in z-50">
                   {([["score", "Overall"], ["followers", "Followers"], ["tipCount", "Tip Count"], ["totalTips", "Total Tipped"]] as const).map(([value, label]) => (
                     <button
                       key={value}
@@ -154,7 +154,7 @@ export default function DiscoverFeed() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search username..."
-          className="w-full sm:w-56 bg-white border border-[var(--card-border)] rounded-xl px-4 py-2 text-sm input-glow outline-none placeholder:text-[#aaa]"
+          className="w-full sm:w-56 bg-[var(--card)] border border-[var(--card-border)] rounded-xl px-4 py-2 text-sm input-glow outline-none placeholder:text-[#aaa]"
         />
       </div>
 
@@ -192,7 +192,7 @@ export default function DiscoverFeed() {
             <div className="text-center mt-8">
               <button
                 onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                className="btn-press bg-white border-2 border-[var(--card-border)] text-[#555] px-6 py-2.5 rounded-xl text-sm font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300"
+                className="btn-press bg-[var(--card)] border-2 border-[var(--card-border)] text-[var(--text-secondary)] px-6 py-2.5 rounded-xl text-sm font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300"
               >
                 Load More ({sorted.length - visible} remaining)
               </button>

@@ -16,14 +16,14 @@ export default function ProfileCard({ address, profile, username }: Props) {
   return (
     <a
       href={href}
-      className="card-tilt bg-white border border-[var(--card-border)] rounded-2xl p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)] block h-full flex flex-col"
+      className="card-tilt bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)] block h-full flex flex-col"
     >
       <div className="flex items-center gap-3 mb-3">
         {profile.avatarUrl ? (
           <img
             src={profile.avatarUrl}
             alt={displayName}
-            className="w-12 h-12 rounded-full object-cover ring-2 ring-[#d1e8ed] select-none pointer-events-none"
+            className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--card-border)] select-none pointer-events-none"
             draggable="false"
           />
         ) : (
@@ -39,7 +39,7 @@ export default function ProfileCard({ address, profile, username }: Props) {
         </div>
       </div>
       {profile.bio && (
-        <p className="text-sm text-[#666] line-clamp-2">{parseBioTheme(profile.bio).cleanBio}</p>
+        <p className="text-sm text-[var(--text-secondary)] line-clamp-2">{parseBioTheme(profile.bio).cleanBio}</p>
       )}
       <div className="flex gap-4 mt-auto pt-3 text-xs text-[var(--muted)]">
         <span>{profile.links.length} links</span>

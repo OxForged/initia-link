@@ -96,7 +96,7 @@ export default function ConnectButton() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-[var(--card-border)] bg-white hover:border-[var(--accent)] transition-colors"
+        className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-[var(--card-border)] bg-[var(--card)] hover:border-[var(--accent)] transition-colors"
       >
         <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
         <span className="gradient-text-animated">{displayName}</span>
@@ -112,7 +112,7 @@ export default function ConnectButton() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-[0_8px_32px_rgba(8,145,178,0.12)] border border-[var(--card-border)] py-2 animate-scale-in z-50">
+        <div className="absolute right-0 top-full mt-2 w-56 bg-[var(--card)] rounded-2xl shadow-[0_8px_32px_rgba(8,145,178,0.12)] border border-[var(--card-border)] py-2 animate-scale-in z-50">
           {/* Auto-Sign toggle */}
           <button
             onClick={() =>

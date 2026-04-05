@@ -83,7 +83,7 @@ export default function FollowListModal({
 
       {/* Modal */}
       <div
-        className="relative bg-white rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.15)] w-full max-w-sm max-h-[70vh] flex flex-col animate-scale-in"
+        className="relative bg-[var(--card)] rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.15)] w-full max-w-sm max-h-[70vh] flex flex-col animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -93,7 +93,7 @@ export default function FollowListModal({
               onClick={() => setTab("followers")}
               className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
                 tab === "followers"
-                  ? "bg-white text-[var(--accent)] shadow-sm"
+                  ? "bg-[var(--card)] text-[var(--accent)] shadow-sm"
                   : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >
@@ -103,7 +103,7 @@ export default function FollowListModal({
               onClick={() => setTab("following")}
               className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
                 tab === "following"
-                  ? "bg-white text-[var(--accent)] shadow-sm"
+                  ? "bg-[var(--card)] text-[var(--accent)] shadow-sm"
                   : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >

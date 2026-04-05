@@ -16,7 +16,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "InitiaLink",
+  title: "initiaLink",
   description: "Your on-chain identity. One link for everything",
   icons: {
     icon: "/favicon.svg",

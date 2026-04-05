@@ -30,7 +30,7 @@ export default function LinkButton({ url, label, index = 0 }: Props) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`animate-fade-in-up w-full flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-white border border-gray-100 shadow-sm ${colors.hoverBorder} hover:shadow-md hover:translate-x-0.5 transition-all duration-200`}
+      className={`animate-fade-in-up w-full flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-[var(--card)] border border-[var(--card-border)] shadow-sm ${colors.hoverBorder} hover:shadow-md hover:translate-x-0.5 transition-all duration-200`}
       style={{ animationDelay: `${index * 80}ms` }}
     >
       <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}>

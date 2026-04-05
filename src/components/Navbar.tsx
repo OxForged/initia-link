@@ -37,7 +37,7 @@ export default function Navbar() {
           className="text-xl font-bold tracking-tight text-[var(--foreground)] font-heading"
           style={{ WebkitTextStroke: "0.2px currentColor" }}
         >
-          InitiaLink
+          initiaLink
         </a>
 
         {/* Desktop nav */}
@@ -51,7 +51,7 @@ export default function Navbar() {
                 className={`py-2 font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[var(--accent)] after:transition-all after:duration-300 ${
                   isActive
                     ? "text-[var(--accent)] after:w-full"
-                    : "text-[#666] hover:text-[var(--accent)] after:w-0 hover:after:w-full"
+                    : "text-[var(--text-secondary)] hover:text-[var(--accent)] after:w-0 hover:after:w-full"
                 }`}
               >
                 {link.label}
@@ -65,7 +65,7 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setOpen(!open)}
-          className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-[#f0f5f7] transition-colors"
+          className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-[var(--surface)] transition-colors"
           aria-label="Toggle menu"
         >
           <span className={`block w-5 h-0.5 bg-[var(--foreground)] transition-all duration-300 ${open ? "rotate-45 translate-y-[3px]" : ""}`} />
@@ -86,7 +86,7 @@ export default function Navbar() {
                 className={`py-3 px-4 rounded-xl text-sm font-medium transition-colors duration-200 ${
                   isActive
                     ? "text-[var(--accent)] bg-[rgba(8,145,178,0.06)]"
-                    : "text-[#666] hover:text-[var(--accent)] hover:bg-[rgba(8,145,178,0.04)]"
+                    : "text-[var(--text-secondary)] hover:text-[var(--accent)] hover:bg-[rgba(8,145,178,0.04)]"
                 }`}
               >
                 {link.label}

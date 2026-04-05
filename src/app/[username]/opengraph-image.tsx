@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { resolveUsernameToAddress, resolveAddressToUsername } from "@/lib/username";
 import { getProfile, formatGas } from "@/lib/contract";
-import { parseBioTheme, getThemeById } from "@/lib/themes";
+import { parseBioTheme } from "@/lib/themes";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
@@ -40,7 +40,7 @@ export default async function Image({ params }: { params: Promise<{ username: st
     return new ImageResponse(
       (
         <div style={{ display: "flex", width: "100%", height: "100%", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #f4f9fb, #e0f2fe)", fontFamily: "sans-serif" }}>
-          <div style={{ fontSize: 48, fontWeight: 700, color: "#1a1a1a" }}>InitiaLink</div>
+          <div style={{ fontSize: 48, fontWeight: 700, color: "#1a1a1a" }}>initiaLink</div>
         </div>
       ),
       { ...size }
@@ -100,7 +100,7 @@ export default async function Image({ params }: { params: Promise<{ username: st
             )}
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div style={{ fontSize: 42, fontWeight: 700, color: "#1a1a1a" }}>{displayName}</div>
-              <div style={{ fontSize: 20, color: "#888", marginTop: 4 }}>on InitiaLink</div>
+              <div style={{ fontSize: 20, color: "#888", marginTop: 4 }}>on initiaLink</div>
             </div>
           </div>
 
@@ -133,7 +133,7 @@ export default async function Image({ params }: { params: Promise<{ username: st
 
         {/* Bottom right branding */}
         <div style={{ position: "absolute", bottom: 40, right: 60, display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ fontSize: 28, fontWeight: 700, color: "#1a1a1a" }}>InitiaLink</div>
+          <div style={{ fontSize: 28, fontWeight: 700, color: "#1a1a1a" }}>initiaLink</div>
           <div style={{ fontSize: 18, color: "#888" }}>Your on-chain identity</div>
         </div>
       </div>

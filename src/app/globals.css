@@ -74,6 +74,18 @@ html.theme-transition *::after {
 .dark .border-\[\#0891b2\] { border-color: var(--accent) !important; }
 .dark .text-\[\#0891b2\] { color: var(--accent) !important; }
 
+.dark .bg-purple-50 { background-color: rgba(139, 92, 246, 0.1) !important; }
+.dark .bg-gray-100 { background-color: rgba(255, 255, 255, 0.08) !important; }
+.dark .bg-gray-50 { background-color: rgba(255, 255, 255, 0.06) !important; }
+.dark .bg-pink-50 { background-color: rgba(236, 72, 153, 0.1) !important; }
+.dark .bg-red-50 { background-color: rgba(239, 68, 68, 0.1) !important; }
+.dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.1) !important; }
+.dark .bg-indigo-50 { background-color: rgba(99, 102, 241, 0.1) !important; }
+.dark .bg-sky-50 { background-color: rgba(14, 165, 233, 0.1) !important; }
+.dark .bg-teal-50 { background-color: rgba(8, 145, 178, 0.1) !important; }
+.dark .text-gray-700 { color: rgba(255, 255, 255, 0.7) !important; }
+.dark .text-gray-800 { color: rgba(255, 255, 255, 0.8) !important; }
+
 .dark .hover\:bg-\[\#f0f5f7\]:hover { background-color: var(--surface) !important; }
 .dark .hover\:bg-\[\#eee\]:hover { background-color: var(--surface-hover) !important; }
 .dark .hover\:bg-\[\#d1e8ed\]:hover { background-color: var(--surface-hover) !important; }
@@ -812,7 +824,7 @@ html.theme-transition *::after {
 
 .dark .stat-chip-label,
 .dark .l1-chip-label {
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.5) !important;
 }
 
 .dark .profile-footer {
@@ -825,24 +837,44 @@ html.theme-transition *::after {
   box-shadow: 0 4px 24px rgba(0,0,0,0.2);
 }
 
+.stat-chip.teal-bg {
+  background: linear-gradient(135deg, #f0fdfa, #e0f2fe);
+}
+
+.stat-chip.purple-bg {
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+}
+
 .dark .stat-chip.teal-bg {
-  background: linear-gradient(135deg, rgba(8,145,178,0.1), rgba(8,145,178,0.05));
+  background: linear-gradient(135deg, rgba(8,145,178,0.15), rgba(8,145,178,0.05)) !important;
 }
 
 .dark .stat-chip.purple-bg {
-  background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(139,92,246,0.05));
+  background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.05)) !important;
+}
+
+.l1-chip.c1 {
+  background: linear-gradient(135deg, #f0fdfa, #e0f2fe);
 }
 
 .dark .l1-chip.c1 {
-  background: linear-gradient(135deg, rgba(8,145,178,0.1), rgba(8,145,178,0.05));
+  background: linear-gradient(135deg, rgba(8,145,178,0.15), rgba(8,145,178,0.05)) !important;
+}
+
+.l1-chip.c2 {
+  background: linear-gradient(135deg, #e0f2fe, #ede9fe);
 }
 
 .dark .l1-chip.c2 {
-  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05));
+  background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.05)) !important;
+}
+
+.l1-chip.c3 {
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
 }
 
 .dark .l1-chip.c3 {
-  background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(139,92,246,0.05));
+  background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.05)) !important;
 }
 
 .dark .btn-footer-compact {

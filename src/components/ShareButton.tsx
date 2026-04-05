@@ -17,7 +17,7 @@ export default function ShareButton({ username, variant = "default" }: Props) {
     ? `${window.location.origin}/${username}`
     : `/${username}`;
 
-  const text = `Check out my on-chain profile on InitiaLink!`;
+  const text = `Check out my on-chain profile on initiaLink!`;
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
@@ -38,8 +38,8 @@ export default function ShareButton({ username, variant = "default" }: Props) {
       <button
         onClick={() => setOpen(!open)}
         className={isCompact
-          ? "btn-footer-compact bg-[#f4f9fb] border border-[#d1e8ed] text-[#888] py-1.5 px-3 rounded-[7px] text-[10px] font-medium hover:border-[var(--theme-accent,#0891b2)] hover:text-[var(--theme-accent,#0891b2)] transition-all duration-200 inline-flex items-center gap-1"
-          : "btn-press bg-white border-2 border-[var(--card-border)] text-[#555] px-5 py-2.5 rounded-xl text-sm font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300 min-h-[44px] inline-flex items-center gap-1.5"
+          ? "btn-footer-compact bg-[var(--surface)] border border-[var(--card-border)] text-[var(--text-secondary)] py-1.5 px-3 rounded-[7px] text-[10px] font-medium hover:border-[var(--theme-accent,#0891b2)] hover:text-[var(--theme-accent,#0891b2)] transition-all duration-200 inline-flex items-center gap-1"
+          : "btn-press bg-[var(--card)] border-2 border-[var(--card-border)] text-[var(--text-secondary)] px-5 py-2.5 rounded-xl text-sm font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] hover:scale-105 transition-all duration-300 min-h-[44px] inline-flex items-center gap-1.5"
         }
       >
         <svg className={isCompact ? "w-3 h-3" : "w-4 h-4"} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -49,7 +49,7 @@ export default function ShareButton({ username, variant = "default" }: Props) {
       </button>
 
       {open && (
-        <div className="absolute left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 bottom-full mb-2 w-48 bg-white rounded-xl shadow-[0_8px_32px_rgba(8,145,178,0.12)] border border-[var(--card-border)] py-1.5 animate-scale-in z-50">
+        <div className="absolute left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 bottom-full mb-2 w-48 bg-[var(--card)] rounded-xl shadow-[0_8px_32px_rgba(8,145,178,0.12)] border border-[var(--card-border)] py-1.5 animate-scale-in z-50">
           <a
             href={`https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`}
             target="_blank"

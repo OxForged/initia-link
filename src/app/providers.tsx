@@ -27,8 +27,8 @@ const queryClient = new QueryClient();
 
 const customChain = {
   chain_id: APPCHAIN_ID,
-  chain_name: "InitiaLink",
-  pretty_name: "InitiaLink Appchain",
+  chain_name: "initiaLink",
+  pretty_name: "initiaLink Appchain",
   network_type: "testnet",
   bech32_prefix: "init",
   apis: {

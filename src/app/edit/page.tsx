@@ -185,7 +185,7 @@ export default function EditPage() {
               </svg>
             }
             title="Connect Your Wallet"
-            description="Link your Initia wallet to get started. Supports Initia Wallet, Keplr, and more."
+            description="Link your initia wallet to get started. Supports initia Wallet, Keplr, and more."
           >
             <button
               onClick={openConnect}
@@ -240,7 +240,7 @@ export default function EditPage() {
               </svg>
             }
             title="Register Your .init Username"
-            description="Your username becomes your profile URL. Register one on the Initia testnet, then come back here."
+            description="Your username becomes your profile URL. Register one on the initia testnet, then come back here."
           >
             <a
               href="https://app.testnet.initia.xyz/usernames"

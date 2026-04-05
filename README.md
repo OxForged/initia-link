@@ -1,4 +1,4 @@
-# InitiaLink
+# initiaLink
 
 Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
@@ -8,7 +8,7 @@ Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
 ## What is this
 
-InitiaLink lets you create a profile page tied to your Initia username. Add your links and bio, set an avatar. Other users can tip you (native tokens, no platform cut) and follow you. One Move module stores everything, no backend, no database.
+initiaLink lets you create a profile page tied to your initia username. Add your links and bio, set an avatar. Other users can tip you (native tokens, no platform cut) and follow you. One Move module stores everything, no backend, no database.
 
 Visit `yourapp.com/alice.init` and you see Alice's profile. She doesn't need to be online, and the visitor doesn't need a wallet to view it.
 
@@ -18,12 +18,12 @@ Linktree owns your profile. They host it and charge you for premium features. If
 
 Linktree also doesn't know anything about crypto. You can't tip someone, follow them on-chain, or verify their identity through their wallet. A list of links on someone else's server.
 
-InitiaLink stores everything in a Move module on a dedicated Initia MiniMove appchain. Your profile is yours. Tips go straight to your wallet, and the follow graph is on-chain too. Because it runs on its own appchain, transaction fees become app revenue.
+initiaLink stores everything in a Move module on a dedicated initia MiniMove appchain. Your profile is yours. Tips go straight to your wallet, and the follow graph is on-chain too. Because it runs on its own appchain, transaction fees become app revenue.
 
 Other alternatives and why they don't fit:
 - **Bento** -- same centralized problem as Linktree, just prettier
 - **ENS profiles** -- Ethereum only, no social features, no tipping
-- **Lens/Farcaster** -- locked to their own ecosystems, not Initia-native
+- **Lens/Farcaster** -- locked to their own ecosystems, not initia-native
 
 ## How it works
 
@@ -36,19 +36,19 @@ One Move module (`profile_registry`) handles everything:
 
 The server resolves `.init` usernames by calling L1 Move view functions (BCS-encoded, over REST) and renders profile pages with Open Graph meta tags. Share a link on Twitter or Discord and it shows the right preview.
 
-## Initia integration
+## initia integration
 
 Five native features used:
 
-1. **Initia Usernames (.init)** -- your username is your URL. Forward resolution (name to address) and reverse resolution (address to name) both work, so even if someone shares a raw address link, the page still shows the `.init` name.
+1. **initia Usernames (.init)** -- your username is your URL. Forward resolution (name to address) and reverse resolution (address to name) both work, so even if someone shares a raw address link, the page still shows the `.init` name.
 
 2. **MiniMove Appchain** -- the profile registry runs as a Move module on a dedicated MiniMove rollup. Move's resource ownership model and the Aptos-variant MoveVM give type safety and composability that Solidity can't match.
 
 3. **Auto-signing** -- session-based auto-signing through InterwovenKit. Enable it once from the wallet dropdown, approve in your wallet, and all subsequent transactions (editing, following, tipping) go through without confirmation dialogs. Uses `/initia.move.v1.MsgExecute` permissions. Only possible on MiniMove (not MiniEVM).
 
-4. **InterwovenKit** -- wallet connection and transaction signing. Supports Initia Wallet, Keplr, MetaMask, and others. Contract writes go through Cosmos `MsgExecute` via `requestTxBlock`, with BCS-encoded arguments.
+4. **InterwovenKit** -- wallet connection and transaction signing. Supports initia Wallet, Keplr, MetaMask, and others. Contract writes go through Cosmos `MsgExecute` via `requestTxBlock`, with BCS-encoded arguments.
 
-5. **L1 Cross-Rollup Identity** -- each profile page queries the Initia L1 testnet for the user's INIT balance and staking positions. The appchain frontend reaches into L1 state via REST API, showing how data flows across rollup boundaries. Uses Initia's `mstaking` module for multi-asset staking queries.
+5. **L1 Cross-Rollup Identity** -- each profile page queries the initia L1 testnet for the user's INIT balance and staking positions. The appchain frontend reaches into L1 state via REST API, showing how data flows across rollup boundaries. Uses initia's `mstaking` module for multi-asset staking queries.
 
 ## Architecture
 
@@ -67,13 +67,13 @@ graph TB
         NODE --- REST
     end
 
-    subgraph Appchain["InitiaLink Appchain (initialink-1)"]
+    subgraph Appchain["initiaLink Appchain (initialink-1)"]
         MOD["profile_registry<br/>Move Module"]
         STATE["On-chain State<br/>Profiles / Follows / Tips"]
         MOD --- STATE
     end
 
-    subgraph L1["Initia L1 Testnet"]
+    subgraph L1["initia L1 Testnet"]
         USER_MOD["usernames Module<br/>(.init Resolution)"]
         BANK["Bank + mStaking<br/>(INIT Balance)"]
     end
@@ -86,6 +86,20 @@ graph TB
     FE -- "L1 Identity<br/>(Balance + Staking)" --> BANK
     FE -- "/api/faucet<br/>(@initia/initia.js)" --> REST
 ```
+
+## Live appchain
+
+The initiaLink MiniMove appchain runs on a dedicated VPS.
+
+| Endpoint | URL |
+|---|---|
+| Cosmos RPC | `http://38.49.213.194:26657` |
+| Cosmos REST | `http://38.49.213.194:1317` |
+| Chain ID | `initialink-1` |
+| VM | MiniMove (Aptos MoveVM) |
+| Module deploy TX | `09DA5492E7AA8A47F6A701B4565EBCEB0045945DD9E9F77A07909F90BEEB0ECC` |
+
+Verify the node is running: `curl http://38.49.213.194:26657/status`
 
 ## Running locally
 
@@ -158,7 +172,7 @@ npm run dev
 - BCS encoding for Move view function calls and transaction args
 - InterwovenKit (`@initia/interwovenkit-react`) for wallet and tx
 - `@initia/initia.js` for faucet (server-side tx signing)
-- Initia L1 REST API for `.init` username resolution and cross-rollup identity
+- initia L1 REST API for `.init` username resolution and cross-rollup identity
 - sonner for toast notifications
 
 ## Pages
@@ -173,7 +187,7 @@ npm run dev
 
 ## Move Module
 
-`profile_registry` deployed at `0xE6638AB1AD3530282D4FA9E13D5BC1189EC6125D` on the InitiaLink MiniMove appchain (`initialink-1`).
+`profile_registry` deployed at `0xE6638AB1AD3530282D4FA9E13D5BC1189EC6125D` on the initiaLink MiniMove appchain (`initialink-1`).
 
 ## Features worth noting
 
@@ -184,10 +198,10 @@ npm run dev
 - Dynamic Open Graph images for rich previews when sharing on Discord, X, Telegram
 - Dashboard with recent tip history (on-chain records) and following list with resolved usernames
 - Follow/Tip buttons hidden on your own profile, follow state checked on-chain
-- L1 cross-rollup identity card on profiles (INIT balance, staked amount, validator count from Initia testnet)
-- Profile themes (6 presets: Teal, Violet, Sunset, Rose, Ocean, Emerald) stored on-chain in bio field
+- L1 cross-rollup identity card on profiles (INIT balance, staked amount, validator count from initia testnet)
+- Profile themes (12 presets + custom color picker with native color dialog) stored on-chain in bio field
 - Clickable follower/following counts open paginated list modal with username resolution
-- Dark mode with toggle in navbar, localStorage persistence, no flash on reload
+- Dark mode with toggle in navbar, localStorage persistence, no flash on reload, all components use CSS variables
 - Two-column edit page (form + sticky live preview) with compact link cards and section grouping
 - Guided onboarding stepper for new users (connect wallet, get GAS, register .init, create profile)
 - Auto-sign for frictionless transactions (MiniMove only)
@@ -197,7 +211,7 @@ npm run dev
 
 ## Who this is for
 
-Crypto-native creators, builders, and community members who want a single landing page tied to their on-chain identity. You already have an `.init` username and want to share your socials, receive tips, and build a follower base without trusting a centralized platform. InitiaLink runs on a dedicated appchain where the app controls its own fees and throughput.
+Crypto-native creators, builders, and community members who want a single landing page tied to their on-chain identity. You already have an `.init` username and want to share your socials, receive tips, and build a follower base without trusting a centralized platform. initiaLink runs on a dedicated appchain where the app controls its own fees and throughput.
 
 ## Structure
 
