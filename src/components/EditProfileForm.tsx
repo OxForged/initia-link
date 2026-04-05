@@ -276,12 +276,12 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                maxLength={280}
+                maxLength={180}
                 rows={2}
                 className="w-full bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm input-glow outline-none resize-none"
                 placeholder="Tell the world about yourself..."
               />
-              <p className="text-xs text-[var(--muted)] mt-0.5 text-right">{bio.length}/280</p>
+              <p className="text-xs text-[var(--muted)] mt-0.5 text-right">{bio.length}/180</p>
             </div>
           </section>
 

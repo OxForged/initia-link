@@ -9,5 +9,5 @@
   "native_feature": "initia-usernames",
   "core_logic_path": "contracts/move/profile_registry/sources/profile_registry.move",
   "native_feature_frontend_path": "src/app/[username]/page.tsx",
-  "demo_video_url": ""
+  "demo_video_url": "https://youtu.be/MEkOyIOcwqM"
 }

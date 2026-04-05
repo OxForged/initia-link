@@ -6,6 +6,8 @@ Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
 **Live:** [initia-link.vercel.app](https://initia-link.vercel.app/)
 
+**Demo:** [youtu.be/MEkOyIOcwqM](https://youtu.be/MEkOyIOcwqM)
+
 **Repo:** [github.com/jordi-stack/initia-link](https://github.com/jordi-stack/initia-link)
 
 ## What is this
