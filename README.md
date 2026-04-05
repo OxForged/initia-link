@@ -45,39 +45,20 @@ Five native features used:
 
 ## Architecture
 
-```mermaid
-graph TB
-    subgraph Browser
-        FE["Next.js Frontend<br/>(App Router + SSR)"]
-        IK["InterwovenKit<br/>(Wallet + Tx Signing)"]
-    end
-
-    subgraph VPS["VPS (38.49.213.194)"]
-        NODE["minitiad<br/>MiniMove Node"]
-        RPC["Cosmos RPC :26657"]
-        REST["Cosmos REST :1317"]
-        NODE --- RPC
-        NODE --- REST
-    end
-
-    subgraph Appchain["initiaLink Appchain (initialink-1)"]
-        MOD["profile_registry<br/>Move Module"]
-        STATE["On-chain State<br/>Profiles / Follows / Tips"]
-        MOD --- STATE
-    end
-
-    subgraph L1["initia L1 Testnet"]
-        USER_MOD["usernames Module<br/>(.init Resolution)"]
-        BANK["Bank + mStaking<br/>(INIT Balance)"]
-    end
-
-    FE -- "View Functions<br/>(BCS + REST)" --> REST
-    IK -- "MsgExecute<br/>(Create/Edit/Tip/Follow)" --> RPC
-    REST -- "Read State" --> MOD
-    RPC -- "Write State" --> MOD
-    FE -- "Username Lookup<br/>(BCS + REST)" --> USER_MOD
-    FE -- "L1 Identity<br/>(Balance + Staking)" --> BANK
-    FE -- "/api/faucet<br/>(@initia/initia.js)" --> REST
+```
+Browser                          initiaLink Appchain (initialink-1)
+┌──────────────────────┐         ┌─────────────────────────────────┐
+│  Next.js Frontend    │ ──────> │  REST :1317  ──> profile_registry│
+│  (App Router + SSR)  │  reads  │                   Move Module   │
+│                      │         │                       │         │
+│  InterwovenKit       │ ──────> │  RPC :26657  ──> On-chain State │
+│  (Wallet + Tx)       │ writes  │               Profiles/Follows  │
+└──────────────────────┘         └─────────────────────────────────┘
+         │                                    VPS 38.49.213.194
+         │
+         │  initia L1 Testnet
+         ├──────> .init Username Resolution (BCS + REST)
+         └──────> L1 Identity: INIT Balance + mStaking
 ```
 
 ## Live appchain
