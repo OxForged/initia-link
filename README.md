@@ -12,18 +12,11 @@ initiaLink lets you create a profile page tied to your initia username. Add your
 
 Visit `yourapp.com/alice.init` and you see Alice's profile. She doesn't need to be online, and the visitor doesn't need a wallet to view it.
 
-## Why not just use Linktree
+## Why on-chain
 
-Linktree owns your profile. They host it and charge you for premium features. If they go down or change their terms, your page disappears.
-
-Linktree also doesn't know anything about crypto. You can't tip someone, follow them on-chain, or verify their identity through their wallet. A list of links on someone else's server.
+Traditional link-in-bio platforms own your profile. They host it, charge for premium features, and if they go down or change terms, your page disappears. They also don't understand crypto -- no tipping, no on-chain follows, no wallet-based identity.
 
 initiaLink stores everything in a Move module on a dedicated initia MiniMove appchain. Your profile is yours. Tips go straight to your wallet, and the follow graph is on-chain too. Because it runs on its own appchain, transaction fees become app revenue.
-
-Other alternatives and why they don't fit:
-- **Bento** -- same centralized problem as Linktree, just prettier
-- **ENS profiles** -- Ethereum only, no social features, no tipping
-- **Lens/Farcaster** -- locked to their own ecosystems, not initia-native
 
 ## How it works
 
