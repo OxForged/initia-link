@@ -135,6 +135,16 @@ Verify the node is running: `curl http://38.49.213.194:26657/status`
 
 Crypto-native creators, builders, and community members who want a single landing page tied to their on-chain identity. You already have an `.init` username and want to share your socials, receive tips, and build a follower base without trusting a centralized platform. initiaLink runs on a dedicated appchain where the app controls its own fees and throughput.
 
+## Competitive landscape
+
+Linktree and similar platforms host your profile on their servers. If they go down, change pricing, or ban your account, your page disappears. Crypto-native alternatives exist -- Lens Protocol lets users build profile pages, and ENS records can point to static sites -- but neither is designed for the Initia ecosystem, and neither gives you a URL that maps directly to a username your followers already know.
+
+initiaLink treats the `.init` username as the URL. There is no separate domain, no ENS record to configure, no IPFS hash to pin. Your username is `alice.init`, your profile is at `initia-link.vercel.app/alice.init`. The profile data lives in a Move module on a dedicated appchain, so the app captures transaction fees rather than leaking them to a shared sequencer.
+
+## Go-to-market
+
+The initial audience is Initia ecosystem users who already hold `.init` usernames. Every wallet connected to an Initia app is a potential profile. The on-chain follow graph creates natural distribution -- your followers see when you update links, and the discover feed surfaces new profiles to the community. The faucet and onboarding stepper lower the barrier for users who haven't transacted on initiaLink before.
+
 ## Running locally
 
 ```bash
