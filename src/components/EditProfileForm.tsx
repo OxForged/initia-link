@@ -5,6 +5,7 @@ import { useContractWrite } from "@/hooks/useContractWrite";
 import { type Profile } from "@/lib/contract";
 import { platforms, detectPlatform } from "@/lib/platforms";
 import { THEMES, type ThemeId, parseBioTheme, encodeBioTheme, resolveTheme } from "@/lib/themes";
+import Avatar from "@/components/Avatar";
 import { toast } from "sonner";
 
 type LinkItem = {
@@ -158,22 +159,16 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
           borderRadius: '16px 16px 0 0',
         }}
       >
-        {avatarUrl ? (
-          <img
-            src={avatarUrl}
+        <div className="mx-auto" style={{ width: 64 }}>
+          <Avatar
+            src={avatarUrl || undefined}
+            initial={"?"}
+            size={64}
+            gradient={selectedTheme.gradient}
             alt="avatar"
-            className="w-16 h-16 rounded-full mx-auto object-cover select-none pointer-events-none"
-            style={{ border: '3px solid rgba(255,255,255,0.3)' }}
-            draggable="false"
+            imgStyle={{ border: '3px solid rgba(255,255,255,0.3)' }}
           />
-        ) : (
-          <div
-            className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-xl font-bold text-white/60"
-            style={{ background: 'rgba(255,255,255,0.15)', border: '3px solid rgba(255,255,255,0.2)' }}
-          >
-            ?
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Identity in white area */}
@@ -241,22 +236,14 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
             {/* Avatar with inline preview */}
             <div className="flex items-start gap-3 mb-4">
               <div className="shrink-0">
-                {avatarUrl ? (
-                  <img
-                    src={avatarUrl}
-                    alt="avatar"
-                    className="w-12 h-12 rounded-full object-cover select-none pointer-events-none"
-                    style={{ border: `2px solid ${selectedTheme.accent}` }}
-                    draggable="false"
-                  />
-                ) : (
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white"
-                    style={{ background: `linear-gradient(135deg, ${selectedTheme.gradient[0]}, ${selectedTheme.gradient[1]})` }}
-                  >
-                    ?
-                  </div>
-                )}
+                <Avatar
+                  src={avatarUrl || undefined}
+                  initial={"?"}
+                  size={48}
+                  gradient={selectedTheme.gradient}
+                  alt="avatar"
+                  imgStyle={{ border: `2px solid ${selectedTheme.accent}` }}
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <label className="block text-xs font-medium mb-1 text-[var(--muted)]">Avatar URL</label>

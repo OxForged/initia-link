@@ -11,6 +11,7 @@ import QRButton from "@/components/QRButton";
 import L1IdentityCard from "@/components/L1Identity";
 import FollowStats from "@/components/FollowStats";
 import ThemedProfileWrapper from "@/components/ThemedProfileWrapper";
+import Avatar from "@/components/Avatar";
 import { parseBioTheme, resolveTheme } from "@/lib/themes";
 type Props = {
   params: Promise<{ username: string }>;
@@ -155,20 +156,14 @@ export default async function ProfilePage({ params }: Props) {
             <div className="relative z-10">
               <div className="animate-scale-in">
                 <div className="hero-avatar-ring">
-                  {profile.avatarUrl ? (
-                    <img
-                      src={profile.avatarUrl}
-                      alt={displayName}
-                      className="w-[98px] h-[98px] rounded-full object-cover select-none pointer-events-none"
-                      style={{ border: '3px solid rgba(255,255,255,0.2)' }}
-                      draggable="false"
-                    />
-                  ) : (
-                    <div
-                      className="w-[98px] h-[98px] rounded-full"
-                      style={{ background: `linear-gradient(135deg, var(--theme-gradient-from), var(--theme-gradient-to))`, border: '3px solid rgba(255,255,255,0.2)' }}
-                    />
-                  )}
+                  <Avatar
+                    src={profile.avatarUrl}
+                    initial={(displayName.replace(/\.init$/, "")[0] || "?").toUpperCase()}
+                    size={98}
+                    gradient={theme.gradient}
+                    alt={displayName}
+                    imgStyle={{ border: '3px solid rgba(255,255,255,0.2)' }}
+                  />
                 </div>
               </div>
             </div>

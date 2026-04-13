@@ -1,7 +1,8 @@
 "use client";
 
 import { type Profile, formatGas } from "@/lib/contract";
-import { parseBioTheme } from "@/lib/themes";
+import { parseBioTheme, resolveTheme } from "@/lib/themes";
+import Avatar from "@/components/Avatar";
 
 type Props = {
   address: string;
@@ -12,6 +13,9 @@ type Props = {
 export default function ProfileCard({ address, profile, username }: Props) {
   const displayName = username || `${address.slice(0, 6)}...${address.slice(-4)}`;
   const href = username ? `/${username}` : `/${address}`;
+  const { themeId, customColors } = parseBioTheme(profile.bio);
+  const theme = resolveTheme(themeId, customColors);
+  const initial = (username?.replace(/\.init$/, "")[0] || displayName[0] || "?").toUpperCase();
 
   return (
     <a
@@ -19,18 +23,14 @@ export default function ProfileCard({ address, profile, username }: Props) {
       className="card-tilt bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)] block h-full flex flex-col"
     >
       <div className="flex items-center gap-3 mb-3">
-        {profile.avatarUrl ? (
-          <img
-            src={profile.avatarUrl}
-            alt={displayName}
-            className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--card-border)] select-none pointer-events-none"
-            draggable="false"
-          />
-        ) : (
-          <div className="w-12 h-12 rounded-full gradient-accent flex items-center justify-center text-lg font-bold text-white ring-2 ring-white/50">
-            {displayName[0]?.toUpperCase()}
-          </div>
-        )}
+        <Avatar
+          src={profile.avatarUrl}
+          initial={initial}
+          size={48}
+          gradient={theme.gradient}
+          alt={displayName}
+          imgStyle={{ boxShadow: "0 0 0 2px var(--card-border)" }}
+        />
         <div>
           <h3 className="font-semibold text-[var(--foreground)]">{displayName}</h3>
           <p className="text-xs text-[var(--muted)]">

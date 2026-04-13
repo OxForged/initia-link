@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { resolveUsernameToAddress, resolveAddressToUsername } from "@/lib/username";
 import { getProfile, formatGas } from "@/lib/contract";
-import { parseBioTheme } from "@/lib/themes";
+import { parseBioTheme, resolveTheme } from "@/lib/themes";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
@@ -9,6 +9,20 @@ export const contentType = "image/png";
 
 function isHexAddress(s: string): boolean {
   return s.startsWith("0x") && s.length === 42;
+}
+
+async function isValidImage(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(2500) });
+    if (!res.ok) return false;
+    const ct = res.headers.get("content-type") || "";
+    if (!ct.startsWith("image/")) return false;
+    const len = res.headers.get("content-length");
+    if (len && parseInt(len, 10) < 100) return false;
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export default async function Image({ params }: { params: Promise<{ username: string }> }) {
@@ -57,6 +71,11 @@ export default async function Image({ params }: { params: Promise<{ username: st
     if (displayName === decoded) displayName = `${address.slice(0, 6)}...${address.slice(-4)}`;
   }
 
+  const { themeId, customColors } = parseBioTheme(profile.bio);
+  const theme = resolveTheme(themeId, customColors);
+  const avatarOk = profile.avatarUrl ? await isValidImage(profile.avatarUrl) : false;
+  const initial = (displayName.replace(/\.init$/, "")[0] || "?").toUpperCase();
+
   return new ImageResponse(
     (
       <div
@@ -73,12 +92,12 @@ export default async function Image({ params }: { params: Promise<{ username: st
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", flex: 1 }}>
           {/* Avatar */}
           <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: 32 }}>
-            {profile.avatarUrl ? (
+            {avatarOk ? (
               <img
                 src={profile.avatarUrl}
                 width={96}
                 height={96}
-                style={{ borderRadius: "50%", objectFit: "cover", border: "3px solid #0891b2" }}
+                style={{ borderRadius: "50%", objectFit: "cover", border: `3px solid ${theme.accent}` }}
               />
             ) : (
               <div
@@ -86,7 +105,7 @@ export default async function Image({ params }: { params: Promise<{ username: st
                   width: 96,
                   height: 96,
                   borderRadius: "50%",
-                  background: "linear-gradient(135deg, #0891b2, #8b5cf6)",
+                  background: `linear-gradient(135deg, ${theme.gradient[0]}, ${theme.gradient[1]})`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -95,7 +114,7 @@ export default async function Image({ params }: { params: Promise<{ username: st
                   color: "white",
                 }}
               >
-                {displayName[0]?.toUpperCase()}
+                {initial}
               </div>
             )}
             <div style={{ display: "flex", flexDirection: "column" }}>
