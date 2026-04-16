@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
 import { getProfile } from "@/lib/contract";
 import ConnectButton from "./ConnectButton";
-import DarkModeToggle from "./DarkModeToggle";
+
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -31,51 +31,108 @@ export default function Navbar() {
 
   return (
     <nav className="px-4 sm:px-6 py-4 animate-fade-in-down relative z-50">
-      <div className="mx-auto max-w-4xl bg-white/85 backdrop-blur-xl rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_28px_rgba(8,145,178,0.1)] transition-shadow duration-500">
+      <div className="mx-auto max-w-4xl flex items-center justify-between gap-4">
+
+        {/* Brand */}
         <a
           href="/"
-          className="text-xl font-bold tracking-tight text-[var(--foreground)] font-heading"
-          style={{ WebkitTextStroke: "0.2px currentColor" }}
+          className="inline-flex items-center gap-2.5 flex-shrink-0"
+          style={{ textDecoration: "none" }}
         >
-          initiaLink
+          {/* Logo mark */}
+          <img
+            src="/favicon.svg"
+            alt="initiaLink"
+            width={30}
+            height={30}
+            style={{
+              borderRadius: "7px",
+              border: "2px solid var(--foreground)",
+              boxShadow: "2px 2px 0 var(--foreground)",
+              flexShrink: 0,
+            }}
+          />
+          <span
+            className="font-heading"
+            style={{ fontWeight: 900, fontStyle: "italic", fontSize: "22px", letterSpacing: "-0.02em", color: "var(--foreground)" }}
+          >
+            initiaLink
+          </span>
         </a>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-5 text-sm">
+        {/* Desktop: pill nav */}
+        <div
+          className="hidden md:flex items-center gap-1"
+          style={{
+            padding: "5px",
+            background: "var(--card)",
+            border: "2px solid var(--foreground)",
+            borderRadius: "9999px",
+            boxShadow: "4px 4px 0 var(--foreground)",
+          }}
+        >
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <a
                 key={link.href}
                 href={link.href}
-                className={`py-2 font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-[var(--accent)] after:transition-all after:duration-300 ${
-                  isActive
-                    ? "text-[var(--accent)] after:w-full"
-                    : "text-[var(--text-secondary)] hover:text-[var(--accent)] after:w-0 hover:after:w-full"
-                }`}
+                className="font-heading"
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "9999px",
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  background: isActive ? "#0891b2" : "transparent",
+                  color: isActive ? "#fff" : "var(--text-secondary)",
+                  transition: "background 200ms, color 200ms",
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                }}
               >
                 {link.label}
               </a>
             );
           })}
-          <DarkModeToggle />
+        </div>
+
+        {/* Desktop: connect */}
+        <div className="hidden md:flex items-center gap-3 flex-shrink-0">
           <ConnectButton />
         </div>
 
         {/* Mobile hamburger */}
         <button
           onClick={() => setOpen(!open)}
-          className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-[var(--surface)] transition-colors"
+          className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-xl flex-shrink-0"
+          style={{
+            border: "2px solid var(--foreground)",
+            boxShadow: "3px 3px 0 var(--foreground)",
+            background: "var(--card)",
+          }}
           aria-label="Toggle menu"
         >
-          <span className={`block w-5 h-0.5 bg-[var(--foreground)] transition-all duration-300 ${open ? "rotate-45 translate-y-[3px]" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-[var(--foreground)] mt-1 transition-all duration-300 ${open ? "-rotate-45 -translate-y-[3px]" : ""}`} />
+          <span
+            className={`block w-5 h-0.5 bg-[var(--foreground)] transition-all duration-300 ${open ? "rotate-45 translate-y-[3px]" : ""}`}
+          />
+          <span
+            className={`block w-5 h-0.5 bg-[var(--foreground)] mt-1 transition-all duration-300 ${open ? "-rotate-45 -translate-y-[3px]" : ""}`}
+          />
         </button>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden mx-auto max-w-4xl mt-2 bg-white/95 backdrop-blur-xl rounded-2xl px-4 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] animate-fade-in-down flex flex-col gap-1">
+        <div
+          className="md:hidden mx-auto max-w-4xl mt-2 animate-fade-in-down flex flex-col gap-1"
+          style={{
+            background: "var(--card)",
+            border: "2px solid var(--foreground)",
+            borderRadius: "20px",
+            boxShadow: "6px 6px 0 var(--foreground)",
+            padding: "16px",
+          }}
+        >
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -83,19 +140,33 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`py-3 px-4 rounded-xl text-sm font-medium transition-colors duration-200 ${
-                  isActive
-                    ? "text-[var(--accent)] bg-[rgba(8,145,178,0.06)]"
-                    : "text-[var(--text-secondary)] hover:text-[var(--accent)] hover:bg-[rgba(8,145,178,0.04)]"
-                }`}
+                className="font-heading"
+                style={{
+                  padding: "12px 16px",
+                  borderRadius: "12px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  background: isActive ? "rgba(8, 145, 178, 0.1)" : "transparent",
+                  color: isActive ? "#0891b2" : "var(--text-secondary)",
+                  textDecoration: "none",
+                }}
               >
                 {link.label}
               </a>
             );
           })}
-          <div className="pt-2 px-4 border-t border-[var(--card-border)] flex items-center justify-between">
+          <div
+            style={{
+              paddingTop: "12px",
+              marginTop: "4px",
+              borderTop: "1px solid var(--card-border)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 16px 0",
+            }}
+          >
             <ConnectButton />
-            <DarkModeToggle />
           </div>
         </div>
       )}

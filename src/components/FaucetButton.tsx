@@ -42,7 +42,8 @@ export default function FaucetButton() {
     <button
       onClick={handleDrip}
       disabled={loading}
-      className="gradient-secondary text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-[0_2px_10px_rgba(139,92,246,0.25)] hover:opacity-90 transition-opacity disabled:opacity-50 min-h-[40px]"
+      className="btn-fizz btn-fizz-primary font-heading disabled:opacity-50"
+      style={{ fontSize: '13px', padding: '8px 16px' }}
     >
       {loading ? "..." : "Get GAS"}
     </button>

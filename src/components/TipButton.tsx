@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useContractWrite } from "@/hooks/useContractWrite";
 import { useHexAddress } from "@initia/interwovenkit-react";
 import { toast } from "sonner";
+
 type Props = {
   profileOwner: string;
   variant?: "default" | "hero";
@@ -13,8 +14,8 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
   const { tipProfile, isConnected } = useContractWrite();
   const hexAddress = useHexAddress();
 
-  // Hide if viewing own profile
   if (hexAddress && hexAddress.toLowerCase() === profileOwner.toLowerCase()) return null;
+
   const [amount, setAmount] = useState("10");
   const [loading, setLoading] = useState(false);
   const [showInput, setShowInput] = useState(false);
@@ -48,11 +49,8 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
     return (
       <button
         onClick={() => setShowInput(true)}
-        className={`btn-press px-5 py-2.5 rounded-xl text-sm font-semibold min-h-[44px] ${
-          isHero
-            ? "btn-glass text-white"
-            : "btn-shimmer gradient-primary text-white hover:scale-105 transition-all duration-300"
-        }`}
+        className={isHero ? "btn-fizz btn-fizz-primary font-heading min-h-[44px]" : "btn-fizz btn-fizz-primary font-heading"}
+        style={isHero ? {} : { fontSize: "13px", padding: "10px 18px" }}
       >
         Tip GAS
       </button>
@@ -64,11 +62,21 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
       <div className="relative" ref={popoverRef}>
         <button
           onClick={() => setShowInput(false)}
-          className="btn-glass btn-press text-white px-5 py-2.5 rounded-xl text-sm font-semibold min-h-[44px]"
+          className="btn-fizz btn-fizz-primary font-heading min-h-[44px]"
         >
           Tip GAS
         </button>
-        <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-[var(--card)] rounded-xl shadow-[0_8px_32px_rgba(8,145,178,0.15)] border border-[var(--card-border)] p-3 animate-scale-in z-50 min-w-[220px]">
+        <div
+          className="absolute top-full mt-2 left-1/2 -translate-x-1/2 animate-scale-in z-50"
+          style={{
+            background: "var(--card)",
+            border: "2px solid var(--foreground)",
+            borderRadius: "14px",
+            boxShadow: "5px 5px 0 var(--foreground)",
+            padding: "12px",
+            minWidth: "220px",
+          }}
+        >
           <div className="flex items-center gap-2">
             <input
               type="number"
@@ -76,20 +84,32 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
               min="1"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="bg-[var(--card)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm w-20 input-glow outline-none text-[var(--foreground)]"
+              className="font-heading"
+              style={{
+                width: "72px",
+                padding: "8px 10px",
+                fontSize: "13px",
+                fontWeight: 700,
+                background: "var(--surface)",
+                border: "2px solid var(--foreground)",
+                borderRadius: "9px",
+                outline: "none",
+                color: "var(--foreground)",
+              }}
             />
             <button
               onClick={handleTip}
               disabled={loading}
-              className="btn-press gradient-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="btn-fizz btn-fizz-primary font-heading disabled:opacity-50"
+              style={{ fontSize: "13px", padding: "8px 14px" }}
             >
               {loading ? "..." : "Send"}
             </button>
             <button
               onClick={() => setShowInput(false)}
-              className="text-[var(--muted)] text-sm hover:text-[var(--foreground)] transition-colors"
+              style={{ fontSize: "13px", color: "var(--muted)", background: "none", border: "none", cursor: "pointer" }}
             >
-              Cancel
+              ✕
             </button>
           </div>
         </div>
@@ -106,20 +126,32 @@ export default function TipButton({ profileOwner, variant = "default" }: Props) 
           min="1"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          className="bg-[var(--card)] border border-[var(--card-border)] rounded-xl px-3 py-2 text-sm w-24 input-glow outline-none text-[var(--foreground)]"
+          className="font-heading"
+          style={{
+            width: "80px",
+            padding: "8px 10px",
+            fontSize: "13px",
+            fontWeight: 700,
+            background: "var(--surface)",
+            border: "2px solid var(--foreground)",
+            borderRadius: "9px",
+            outline: "none",
+            color: "var(--foreground)",
+          }}
         />
         <button
           onClick={handleTip}
           disabled={loading}
-          className="btn-press gradient-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+          className="btn-fizz btn-fizz-primary font-heading disabled:opacity-50"
+          style={{ fontSize: "13px", padding: "8px 14px" }}
         >
           {loading ? "..." : "Send"}
         </button>
         <button
           onClick={() => setShowInput(false)}
-          className="text-[var(--muted)] text-sm hover:text-[var(--foreground)] transition-colors"
+          style={{ fontSize: "13px", color: "var(--muted)", background: "none", border: "none", cursor: "pointer" }}
         >
-          Cancel
+          ✕
         </button>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { useInterwovenKit, useHexAddress } from "@initia/interwovenkit-react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { APPCHAIN_ID, REST_URL } from "@/lib/constants";
+import DarkModeToggle from "./DarkModeToggle";
 
 export default function ConnectButton() {
   const {
@@ -98,7 +99,8 @@ export default function ConnectButton() {
     return (
       <button
         onClick={openConnect}
-        className="gradient-primary text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-[0_2px_10px_rgba(8,145,178,0.25)] hover:opacity-90 transition-opacity btn-shimmer"
+        className="btn-fizz btn-fizz-primary font-heading"
+        style={{ fontSize: '13px', padding: '10px 20px' }}
       >
         Connect Wallet
       </button>
@@ -113,7 +115,8 @@ export default function ConnectButton() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-[var(--card-border)] bg-[var(--card)] hover:border-[var(--accent)] transition-colors"
+        className="btn-fizz btn-fizz-ghost font-heading flex items-center gap-2"
+        style={{ fontSize: '13px', padding: '8px 14px', boxShadow: '3px 3px 0 var(--foreground)' }}
       >
         <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
         <span className="gradient-text-animated">{displayName}</span>
@@ -129,7 +132,7 @@ export default function ConnectButton() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-56 bg-[var(--card)] rounded-2xl shadow-[0_8px_32px_rgba(8,145,178,0.12)] border border-[var(--card-border)] py-2 animate-scale-in z-50">
+        <div className="absolute right-0 top-full mt-2 w-56 bg-[var(--card)] animate-scale-in z-50" style={{ border: '2px solid var(--foreground)', borderRadius: '16px', boxShadow: '5px 5px 0 var(--foreground)', padding: '6px 0' }}>
           {/* GAS Balance */}
           {gasBalance !== null && (
             <div className="px-4 py-2.5 flex items-center justify-between text-sm">
@@ -151,7 +154,7 @@ export default function ConnectButton() {
               className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
                 isAutoSign
                   ? "bg-[rgba(8,145,178,0.1)] text-[var(--accent)]"
-                  : "bg-[#f0f0f0] text-[var(--muted)]"
+                  : "bg-[var(--surface)] text-[var(--muted)]"
               }`}
             >
               {autoSignLoading ? "..." : isAutoSign ? "ON" : "OFF"}
@@ -170,7 +173,13 @@ export default function ConnectButton() {
             </span>
           </button>
 
-          <div className="mx-3 my-1 border-t border-[var(--card-border)]" />
+          {/* Theme toggle */}
+          <div className="w-full px-4 py-2.5 flex items-center justify-between">
+            <span className="font-heading text-[var(--foreground)]" style={{ fontSize: '12px', fontWeight: 700 }}>Theme</span>
+            <DarkModeToggle />
+          </div>
+
+          <div className="mx-3 my-1" style={{ borderTop: '2px solid var(--foreground)' }} />
 
           {/* Disconnect */}
           <button

@@ -4,7 +4,7 @@ export function Skeleton({ className = "" }: { className?: string }) {
 
 export function ProfileCardSkeleton() {
   return (
-    <div className="bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-5 shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
+    <div className="bg-[var(--card)] rounded-2xl p-5" style={{ border: '2px solid var(--foreground)', boxShadow: '6px 6px 0 var(--foreground)' }}>
       <div className="flex items-center gap-3 mb-3">
         <div className="skeleton w-12 h-12 rounded-full" />
         <div className="flex-1">

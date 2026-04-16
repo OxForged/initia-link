@@ -120,12 +120,24 @@ export default function EditPage() {
   return (
     <div className="max-w-lg mx-auto">
       {/* Header */}
-      <h1 className="animate-fade-in-up delay-0 text-2xl sm:text-3xl font-bold text-center text-[var(--foreground)] font-heading mb-2">
-        Get Started
-      </h1>
-      <p className="animate-fade-in-up delay-1 text-sm text-[var(--muted)] text-center mb-8">
-        Set up your on-chain profile in a few steps
-      </p>
+      <div className="text-center mb-8">
+        <div
+          className="font-heading animate-fade-in-up delay-0"
+          style={{ fontSize: "11px", fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "8px" }}
+        >
+          Onboarding
+        </div>
+        <h1
+          className="font-heading animate-fade-in-up delay-1"
+          style={{ fontSize: "clamp(28px, 5vw, 40px)", fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1, margin: "0 0 8px" }}
+        >
+          Get{" "}
+          <em style={{ fontStyle: "italic", color: "#0891b2" }}>started</em>.
+        </h1>
+        <p className="animate-fade-in-up delay-2" style={{ fontSize: "14px", color: "var(--muted)" }}>
+          Set up your on-chain profile in a few steps
+        </p>
+      </div>
 
       {/* Progress stepper */}
       <div className="animate-fade-in-up delay-2 flex items-center justify-between mb-10 px-2">
@@ -137,13 +149,22 @@ export default function EditPage() {
               {/* Step circle */}
               <div className="flex flex-col items-center">
                 <div
-                  className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500 ${
-                    done
-                      ? "gradient-accent text-white shadow-[0_2px_10px_rgba(8,145,178,0.3)]"
-                      : active
-                        ? "border-2 border-[var(--accent)] text-[var(--accent)] bg-[var(--card)]"
-                        : "border-2 border-[var(--card-border)] text-[var(--muted)] bg-[var(--card)]"
-                  }`}
+                  className="font-heading"
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "14px",
+                    fontWeight: 800,
+                    border: "2px solid var(--foreground)",
+                    boxShadow: done || active ? "3px 3px 0 var(--foreground)" : "none",
+                    background: done ? "linear-gradient(135deg, #0891b2, #8b5cf6)" : active ? "rgba(8,145,178,0.1)" : "var(--card)",
+                    color: done ? "#fff" : active ? "#0891b2" : "var(--muted)",
+                    transition: "all 400ms ease",
+                  }}
                 >
                   {done ? (
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -189,7 +210,7 @@ export default function EditPage() {
           >
             <button
               onClick={openConnect}
-              className="btn-press btn-shimmer gradient-primary text-white px-8 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_8px_28px_rgba(8,145,178,0.4)] hover:scale-105 transition-all duration-300"
+              className="btn-fizz btn-fizz-primary"
             >
               Connect Wallet
             </button>
@@ -213,7 +234,7 @@ export default function EditPage() {
             <button
               onClick={handleFaucet}
               disabled={faucetLoading}
-              className="btn-press btn-shimmer gradient-primary text-white px-8 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_8px_28px_rgba(8,145,178,0.4)] hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
+              className="btn-fizz btn-fizz-primary disabled:opacity-50"
             >
               {faucetLoading ? (
                 <span className="flex items-center gap-2">
@@ -246,7 +267,7 @@ export default function EditPage() {
               href="https://app.testnet.initia.xyz/usernames"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-press btn-shimmer gradient-primary text-white px-8 py-3 rounded-xl font-semibold shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_8px_28px_rgba(8,145,178,0.4)] hover:scale-105 transition-all duration-300 inline-block"
+              className="btn-fizz btn-fizz-primary inline-block"
             >
               Register Username
             </a>
@@ -277,18 +298,55 @@ function StepCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-6 sm:p-8 text-center shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-      <div className="w-14 h-14 rounded-2xl gradient-accent text-white flex items-center justify-center mx-auto mb-4">
+    <div
+      className="fizz-card text-center"
+      style={{ padding: "32px 28px", transform: "rotate(-0.5deg)" }}
+    >
+      <div
+        style={{
+          width: "56px",
+          height: "56px",
+          borderRadius: "16px",
+          background: "linear-gradient(135deg, #0891b2, #8b5cf6)",
+          border: "2px solid var(--foreground)",
+          boxShadow: "4px 4px 0 var(--foreground)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#fff",
+          margin: "0 auto 20px",
+        }}
+      >
         {icon}
       </div>
-      <h2 className="text-xl font-bold text-[var(--foreground)] font-heading mb-2">{title}</h2>
-      <p className="text-sm text-[var(--muted)] mb-6 max-w-sm mx-auto">{description}</p>
+      <h2
+        className="font-heading"
+        style={{ fontSize: "22px", fontWeight: 900, letterSpacing: "-0.015em", margin: "0 0 8px" }}
+      >
+        {title}
+      </h2>
+      <p style={{ fontSize: "14px", color: "var(--muted)", marginBottom: "24px", maxWidth: "320px", margin: "0 auto 20px", lineHeight: 1.55 }}>
+        {description}
+      </p>
       {badge && (
-        <div className="inline-block bg-[var(--surface)] border border-[var(--card-border)] rounded-full px-3 py-1 text-xs font-medium text-[var(--foreground)] mb-4">
+        <div
+          className="font-heading inline-block mb-4"
+          style={{
+            padding: "5px 12px",
+            background: "rgba(8,145,178,0.08)",
+            border: "2px solid var(--foreground)",
+            borderRadius: "9999px",
+            boxShadow: "3px 3px 0 var(--foreground)",
+            fontSize: "12px",
+            fontWeight: 800,
+          }}
+        >
           {badge}
         </div>
       )}
-      {children}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+        {children}
+      </div>
     </div>
   );
 }

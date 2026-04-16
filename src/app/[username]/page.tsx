@@ -83,7 +83,7 @@ export default async function ProfilePage({ params }: Props) {
   if (!address) {
     return (
       <div className="text-center py-16 animate-fade-in">
-        <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">Profile Not Found</h1>
+        <h1 className="font-heading text-2xl mb-2 text-[var(--foreground)]" style={{ fontWeight: 900 }}>Profile Not Found</h1>
         <p className="text-[var(--muted)]">Could not resolve &quot;{decoded}&quot; to an address.</p>
       </div>
     );
@@ -95,7 +95,7 @@ export default async function ProfilePage({ params }: Props) {
   } catch {
     return (
       <div className="text-center py-16 animate-fade-in">
-        <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">Error Loading Profile</h1>
+        <h1 className="font-heading text-2xl mb-2 text-[var(--foreground)]" style={{ fontWeight: 900 }}>Error Loading Profile</h1>
         <p className="text-[var(--muted)]">Could not fetch profile data. Make sure the appchain is running.</p>
       </div>
     );
@@ -104,7 +104,7 @@ export default async function ProfilePage({ params }: Props) {
   if (!profile.exists) {
     return (
       <div className="text-center py-16 animate-fade-in">
-        <h1 className="text-2xl font-bold mb-2 text-[var(--foreground)]">No Profile</h1>
+        <h1 className="font-heading text-2xl mb-2 text-[var(--foreground)]" style={{ fontWeight: 900 }}>No Profile</h1>
         <p className="text-[var(--muted)]">This address has not created a profile yet.</p>
       </div>
     );
@@ -123,7 +123,7 @@ export default async function ProfilePage({ params }: Props) {
     <ThemedProfileWrapper theme={theme}>
       <div className="max-w-lg mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Unified profile block */}
-        <div className="profile-block rounded-2xl overflow-visible" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
+        <div className="profile-block rounded-2xl overflow-visible" style={{ border: '2px solid var(--foreground)', boxShadow: '8px 8px 0 var(--foreground)' }}>
 
           {/* === BANNER (avatar only) === */}
           <div
@@ -133,36 +133,31 @@ export default async function ProfilePage({ params }: Props) {
               background: `linear-gradient(165deg, var(--theme-gradient-from, #0891b2) 0%, var(--theme-gradient-to, #8b5cf6) 100%)`,
             }}
           >
-            {/* Mesh overlay */}
+            {/* Mesh overlay — static, no infinite animation */}
             <div
               className="absolute inset-0 z-[1] pointer-events-none"
               style={{
-                background: `radial-gradient(ellipse 80% 50% at 20% 40%, rgba(6,182,212,0.35) 0%, transparent 70%), radial-gradient(ellipse 60% 60% at 85% 15%, rgba(139,92,246,0.4) 0%, transparent 70%)`,
+                background: `radial-gradient(ellipse 80% 50% at 20% 40%, rgba(6,182,212,0.3) 0%, transparent 70%), radial-gradient(ellipse 60% 60% at 85% 15%, rgba(139,92,246,0.35) 0%, transparent 70%)`,
               }}
-            />
-            <div className="hero-noise" aria-hidden="true" />
-            <div
-              className="hero-orb"
-              style={{ width: 120, height: 120, background: 'rgba(6,182,212,0.22)', top: -20, left: -15, animation: 'heroFloat1 8s ease-in-out infinite' }}
-              aria-hidden="true"
-            />
-            <div
-              className="hero-orb"
-              style={{ width: 90, height: 90, background: 'rgba(167,139,250,0.18)', bottom: 0, right: 5, animation: 'heroFloat2 10s ease-in-out infinite' }}
-              aria-hidden="true"
             />
 
             {/* Avatar only in banner */}
             <div className="relative z-10">
-              <div className="animate-scale-in">
-                <div className="hero-avatar-ring">
+              <div className="animate-scale-in" style={{ display: 'inline-block' }}>
+                <div style={{
+                  borderRadius: '50%',
+                  border: '3px solid white',
+                  boxShadow: '4px 4px 0 rgba(0,0,0,0.25)',
+                  display: 'inline-flex',
+                  padding: '3px',
+                  background: `linear-gradient(135deg, ${theme.gradient[0]}, ${theme.gradient[1]})`,
+                }}>
                   <Avatar
                     src={profile.avatarUrl}
                     initial={(displayName.replace(/\.init$/, "")[0] || "?").toUpperCase()}
-                    size={98}
+                    size={96}
                     gradient={theme.gradient}
                     alt={displayName}
-                    imgStyle={{ border: '3px solid rgba(255,255,255,0.2)' }}
                   />
                 </div>
               </div>
@@ -170,24 +165,20 @@ export default async function ProfilePage({ params }: Props) {
           </div>
 
           {/* === IDENTITY SECTION === */}
-          <div className="bg-[var(--card)] text-center" style={{ padding: '16px 24px 18px' }}>
-            {/* Username - large and prominent */}
+          <div className="bg-[var(--card)] text-center" style={{ padding: '16px 24px 20px', borderTop: '2px solid var(--foreground)' }}>
             <h1
-              className="animate-fade-in-up delay-1 font-heading font-bold text-[var(--foreground)]"
-              style={{ fontSize: 28, letterSpacing: '-0.5px' }}
+              className="animate-fade-in-up delay-1 font-heading text-[var(--foreground)]"
+              style={{ fontSize: 30, fontWeight: 900, letterSpacing: '-0.025em' }}
             >
               {displayName}
             </h1>
 
-            {/* Bio - muted, smaller, constrained width */}
             {cleanBio && (
-              <p className="animate-fade-in-up delay-1 text-[var(--muted)] text-sm mt-2 max-w-xs mx-auto leading-relaxed">{cleanBio}</p>
+              <p className="animate-fade-in-up delay-1 font-heading text-[var(--muted)] max-w-xs mx-auto mt-2" style={{ fontSize: '13px', fontWeight: 600, lineHeight: 1.6, fontStyle: 'italic' }}>{cleanBio}</p>
             )}
 
-            {/* Divider */}
             <div className="mx-auto mt-4 mb-3" style={{ width: 40, height: 2, borderRadius: 1, background: 'linear-gradient(90deg, var(--theme-gradient-from, #0891b2), var(--theme-gradient-to, #8b5cf6))' }} />
 
-            {/* Follow stats */}
             <div>
               <FollowStats
                 profileOwner={address}
@@ -196,8 +187,8 @@ export default async function ProfilePage({ params }: Props) {
               />
             </div>
 
-            {/* Action buttons */}
-            <div className="flex justify-center gap-2.5 mt-3">
+            {/* Action buttons — fizz style */}
+            <div className="flex justify-center gap-2 mt-4 flex-wrap">
               <TipButton profileOwner={address} />
               <FollowButton profileOwner={address} />
               <EditProfileButton profileOwner={address} />
@@ -206,8 +197,13 @@ export default async function ProfilePage({ params }: Props) {
 
           {/* === LINKS SECTION === */}
           {profile.links.length > 0 && (
-            <div className="profile-section bg-[var(--card)] border-t border-[var(--card-border)]" style={{ padding: '14px 20px' }}>
-              <div className="profile-section-label">Links</div>
+            <div className="bg-[var(--card)]" style={{ padding: '16px 20px', borderTop: '2px solid var(--foreground)' }}>
+              <div
+                className="font-heading"
+                style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '10px' }}
+              >
+                Links
+              </div>
               <div className="flex flex-col gap-2">
                 {profile.links.map((url, i) => (
                   <LinkButton key={i} url={url} label={profile.linkLabels[i] || url} index={i} />
@@ -217,16 +213,39 @@ export default async function ProfilePage({ params }: Props) {
           )}
 
           {/* === ON-CHAIN + L1 IDENTITY SECTION === */}
-          <div className="profile-section bg-[var(--card)] border-t border-[var(--card-border)]" style={{ padding: '14px 20px' }}>
-            <div className="profile-section-label">On-chain</div>
+          <div className="bg-[var(--card)]" style={{ padding: '16px 20px', borderTop: '2px solid var(--foreground)' }}>
+            <div
+              className="font-heading"
+              style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '10px' }}
+            >
+              On-chain
+            </div>
             <div className="flex gap-2 mb-3">
-              <div className="stat-chip teal-bg flex-1">
-                <div className="stat-chip-value font-heading text-[#0891b2]">{formatGas(profile.totalTips)}</div>
-                <div className="stat-chip-label">GAS received</div>
+              <div
+                className="flex-1 text-center"
+                style={{
+                  padding: '10px 8px',
+                  border: '2px solid var(--foreground)',
+                  borderRadius: '12px',
+                  boxShadow: '3px 3px 0 var(--foreground)',
+                  background: 'rgba(8,145,178,0.05)',
+                }}
+              >
+                <div className="font-heading" style={{ fontSize: '18px', fontWeight: 900, color: '#0891b2' }}>{formatGas(profile.totalTips)}</div>
+                <div className="font-heading" style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)' }}>GAS received</div>
               </div>
-              <div className="stat-chip purple-bg flex-1">
-                <div className="stat-chip-value font-heading text-[#8b5cf6]">{profile.tipCount}</div>
-                <div className="stat-chip-label">Tips</div>
+              <div
+                className="flex-1 text-center"
+                style={{
+                  padding: '10px 8px',
+                  border: '2px solid var(--foreground)',
+                  borderRadius: '12px',
+                  boxShadow: '3px 3px 0 var(--foreground)',
+                  background: 'rgba(139,92,246,0.05)',
+                }}
+              >
+                <div className="font-heading" style={{ fontSize: '18px', fontWeight: 900, color: '#8b5cf6' }}>{profile.tipCount.toString()}</div>
+                <div className="font-heading" style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)' }}>Tips</div>
               </div>
             </div>
             <L1IdentityCard initAddress={hexToBech32(address)} variant="compact" />
@@ -234,10 +253,15 @@ export default async function ProfilePage({ params }: Props) {
 
           {/* === FOOTER BAR === */}
           <div
-            className="profile-footer bg-[var(--card)] border-t border-[var(--card-border)] flex items-center justify-between"
-            style={{ padding: '10px 20px', borderRadius: '0 0 24px 24px' }}
+            className="bg-[var(--card)] flex items-center justify-between"
+            style={{ padding: '10px 20px', borderRadius: '0 0 24px 24px', borderTop: '2px solid var(--foreground)' }}
           >
-            <div className="text-[10px] text-[var(--muted)]">On-chain since {createdDate}</div>
+            <div
+              className="font-heading"
+              style={{ fontSize: '10px', fontWeight: 700, color: 'var(--muted)', fontStyle: 'italic' }}
+            >
+              On-chain since {createdDate}
+            </div>
             <div className="flex gap-1.5">
               <ShareButton username={displayName} variant="compact" />
               <QRButton username={displayName} variant="compact" />

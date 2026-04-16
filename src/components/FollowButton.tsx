@@ -5,6 +5,7 @@ import { useContractWrite } from "@/hooks/useContractWrite";
 import { useHexAddress } from "@initia/interwovenkit-react";
 import { isFollowing as checkIsFollowing } from "@/lib/contract";
 import { toast } from "sonner";
+
 type Props = {
   profileOwner: string;
   variant?: "default" | "hero";
@@ -17,7 +18,6 @@ export default function FollowButton({ profileOwner, variant = "default" }: Prop
   const [loading, setLoading] = useState(false);
   const isHero = variant === "hero";
 
-  // Check on-chain follow status
   useEffect(() => {
     if (!hexAddress) return;
     checkIsFollowing(hexAddress, profileOwner)
@@ -25,7 +25,6 @@ export default function FollowButton({ profileOwner, variant = "default" }: Prop
       .catch(() => {});
   }, [hexAddress, profileOwner]);
 
-  // Hide if viewing own profile
   if (hexAddress && hexAddress.toLowerCase() === profileOwner.toLowerCase()) return null;
 
   async function handleToggle() {
@@ -53,7 +52,8 @@ export default function FollowButton({ profileOwner, variant = "default" }: Prop
       <button
         onClick={handleToggle}
         disabled={loading}
-        className="btn-hero-solid btn-press px-5 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-50 min-h-[44px]"
+        className="btn-fizz font-heading disabled:opacity-50 min-h-[44px]"
+      style={{ padding: '10px 20px', fontSize: '13px', background: following ? '#8b5cf6' : 'var(--card)', color: following ? '#fff' : '#8b5cf6', borderColor: 'var(--foreground)', boxShadow: '4px 4px 0 var(--foreground)' }}
       >
         {loading ? "..." : following ? "Following" : "Follow"}
       </button>
@@ -64,15 +64,18 @@ export default function FollowButton({ profileOwner, variant = "default" }: Prop
     <button
       onClick={handleToggle}
       disabled={loading}
-      className={`follow-morph btn-press px-5 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-50 hover:scale-105 min-h-[44px] ${
-        following
-          ? "following text-white"
-          : "border-2 border-[var(--theme-accent,#0891b2)] text-[var(--theme-accent,#0891b2)] hover:text-white hover:border-transparent"
-      }`}
+      className="btn-fizz font-heading disabled:opacity-50"
+      style={{
+        fontSize: "13px",
+        padding: "10px 18px",
+        background: following ? "#8b5cf6" : "var(--card)",
+        color: following ? "#fff" : "#8b5cf6",
+        borderColor: "var(--foreground)",
+        boxShadow: "4px 4px 0 var(--foreground)",
+        transition: "background 200ms, color 200ms, box-shadow 200ms",
+      }}
     >
-      <span className="relative z-[1]">
-        {loading ? "..." : following ? "Following" : "Follow"}
-      </span>
+      {loading ? "..." : following ? "Following" : "Follow"}
     </button>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { detectPlatform } from "@/lib/platforms";
 
 type Props = {
@@ -30,13 +32,30 @@ export default function LinkButton({ url, label, index = 0 }: Props) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`animate-fade-in-up w-full flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-[var(--card)] border border-[var(--card-border)] shadow-sm ${colors.hoverBorder} hover:shadow-md hover:translate-x-0.5 transition-all duration-200`}
-      style={{ animationDelay: `${index * 80}ms` }}
+      className="animate-fade-in-up w-full flex items-center gap-3 bg-[var(--card)] transition-all duration-180"
+      style={{
+        animationDelay: `${index * 80}ms`,
+        border: '2px solid var(--foreground)',
+        borderRadius: '12px',
+        boxShadow: '3px 3px 0 var(--foreground)',
+        padding: '10px 12px',
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLElement).style.transform = 'translate(-1px, -1px)';
+        (e.currentTarget as HTMLElement).style.boxShadow = '5px 5px 0 var(--foreground)';
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLElement).style.transform = '';
+        (e.currentTarget as HTMLElement).style.boxShadow = '3px 3px 0 var(--foreground)';
+      }}
     >
-      <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}>
-        <span className="text-base sm:text-lg">{platform.icon}</span>
+      <div
+        className={`w-9 h-9 ${colors.text} flex items-center justify-center flex-shrink-0`}
+        style={{ border: '2px solid var(--foreground)', borderRadius: '8px', background: 'var(--surface)' }}
+      >
+        <span className="text-base">{platform.icon}</span>
       </div>
-      <span className="font-semibold text-[var(--foreground)] text-sm truncate">{label}</span>
+      <span className="font-heading font-bold text-[var(--foreground)] text-sm truncate" style={{ fontSize: '13px', fontWeight: 800 }}>{label}</span>
     </a>
   );
 }

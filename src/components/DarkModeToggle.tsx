@@ -38,10 +38,12 @@ export default function DarkModeToggle() {
       onClick={toggle}
       className="relative w-[52px] h-[28px] rounded-full overflow-hidden focus:outline-none shrink-0"
       style={{
-        transition: "background 0.6s ease",
+        transition: "background 0.6s ease, box-shadow 0.3s ease",
         background: dark
           ? "linear-gradient(180deg, #0c1445 0%, #1a237e 100%)"
           : "linear-gradient(180deg, #64b5f6 0%, #42a5f5 100%)",
+        border: '2px solid var(--foreground)',
+        boxShadow: '3px 3px 0 var(--foreground)',
       }}
       title={dark ? "Light mode" : "Dark mode"}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}

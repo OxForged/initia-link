@@ -83,29 +83,36 @@ export default function FollowListModal({
 
       {/* Modal */}
       <div
-        className="relative bg-[var(--card)] rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.15)] w-full max-w-sm max-h-[70vh] flex flex-col animate-scale-in"
+        className="relative bg-[var(--card)] w-full max-w-sm max-h-[70vh] flex flex-col animate-scale-in"
+        style={{ border: '2px solid var(--foreground)', borderRadius: '20px', boxShadow: '6px 6px 0 var(--foreground)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
-          <div className="flex gap-1 bg-[var(--background)] rounded-xl p-1">
+          <div className="flex gap-1 p-1 rounded-xl" style={{ border: '2px solid var(--foreground)', background: 'var(--surface)' }}>
             <button
               onClick={() => setTab("followers")}
-              className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                tab === "followers"
-                  ? "bg-[var(--card)] text-[var(--accent)] shadow-sm"
-                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
-              }`}
+              className="px-4 py-1.5 rounded-lg font-heading transition-all duration-200"
+              style={{
+                fontSize: '12px', fontWeight: 800,
+                background: tab === "followers" ? 'var(--card)' : 'transparent',
+                color: tab === "followers" ? '#0891b2' : 'var(--muted)',
+                border: tab === "followers" ? '2px solid var(--foreground)' : '2px solid transparent',
+                boxShadow: tab === "followers" ? '2px 2px 0 var(--foreground)' : 'none',
+              }}
             >
               Followers ({followerCount})
             </button>
             <button
               onClick={() => setTab("following")}
-              className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                tab === "following"
-                  ? "bg-[var(--card)] text-[var(--accent)] shadow-sm"
-                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
-              }`}
+              className="px-4 py-1.5 rounded-lg font-heading transition-all duration-200"
+              style={{
+                fontSize: '12px', fontWeight: 800,
+                background: tab === "following" ? 'var(--card)' : 'transparent',
+                color: tab === "following" ? '#0891b2' : 'var(--muted)',
+                border: tab === "following" ? '2px solid var(--foreground)' : '2px solid transparent',
+                boxShadow: tab === "following" ? '2px 2px 0 var(--foreground)' : 'none',
+              }}
             >
               Following ({followingCount})
             </button>
@@ -159,7 +166,8 @@ export default function FollowListModal({
                 <button
                   onClick={loadMore}
                   disabled={loading}
-                  className="w-full mt-3 py-2 text-sm font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] disabled:opacity-50 transition-colors"
+                  className="btn-fizz btn-fizz-ghost font-heading w-full mt-3 disabled:opacity-50"
+                  style={{ fontSize: '12px', padding: '8px' }}
                 >
                   {loading ? "Loading..." : "Load more"}
                 </button>

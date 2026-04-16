@@ -30,6 +30,10 @@
   --overlay: rgba(0, 0, 0, 0.6);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -117,6 +121,73 @@ html.theme-transition *::after {
 }
 
 /* ============================================
+   FIZZ DESIGN SYSTEM
+   Hard borders, pop shadows, tilted energy
+   ============================================ */
+
+.btn-fizz {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 800;
+  border: 2px solid var(--foreground);
+  border-radius: 9999px;
+  transition: transform 180ms ease, box-shadow 180ms ease, color 200ms ease, border-color 200ms ease;
+  text-decoration: none;
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.btn-fizz-primary {
+  background: #0891b2;
+  color: #fff;
+  padding: 15px 26px;
+  font-size: 16px;
+  box-shadow: 6px 6px 0 var(--foreground);
+}
+.btn-fizz-primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--foreground);
+}
+.btn-fizz-ghost {
+  background: var(--card);
+  color: var(--text-secondary);
+  padding: 15px 26px;
+  font-size: 16px;
+  box-shadow: 4px 4px 0 var(--card-border);
+}
+.btn-fizz-ghost:hover {
+  color: #0891b2;
+  border-color: #0891b2;
+  box-shadow: 4px 4px 0 #0891b2;
+}
+
+.fizz-card {
+  background: var(--card);
+  border: 2px solid var(--foreground);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0 var(--foreground);
+}
+
+/* Underline highlight effect for hero words */
+.lp-underline-word {
+  display: inline-block;
+  position: relative;
+  text-decoration: underline;
+  text-decoration-color: #8b5cf6;
+  text-decoration-thickness: 0.13em;
+  text-underline-offset: 0.1em;
+  text-decoration-skip-ink: none;
+}
+
+/* Chrome gradient for orb elements */
+.chrome-orb {
+  background: linear-gradient(180deg, #F0F2F7 0%, #C8CCD6 50%, #9DA3B5 100%);
+}
+
+/* ============================================
    GRADIENT UTILITIES
    ============================================ */
 
@@ -150,6 +221,11 @@ html.theme-transition *::after {
 /* ============================================
    KEYFRAMES
    ============================================ */
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 @keyframes fadeInUp {
   from {
@@ -215,6 +291,10 @@ html.theme-transition *::after {
 @keyframes drawUnderline {
   from { width: 0; }
   to { width: 120%; }
+}
+
+@keyframes drawStroke {
+  to { stroke-dashoffset: 0; }
 }
 
 @keyframes shimmer {
@@ -635,40 +715,6 @@ html.theme-transition *::after {
    Hero-driven profile page styles
    ============================================ */
 
-/* Avatar spinning ring */
-@keyframes rspin {
-  to { transform: rotate(360deg); }
-}
-
-.hero-avatar-ring {
-  width: 104px;
-  height: 104px;
-  margin: 0 auto;
-  border-radius: 50%;
-  padding: 3px;
-  background: conic-gradient(from 0deg, rgba(255,255,255,0.7), rgba(255,255,255,0.15), rgba(255,255,255,0.7));
-  position: relative;
-}
-
-.hero-avatar-ring::after {
-  content: "";
-  position: absolute;
-  inset: -5px;
-  border-radius: 50%;
-  background: conic-gradient(from 180deg, rgba(8,145,178,0.35), transparent, rgba(139,92,246,0.35), transparent);
-  animation: rspin 4s linear infinite reverse;
-  z-index: -1;
-  filter: blur(7px);
-}
-
-[style*="--theme-accent"] .hero-avatar-ring::after {
-  background: conic-gradient(from 180deg, var(--theme-gradient-from, rgba(8,145,178,0.35)), transparent, var(--theme-gradient-to, rgba(139,92,246,0.35)), transparent);
-}
-
-.hero-avatar-ring > * {
-  position: relative;
-  z-index: 1;
-}
 
 /* Noise texture */
 .hero-noise {

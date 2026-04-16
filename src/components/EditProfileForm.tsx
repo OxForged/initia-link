@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { HexColorPicker } from "react-colorful";
 import { useContractWrite } from "@/hooks/useContractWrite";
 import { type Profile } from "@/lib/contract";
 import { platforms, detectPlatform } from "@/lib/platforms";
@@ -44,6 +45,18 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
   const [saving, setSaving] = useState(false);
   const [expandedPicker, setExpandedPicker] = useState<number | null>(null);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
+  const [openColorPicker, setOpenColorPicker] = useState<"color1" | "color2" | null>(null);
+  const colorPickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (colorPickerRef.current && !colorPickerRef.current.contains(e.target as Node)) {
+        setOpenColorPicker(null);
+      }
+    }
+    if (openColorPicker) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openColorPicker]);
 
   function addLink() {
     if (links.length >= 10) return;
@@ -148,7 +161,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
   const previewCard = (
     <div
       className="rounded-2xl overflow-hidden transition-all duration-500"
-      style={{ boxShadow: `0 4px 24px ${selectedTheme.shadow}` }}
+      style={{ border: '2px solid var(--foreground)', boxShadow: '6px 6px 0 var(--foreground)' }}
     >
       {/* Banner gradient (avatar only) */}
       <div
@@ -192,7 +205,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
 
       {/* Links as icon-box */}
       {links.filter((l) => l.url.trim()).length > 0 && (
-        <div className="bg-[var(--card)] border-t border-[var(--card-border)] px-4 py-3">
+        <div className="bg-[var(--card)] px-4 py-3" style={{ borderTop: '2px solid var(--foreground)' }}>
           <div className="flex flex-col gap-1.5">
             {links
               .filter((l) => l.url.trim())
@@ -202,7 +215,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 return (
                   <div
                     key={i}
-                    className={`flex items-center gap-2.5 p-2 rounded-xl bg-[var(--card)] border border-[var(--card-border)] shadow-sm`}
+                    className="flex items-center gap-2.5 p-2 rounded-xl bg-[var(--card)]"
+                    style={{ border: '2px solid var(--foreground)', boxShadow: '2px 2px 0 var(--foreground)' }}
                   >
                     <div className={`w-8 h-8 rounded-lg ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}>
                       <span className="text-sm">{platform.icon}</span>
@@ -215,7 +229,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
         </div>
       )}
       {links.filter((l) => l.url.trim()).length === 0 && (
-        <div className="bg-[var(--card)] border-t border-[var(--card-border)] px-4 py-3">
+        <div className="bg-[var(--card)] px-4 py-3" style={{ borderTop: '2px solid var(--foreground)' }}>
           <p className="text-xs text-[var(--muted)] text-center">Add links to see them here</p>
         </div>
       )}
@@ -230,8 +244,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
         <form onSubmit={handleSubmit} className="flex-1 min-w-0 space-y-4">
 
           {/* ═══ Section 1: Identity ═══ */}
-          <section className="bg-[var(--card)] rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
-            <h2 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-4">Identity</h2>
+          <section className="bg-[var(--card)] rounded-2xl p-4 sm:p-5" style={{ border: '2px solid var(--foreground)', boxShadow: '4px 4px 0 var(--foreground)' }}>
+            <h2 className="font-heading mb-4" style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)' }}>Identity</h2>
 
             {/* Avatar with inline preview */}
             <div className="flex items-start gap-3 mb-4">
@@ -246,12 +260,12 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <label className="block text-xs font-medium mb-1 text-[var(--muted)]">Avatar URL</label>
+                <label className="font-heading block mb-1 text-[var(--muted)]" style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Avatar URL</label>
                 <input
                   type="url"
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="w-full bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm input-glow outline-none"
+                  className="w-full bg-[var(--surface)] rounded-lg px-3 py-2 text-sm input-glow outline-none" style={{ border: '2px solid var(--foreground)' }}
                   placeholder="https://example.com/avatar.png"
                 />
               </div>
@@ -259,13 +273,14 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
 
             {/* Bio */}
             <div>
-              <label className="block text-xs font-medium mb-1 text-[var(--muted)]">Bio</label>
+              <label className="font-heading block mb-1 text-[var(--muted)]" style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Bio</label>
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 maxLength={180}
                 rows={2}
-                className="w-full bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm input-glow outline-none resize-none"
+                className="w-full bg-[var(--surface)] rounded-lg px-3 py-2 text-sm input-glow outline-none resize-none"
+                style={{ border: '2px solid var(--foreground)' }}
                 placeholder="Tell the world about yourself..."
               />
               <p className="text-xs text-[var(--muted)] mt-0.5 text-right">{bio.length}/180</p>
@@ -273,35 +288,36 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
           </section>
 
           {/* ═══ Section 2: Theme ═══ */}
-          <section className="bg-[var(--card)] rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
-            <h2 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-3">Theme</h2>
-            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
+          <section className="bg-[var(--card)] rounded-2xl p-4 sm:p-5" style={{ border: '2px solid var(--foreground)', boxShadow: '4px 4px 0 var(--foreground)' }}>
+            <h2 className="font-heading mb-3" style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)' }}>Theme</h2>
+            {/* Selected theme label */}
+            <p className="font-heading mb-2" style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)' }}>
+              {theme === "custom" ? "Custom" : THEMES.find(t => t.id === theme)?.label ?? "Teal"}
+            </p>
+            <div className="grid grid-cols-7 gap-2">
               {THEMES.map((t) => (
                 <button
                   key={t.id}
                   type="button"
+                  title={t.label}
                   onClick={() => setTheme(t.id)}
-                  className={`relative rounded-xl p-2 text-center transition-all duration-200 ${
-                    theme === t.id
-                      ? "scale-105"
-                      : "hover:scale-105"
-                  }`}
+                  className="relative flex items-center justify-center rounded-xl transition-all duration-150"
                   style={{
-                    background: `linear-gradient(135deg, ${t.gradient[0]}15, ${t.gradient[1]}15)`,
-                    ...(theme === t.id
-                      ? { boxShadow: `0 0 0 2px ${t.accent}, 0 4px 12px ${t.shadow}` }
-                      : { border: "1px solid var(--card-border)" }),
+                    aspectRatio: "1",
+                    background: `linear-gradient(135deg, ${t.gradient[0]}18, ${t.gradient[1]}18)`,
+                    border: theme === t.id ? `2px solid ${t.accent}` : '2px solid var(--foreground)',
+                    boxShadow: theme === t.id ? `3px 3px 0 ${t.accent}` : '2px 2px 0 var(--foreground)',
+                    transform: theme === t.id ? 'translate(-1px, -1px)' : '',
                   }}
                 >
                   <div
-                    className="w-5 h-5 rounded-full mx-auto mb-1"
+                    className="w-6 h-6 rounded-full"
                     style={{ background: `linear-gradient(135deg, ${t.gradient[0]}, ${t.gradient[1]})` }}
                   />
-                  <span className="text-[10px] font-medium text-[var(--foreground)]">{t.label}</span>
                   {theme === t.id && (
                     <div
-                      className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
-                      style={{ background: t.accent }}
+                      className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full flex items-center justify-center"
+                      style={{ background: t.accent, border: '1.5px solid white' }}
                     >
                       <svg width="8" height="8" viewBox="0 0 16 16" fill="none">
                         <path d="M3 8l4 4 6-7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -313,32 +329,31 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
               {/* Custom color option */}
               <button
                 type="button"
+                title="Custom"
                 onClick={() => setTheme("custom")}
-                className={`relative rounded-xl p-2 text-center transition-all duration-200 ${
-                  theme === "custom" ? "scale-105" : "hover:scale-105"
-                }`}
+                className="relative flex items-center justify-center rounded-xl transition-all duration-150"
                 style={{
+                  aspectRatio: "1",
                   background: theme === "custom"
-                    ? `linear-gradient(135deg, ${customColor1}15, ${customColor2}15)`
-                    : undefined,
-                  ...(theme === "custom"
-                    ? { boxShadow: `0 0 0 2px ${customColor1}, 0 4px 12px ${customColor1}40` }
-                    : { border: "1px solid var(--card-border)" }),
+                    ? `linear-gradient(135deg, ${customColor1}18, ${customColor2}18)`
+                    : 'var(--surface)',
+                  border: theme === "custom" ? `2px solid ${customColor1}` : '2px solid var(--foreground)',
+                  boxShadow: theme === "custom" ? `3px 3px 0 ${customColor1}` : '2px 2px 0 var(--foreground)',
+                  transform: theme === "custom" ? 'translate(-1px, -1px)' : '',
                 }}
               >
                 <div
-                  className="w-5 h-5 rounded-full mx-auto mb-1"
+                  className="w-6 h-6 rounded-full"
                   style={{
                     background: theme === "custom"
                       ? `linear-gradient(135deg, ${customColor1}, ${customColor2})`
                       : "conic-gradient(#ef4444, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444)",
                   }}
                 />
-                <span className="text-[10px] font-medium text-[var(--foreground)]">Custom</span>
                 {theme === "custom" && (
                   <div
-                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
-                    style={{ background: customColor1 }}
+                    className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full flex items-center justify-center"
+                    style={{ background: customColor1, border: '1.5px solid white' }}
                   >
                     <svg width="8" height="8" viewBox="0 0 16 16" fill="none">
                       <path d="M3 8l4 4 6-7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -347,39 +362,58 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 )}
               </button>
             </div>
-            {/* Custom color pickers */}
+            {/* Custom color pickers — react-colorful inline, no OS modal */}
             {theme === "custom" && (
-              <div className="flex items-center gap-4 mt-3 p-3 rounded-xl bg-[var(--surface)] border border-[var(--card-border)]">
-                <div className="flex items-center gap-2">
-                  <label className="text-[11px] text-[var(--muted)] font-medium">From</label>
-                  <input
-                    type="color"
-                    value={customColor1}
-                    onChange={(e) => setCustomColor1(e.target.value)}
-                    className="w-8 h-8 rounded-lg cursor-pointer border-0 p-0"
-                    style={{ background: "none" }}
-                  />
-                  <span className="text-[11px] text-[var(--muted)] font-mono">{customColor1}</span>
+              <div className="mt-3 p-3 rounded-xl bg-[var(--surface)]" style={{ border: '2px solid var(--foreground)' }} ref={colorPickerRef}>
+                <div className="flex items-center gap-3">
+                  {/* Color 1 */}
+                  <div className="flex items-center gap-2 flex-1 relative">
+                    <label className="font-heading text-[var(--muted)] shrink-0" style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>From</label>
+                    <button
+                      type="button"
+                      onClick={() => setOpenColorPicker(openColorPicker === "color1" ? null : "color1")}
+                      className="w-7 h-7 rounded shrink-0"
+                      style={{ background: customColor1, border: '2px solid var(--foreground)', boxShadow: '2px 2px 0 var(--foreground)' }}
+                    />
+                    <span className="font-mono text-[11px] text-[var(--muted)]">{customColor1}</span>
+                    {openColorPicker === "color1" && (
+                      <div className="absolute top-full left-0 mt-2 z-50 animate-scale-in" style={{ filter: 'drop-shadow(4px 4px 0 var(--foreground))' }}>
+                        <div style={{ border: '2px solid var(--foreground)', borderRadius: '12px', overflow: 'hidden' }}>
+                          <HexColorPicker color={customColor1} onChange={setCustomColor1} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Color 2 */}
+                  <div className="flex items-center gap-2 flex-1 relative">
+                    <label className="font-heading text-[var(--muted)] shrink-0" style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>To</label>
+                    <button
+                      type="button"
+                      onClick={() => setOpenColorPicker(openColorPicker === "color2" ? null : "color2")}
+                      className="w-7 h-7 rounded shrink-0"
+                      style={{ background: customColor2, border: '2px solid var(--foreground)', boxShadow: '2px 2px 0 var(--foreground)' }}
+                    />
+                    <span className="font-mono text-[11px] text-[var(--muted)]">{customColor2}</span>
+                    {openColorPicker === "color2" && (
+                      <div className="absolute top-full left-0 mt-2 z-50 animate-scale-in" style={{ filter: 'drop-shadow(4px 4px 0 var(--foreground))' }}>
+                        <div style={{ border: '2px solid var(--foreground)', borderRadius: '12px', overflow: 'hidden' }}>
+                          <HexColorPicker color={customColor2} onChange={setCustomColor2} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Gradient preview */}
+                  <div className="w-12 h-8 rounded shrink-0" style={{ background: `linear-gradient(135deg, ${customColor1}, ${customColor2})`, border: '2px solid var(--foreground)' }} />
                 </div>
-                <div className="flex items-center gap-2">
-                  <label className="text-[11px] text-[var(--muted)] font-medium">To</label>
-                  <input
-                    type="color"
-                    value={customColor2}
-                    onChange={(e) => setCustomColor2(e.target.value)}
-                    className="w-8 h-8 rounded-lg cursor-pointer border-0 p-0"
-                    style={{ background: "none" }}
-                  />
-                  <span className="text-[11px] text-[var(--muted)] font-mono">{customColor2}</span>
-                </div>
-                <div className="ml-auto w-16 h-6 rounded-lg" style={{ background: `linear-gradient(135deg, ${customColor1}, ${customColor2})` }} />
               </div>
             )}
           </section>
 
           {/* ═══ Section 3: Links ═══ */}
-          <section className="bg-[var(--card)] rounded-2xl border border-[var(--card-border)] p-4 sm:p-5">
-            <h2 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-3">
+          <section className="bg-[var(--card)] rounded-2xl p-4 sm:p-5" style={{ border: '2px solid var(--foreground)', boxShadow: '4px 4px 0 var(--foreground)' }}>
+            <h2 className="font-heading mb-3" style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)' }}>
               Links <span className="normal-case font-normal">({links.length}/10)</span>
             </h2>
             <div className="space-y-3">
@@ -390,7 +424,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                 return (
                   <div
                     key={i}
-                    className="animate-fade-in-up bg-[var(--surface)] border border-[var(--card-border)] rounded-xl p-3 transition-shadow duration-200"
+                    className="animate-fade-in-up bg-[var(--surface)] rounded-xl p-3"
+                    style={{ border: '2px solid var(--foreground)', boxShadow: '3px 3px 0 var(--foreground)' }}
                     style={{ animationDelay: `${i * 40}ms` }}
                   >
                     {/* Top row: icon + label + delete */}
@@ -399,7 +434,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                         type="button"
                         onClick={() => setExpandedPicker(isPickerOpen ? null : i)}
                         title={`${activePlatform.label} (click to change)`}
-                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 gradient-primary text-white shadow-sm hover:scale-110"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 text-white"
+                        style={{ background: '#0891b2', border: '2px solid var(--foreground)', boxShadow: '3px 3px 0 var(--foreground)' }}
                       >
                         {activePlatform.icon}
                       </button>
@@ -407,7 +443,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                         type="text"
                         value={link.label}
                         onChange={(e) => updateLink(i, "label", e.target.value)}
-                        className="bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm flex-1 min-w-0 input-glow outline-none"
+                        className="bg-[var(--surface)] rounded-lg px-3 py-2 text-sm flex-1 min-w-0 input-glow outline-none"
+                        style={{ border: '2px solid var(--foreground)' }}
                         placeholder="Label"
                       />
                       <button
@@ -427,7 +464,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                         type="url"
                         value={link.url}
                         onChange={(e) => updateLink(i, "url", e.target.value)}
-                        className="bg-[var(--surface)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-sm w-full input-glow outline-none"
+                        className="bg-[var(--surface)] rounded-lg px-3 py-2 text-sm w-full input-glow outline-none"
+                        style={{ border: '2px solid var(--foreground)' }}
                         placeholder={activePlatform.placeholder || "https://..."}
                       />
                     </div>
@@ -444,13 +482,13 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                                 type="button"
                                 onClick={() => selectPlatform(i, p.id)}
                                 title={p.label}
-                                className={`
-                                  w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200
-                                  ${isActive
-                                    ? "gradient-primary text-white shadow-[0_2px_8px_rgba(8,145,178,0.3)] scale-110"
-                                    : "bg-[var(--surface)] text-[var(--muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--accent)] hover:scale-105"
-                                  }
-                                `}
+                                className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-150"
+                                style={{
+                                  background: isActive ? '#0891b2' : 'var(--surface)',
+                                  color: isActive ? '#fff' : 'var(--muted)',
+                                  border: isActive ? '2px solid var(--foreground)' : '2px solid transparent',
+                                  boxShadow: isActive ? '2px 2px 0 var(--foreground)' : 'none',
+                                }}
                               >
                                 {p.icon}
                               </button>
@@ -468,13 +506,12 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
               <button
                 type="button"
                 onClick={addLink}
-                className="mt-3 flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-hover)] font-medium hover:scale-105 transition-all duration-200 group"
+                className="btn-fizz btn-fizz-ghost font-heading mt-3 flex items-center gap-2"
+                style={{ fontSize: '12px', padding: '8px 14px', boxShadow: '3px 3px 0 var(--foreground)' }}
               >
-                <span className="w-7 h-7 rounded-lg bg-[var(--surface)] flex items-center justify-center group-hover:bg-[var(--accent)] group-hover:text-white transition-all duration-200">
-                  <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                </span>
+                <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
                 Add link
               </button>
             )}
@@ -485,11 +522,8 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
             <button
               type="submit"
               disabled={saving}
-              className="w-full btn-press btn-shimmer text-white py-3 rounded-xl font-semibold hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
-              style={{
-                background: `linear-gradient(135deg, #0891b2, #8b5cf6)`,
-                boxShadow: `0 4px 16px rgba(8,145,178,0.25)`,
-              }}
+              className="w-full btn-fizz btn-fizz-primary font-heading disabled:opacity-50"
+              style={{ fontSize: '15px', padding: '14px', borderRadius: '12px' }}
             >
               {saving ? (
                 <span className="flex items-center justify-center gap-2">
@@ -504,7 +538,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
         {/* ── Right column: Sticky Preview (desktop only) ── */}
         <div className="hidden lg:block w-72 shrink-0 self-start sticky top-24">
           <div>
-            <h3 className="text-sm font-semibold text-[var(--muted)] uppercase tracking-wider mb-3">Preview</h3>
+            <h3 className="font-heading mb-3 text-[var(--muted)]" style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Preview</h3>
             {previewCard}
           </div>
         </div>
@@ -515,10 +549,11 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
         <button
           type="button"
           onClick={() => setShowMobilePreview(true)}
-          className="fixed bottom-32 right-4 z-30 w-12 h-12 rounded-full text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+          className="fixed bottom-32 right-4 z-30 w-12 h-12 rounded-full text-white flex items-center justify-center transition-transform"
           style={{
             background: `linear-gradient(135deg, ${selectedTheme.gradient[0]}, ${selectedTheme.gradient[1]})`,
-            boxShadow: `0 4px 20px ${selectedTheme.shadow}`,
+            border: "2px solid var(--foreground)",
+            boxShadow: "4px 4px 0 var(--foreground)",
           }}
           title="Preview profile"
         >
@@ -539,7 +574,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-[var(--muted)] uppercase tracking-wider">Preview</h3>
+                <h3 className="font-heading text-[var(--muted)]" style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Preview</h3>
                 <button
                   onClick={() => setShowMobilePreview(false)}
                   className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"

@@ -1,150 +1,540 @@
-import { getPlatform } from "@/lib/platforms";
+import React from "react";
 
 export default function Home() {
-  const previewLinks = [
-    { platformId: "website", label: "My Portfolio", bgClass: "bg-teal-50", textClass: "text-[#0891b2]", hoverBorder: "hover:border-teal-200" },
-    { platformId: "twitter", label: "Twitter / X", bgClass: "bg-purple-50", textClass: "text-[#8b5cf6]", hoverBorder: "hover:border-purple-200" },
-    { platformId: "github", label: "GitHub", bgClass: "bg-gray-50", textClass: "text-gray-700", hoverBorder: "hover:border-gray-300" },
-  ];
-
   return (
-    <div className="relative min-h-[80vh] overflow-visible">
-      {/* Atmospheric orbs */}
-      <div
-        className="fixed top-[-8rem] right-[-10rem] w-[500px] h-[500px] rounded-full opacity-25 pointer-events-none z-0"
-        style={{ background: '#8b5cf6', filter: 'blur(100px)' }}
-        aria-hidden="true"
-      />
-      <div
-        className="fixed top-[33%] left-[-8rem] w-[400px] h-[400px] rounded-full opacity-25 pointer-events-none z-0"
-        style={{ background: '#0891b2', filter: 'blur(100px)' }}
-        aria-hidden="true"
-      />
+    <div className="relative">
 
-      {/* Hero: 2-column layout */}
-      <section className="pt-4 sm:pt-8 lg:pt-12 pb-8 lg:pb-16">
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-center">
+      {/* ── HERO ── */}
+      <section className="relative pt-16 pb-20" style={{ overflow: "visible" }}>
 
-          {/* Left: Text */}
-          <div className="flex-1 flex flex-col justify-center relative z-20 text-center lg:text-left">
-            <h1 className="animate-fade-in-up delay-0 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight font-heading mb-4">
-              Your on-chain identity
+
+        {/* Sticker: purple blob */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            bottom: "48px",
+            right: "-24px",
+            width: "96px",
+            height: "96px",
+            background: "#8b5cf6",
+            border: "2px solid var(--foreground)",
+            borderRadius: "60% 40% 55% 45% / 50% 60% 40% 50%",
+            boxShadow: "5px 5px 0 var(--foreground)",
+            transform: "rotate(12deg)",
+            opacity: 0.85,
+          }}
+        />
+
+        <div className="flex flex-col lg:flex-row gap-12 items-center">
+
+          {/* Left: copy */}
+          <div className="flex-1 flex flex-col justify-center relative z-10 text-center lg:text-left">
+
+            {/* Headline */}
+            <h1
+              className="font-heading"
+              style={{
+                fontSize: "clamp(22px, 2.8vw, 40px)",
+                lineHeight: 1.05,
+                fontWeight: 900,
+                letterSpacing: "-0.025em",
+                margin: "0 0 24px",
+              }}
+            >
+              Your <em style={{ fontStyle: "italic", color: "#0891b2" }}>on-chain</em> identity.
               <br />
-              <span className="gradient-text-animated">One link for everything</span>
+              <span className="lp-underline-word">One link</span> for everything.
             </h1>
 
-            <p className="animate-fade-in-up delay-2 text-[var(--text-secondary)] text-sm sm:text-base md:text-lg mb-8 max-w-xl leading-relaxed mx-auto lg:mx-0">
-              Create your link-in-bio page powered by your <span className="gradient-text-animated font-semibold whitespace-nowrap">.init username</span>.
-              Share links, receive <span className="gradient-text-animated font-semibold">GAS tips</span>, and connect with creators on <span className="relative font-semibold text-[var(--foreground)]">initia<span className="absolute bottom-0 h-[2.5px] rounded-[1px] bg-[var(--accent)]" style={{ left: "-4%", animation: "drawUnderline 0.8s cubic-bezier(0.22,0.61,0.36,1) 0.8s forwards", width: 0, transform: "rotate(-0.8deg)" }} /></span>.
+            {/* Subtext */}
+            <p
+              className="mx-auto lg:mx-0"
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.6,
+                color: "var(--text-secondary)",
+                maxWidth: "440px",
+                margin: "0 0 32px",
+              }}
+            >
+              Create your link-in-bio powered by your{" "}
+              <strong style={{ color: "var(--foreground)", fontWeight: 700, position: "relative", display: "inline-block" }}>
+                .init username
+                <svg
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: 0, bottom: "-5px", width: "100%", height: "10px", overflow: "visible" }}
+                  viewBox="0 0 200 10"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    d="M 2,7 C 60,4 140,3 198,6"
+                    fill="none"
+                    stroke="#0891b2"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    vectorEffect="non-scaling-stroke"
+                    style={{
+                      strokeDasharray: 205,
+                      strokeDashoffset: 205,
+                      animation: "drawStroke 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards",
+                    }}
+                  />
+                </svg>
+              </strong>
+              . Share links, receive{" "}
+              <strong style={{ color: "#0891b2", fontWeight: 700 }}>
+                GAS tips
+              </strong>
+              , and build your on-chain presence on Initia.
             </p>
 
-            <div className="animate-fade-in-up delay-3 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-              <a
-                href="/edit"
-                className="btn-press btn-shimmer gradient-accent text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl font-semibold shadow-[0_4px_20px_rgba(8,145,178,0.3)] hover:shadow-[0_8px_28px_rgba(8,145,178,0.35)] hover:-translate-y-0.5 transition-all duration-300 text-center text-sm"
-              >
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+              <a href="/edit" className="btn-fizz btn-fizz-primary">
                 Create Your Profile
               </a>
-              <a
-                href="/discover"
-                className="btn-press bg-[var(--card)] border border-[var(--card-border)] text-[var(--text-secondary)] px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300 text-center text-sm"
-              >
+              <a href="/discover" className="btn-fizz btn-fizz-ghost">
                 Discover Profiles
               </a>
             </div>
           </div>
 
-          {/* Right: Preview profile card */}
-          <div className="flex-shrink-0 flex justify-center relative w-full max-w-[360px]">
+          {/* Right: profile card mockup */}
+          <div
+            className="flex-shrink-0 w-full mx-auto lg:mx-0"
+            style={{ maxWidth: "320px", transform: "rotate(1.5deg)" }}
+          >
+            {/* Card: no overflow:hidden so avatar can float over banner */}
+            <div className="fizz-card" style={{ position: "relative" }}>
 
-            {/* The profile card */}
-            <div
-              className="relative w-full backdrop-blur-xl rounded-[2rem] p-2 animate-fade-in-up delay-4"
-              style={{ backgroundColor: 'color-mix(in srgb, var(--card) 80%, transparent)', boxShadow: '0 20px 40px -10px rgba(139,92,246,0.15), 0 0 20px 0px rgba(8,145,178,0.05)' }}
-            >
-              <div className="bg-[var(--card)] rounded-[1.75rem] p-5 sm:p-6 h-full" style={{ boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(255,255,255,0.04)' }}>
+              {/* Banner — clips own corners */}
+              <div
+                style={{
+                  height: "88px",
+                  background: "linear-gradient(135deg, #0891b2, #8b5cf6)",
+                  position: "relative",
+                  overflow: "hidden",
+                  borderRadius: "26px 26px 0 0",
+                }}
+              >
+                <svg
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    opacity: 0.18,
+                  }}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <pattern
+                      id="lp-dots"
+                      width="20"
+                      height="20"
+                      patternUnits="userSpaceOnUse"
+                    >
+                      <circle cx="2" cy="2" r="1.5" fill="white" />
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#lp-dots)" />
+                </svg>
+              </div>
 
-                {/* Cover banner */}
-                <div className="h-24 sm:h-28 -mx-5 -mt-5 sm:-mx-6 sm:-mt-6 rounded-t-[1.75rem] relative overflow-hidden group/banner" style={{ background: 'linear-gradient(to right, var(--theme-gradient-from, #0891b2), var(--theme-gradient-to, #8b5cf6))' }}>
-                  <div className="absolute top-2 right-3 hidden group-hover/banner:flex items-center gap-1 rounded-full py-1 px-2.5 text-[10px] font-semibold text-white z-10 shadow-lg" style={{ background: 'linear-gradient(135deg, #0891b2, #8b5cf6)' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
-                    Cover Banner
-                  </div>
-                  <svg className="absolute inset-0 w-full h-full opacity-20" style={{ mixBlendMode: 'overlay' }} width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <pattern id="dotgrid" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="1.5" fill="#8b5cf6" />
-                      </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#dotgrid)" />
-                  </svg>
-                </div>
+              <div style={{ padding: "0 20px 20px" }}>
 
-                {/* Avatar */}
-                <div className="relative flex justify-center -mt-14 sm:-mt-16 mb-3 group/avatar">
-                  <div className="rounded-full p-[5px]" style={{ background: 'linear-gradient(135deg, #0891b2, #8b5cf6)', boxShadow: '0 8px 24px rgba(139,92,246,0.2)' }}>
+                {/* Avatar — position relative + zIndex paints on top of banner */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "-36px",
+                    marginBottom: "12px",
+                    position: "relative",
+                    zIndex: 20,
+                  }}
+                >
+                  <div
+                    style={{
+                      borderRadius: "50%",
+                      padding: "3px",
+                      background: "linear-gradient(180deg, #F0F2F7 0%, #C8CCD6 50%, #9DA3B5 100%)",
+                      border: "2px solid var(--foreground)",
+                      boxShadow: "4px 4px 0 var(--foreground)",
+                    }}
+                  >
                     <img
                       src="https://api.dicebear.com/9.x/notionists/svg?seed=alice"
                       alt="alice.init"
-                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-[var(--card)] object-cover bg-[var(--card)] select-none pointer-events-none"
-                      draggable="false"
+                      draggable={false}
+                      style={{
+                        width: "64px",
+                        height: "64px",
+                        borderRadius: "50%",
+                        background: "#e0f2fe",
+                        display: "block",
+                      }}
                     />
-                  </div>
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 hidden group-hover/avatar:flex items-center gap-1 rounded-full py-1 px-2.5 text-[10px] font-semibold text-white z-10 shadow-lg whitespace-nowrap" style={{ background: 'linear-gradient(135deg, #0891b2, #8b5cf6)' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    Avatar
                   </div>
                 </div>
 
                 {/* Identity */}
-                <div className="text-center mb-5 group/identity relative">
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 hidden group-hover/identity:flex items-center gap-1 rounded-full py-1 px-2.5 text-[10px] font-semibold text-white z-10 shadow-lg whitespace-nowrap" style={{ background: 'linear-gradient(135deg, #0891b2, #8b5cf6)' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2a7.2 7.2 0 0 1-6-3.22c.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08a7.2 7.2 0 0 1-6 3.22z"/></svg>
-                    .init Identity
+                <div style={{ textAlign: "center", marginBottom: "16px" }}>
+                  <div
+                    className="font-heading"
+                    style={{
+                      fontWeight: 900,
+                      fontSize: "20px",
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    alice.init
                   </div>
-                  <h2 className="font-heading font-bold text-xl sm:text-2xl text-[var(--foreground)]">alice.init</h2>
-                  <p className="text-sm text-[var(--muted)] mt-1">Web3 builder, coffee enthusiast</p>
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "var(--text-secondary)",
+                      marginTop: "3px",
+                    }}
+                  >
+                    Web3 builder, coffee nerd
+                  </div>
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 mb-5 p-3 rounded-2xl border border-[var(--card-border)] group/stats relative" style={{ background: 'var(--surface)' }}>
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 hidden group-hover/stats:flex items-center gap-1 rounded-full py-1 px-2.5 text-[10px] font-semibold text-white z-10 shadow-lg whitespace-nowrap" style={{ background: 'linear-gradient(135deg, #0891b2, #8b5cf6)' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
-                    Social Stats
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    border: "2px solid var(--foreground)",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    marginBottom: "14px",
+                  }}
+                >
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "10px 8px",
+                      borderRight: "2px solid var(--foreground)",
+                    }}
+                  >
+                    <div
+                      className="font-heading"
+                      style={{ fontWeight: 900, fontSize: "18px" }}
+                    >
+                      42
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "9px",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.1em",
+                        color: "var(--muted)",
+                      }}
+                    >
+                      Followers
+                    </div>
                   </div>
-                  <div className="text-center border-r border-[var(--card-border)]">
-                    <p className="text-lg sm:text-xl font-heading font-bold text-[var(--foreground)]">42</p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">Followers</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-lg sm:text-xl font-heading font-bold gradient-text-animated">1.2</p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--muted)]">GAS Tipped</p>
+                  <div style={{ textAlign: "center", padding: "10px 8px" }}>
+                    <div
+                      className="font-heading"
+                      style={{
+                        fontWeight: 900,
+                        fontSize: "18px",
+                        color: "#0891b2",
+                      }}
+                    >
+                      1.2
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "9px",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.1em",
+                        color: "var(--muted)",
+                      }}
+                    >
+                      GAS Tipped
+                    </div>
                   </div>
                 </div>
 
-                {/* Link buttons */}
-                <div className="flex flex-col gap-2 group/links relative">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 hidden group-hover/links:flex items-center gap-1 rounded-full py-1 px-2.5 text-[10px] font-semibold text-white z-10 shadow-lg whitespace-nowrap" style={{ background: 'linear-gradient(135deg, #0891b2, #8b5cf6)' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                    Links
-                  </div>
-                  {previewLinks.map((link) => {
-                    const platform = getPlatform(link.platformId);
-                    return (
+                {/* Links */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {([
+                    {
+                      label: "My Portfolio", color: "#0891b2",
+                      icon: <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M2 12h20" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></svg>,
+                    },
+                    {
+                      label: "Twitter / X", color: "#8b5cf6",
+                      icon: <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>,
+                    },
+                    {
+                      label: "GitHub", color: "#333",
+                      icon: <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>,
+                    },
+                  ] as { label: string; color: string; icon: React.ReactNode }[]).map((link) => (
+                    <div
+                      key={link.label}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        padding: "8px 12px",
+                        border: "2px solid var(--foreground)",
+                        borderRadius: "10px",
+                        boxShadow: "3px 3px 0 var(--foreground)",
+                        background: "var(--card)",
+                      }}
+                    >
                       <div
-                        key={link.platformId}
-                        className={`flex items-center gap-3 p-2.5 rounded-2xl bg-[var(--card)] border border-[var(--card-border)] shadow-sm ${link.hoverBorder} hover:shadow-md transition-all cursor-default`}
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          borderRadius: "7px",
+                          background: `${link.color}18`,
+                          border: "2px solid var(--foreground)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: link.color,
+                          flexShrink: 0,
+                        }}
                       >
-                        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${link.bgClass} ${link.textClass} flex items-center justify-center`}>
-                          <span className="text-base sm:text-lg">{platform?.icon}</span>
-                        </div>
-                        <span className="font-bold text-[var(--foreground)] text-sm">{link.label}</span>
+                        {link.icon}
                       </div>
-                    );
-                  })}
+                      <span
+                        className="font-heading"
+                        style={{ fontWeight: 800, fontSize: "13px" }}
+                      >
+                        {link.label}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ── */}
+      <section style={{ padding: "64px 0 80px" }}>
+        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <div
+            className="font-heading"
+            style={{
+              fontSize: "11px",
+              fontWeight: 800,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+              marginBottom: "12px",
+            }}
+          >
+            How it works
+          </div>
+          <h2
+            className="font-heading"
+            style={{
+              fontSize: "clamp(32px, 4.5vw, 52px)",
+              fontWeight: 900,
+              letterSpacing: "-0.02em",
+              lineHeight: 1,
+              margin: 0,
+            }}
+          >
+            Three steps,{" "}
+            <em style={{ fontStyle: "italic", color: "#8b5cf6" }}>one link</em>.
+          </h2>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          {[
+            {
+              iconBg: "#0891b2",
+              step: "Step 01",
+              title: "Register .init",
+              desc: "Claim your unique .init username on Initia. It becomes the home of your on-chain identity and presence.",
+              rotate: "-1.2deg",
+              icon: (
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              ),
+            },
+            {
+              iconBg: "#8b5cf6",
+              step: "Step 02",
+              title: "Add Your Links",
+              desc: "Add all your socials, portfolio, and content in one place. Customise with themes.",
+              rotate: "0.4deg",
+              icon: (
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+                  <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z" />
+                </svg>
+              ),
+            },
+            {
+              iconBg: "#0891b2",
+              step: "Step 03",
+              title: "Earn GAS Tips",
+              desc: "Anyone can tip you directly in GAS tokens. On-chain, instant, no intermediaries needed.",
+              rotate: "1.4deg",
+              icon: (
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+                  <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
+                </svg>
+              ),
+            },
+          ].map((card) => (
+            <div
+              key={card.title}
+              className="fizz-card"
+              style={{ padding: "24px", transform: `rotate(${card.rotate})` }}
+            >
+              <div
+                style={{
+                  width: "52px",
+                  height: "52px",
+                  borderRadius: "14px",
+                  background: card.iconBg,
+                  border: "2px solid var(--foreground)",
+                  boxShadow: "4px 4px 0 var(--foreground)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                {card.icon}
+              </div>
+              <div
+                className="font-heading"
+                style={{
+                  fontStyle: "italic",
+                  fontWeight: 700,
+                  fontSize: "11px",
+                  color: "var(--muted)",
+                  marginBottom: "4px",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                {card.step}
+              </div>
+              <h3
+                className="font-heading"
+                style={{
+                  fontWeight: 900,
+                  fontSize: "20px",
+                  letterSpacing: "-0.015em",
+                  margin: "0 0 10px",
+                }}
+              >
+                {card.title}
+              </h3>
+              <p
+                style={{
+                  fontSize: "13px",
+                  color: "var(--text-secondary)",
+                  lineHeight: 1.55,
+                  margin: 0,
+                }}
+              >
+                {card.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CTA CARD ── */}
+      <section style={{ paddingBottom: "64px" }}>
+        <div
+          className="fizz-card"
+          style={{
+            padding: "64px 40px",
+            textAlign: "center",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Decorative orbs */}
+          <div
+            style={{
+              position: "absolute",
+              top: "-60px",
+              left: "-60px",
+              width: "180px",
+              height: "180px",
+              borderRadius: "50%",
+              background: "#0891b2",
+              opacity: 0.1,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "-50px",
+              right: "-50px",
+              width: "160px",
+              height: "160px",
+              borderRadius: "50%",
+              background: "#8b5cf6",
+              opacity: 0.12,
+            }}
+          />
+
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <div
+              className="font-heading"
+              style={{
+                fontSize: "11px",
+                fontWeight: 800,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--muted)",
+                marginBottom: "14px",
+              }}
+            >
+              Get started today
+            </div>
+            <h2
+              className="font-heading"
+              style={{
+                fontSize: "clamp(32px, 4.5vw, 60px)",
+                fontWeight: 900,
+                lineHeight: 0.96,
+                letterSpacing: "-0.025em",
+                margin: "0 0 28px",
+              }}
+            >
+              Bring your{" "}
+              <em style={{ fontStyle: "italic", color: "#0891b2" }}>
+                identity
+              </em>
+              <br />
+              on-chain.
+            </h2>
+            <a
+              href="/edit"
+              className="btn-fizz btn-fizz-primary"
+              style={{ fontSize: "17px", padding: "18px 32px" }}
+            >
+              Create Your Profile
+            </a>
           </div>
         </div>
       </section>

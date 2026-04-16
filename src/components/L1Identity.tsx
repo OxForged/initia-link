@@ -47,7 +47,7 @@ export default function L1IdentityCard({ initAddress, variant = "default" }: Pro
     }
     return (
       <div className="animate-fade-in-up delay-5 mb-6">
-        <div className="bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-4">
+        <div className="bg-[var(--card)] rounded-2xl p-4" style={{ border: '2px solid var(--foreground)', boxShadow: '4px 4px 0 var(--foreground)' }}>
           <div className="skeleton h-4 w-32 mb-3 rounded" />
           <div className="grid grid-cols-3 gap-3">
             <div className="skeleton h-12 rounded-xl" />
@@ -76,17 +76,26 @@ export default function L1IdentityCard({ initAddress, variant = "default" }: Pro
           <span className="text-[9px] text-[var(--muted)] bg-[var(--background)] px-1.5 py-0.5 rounded" style={{ lineHeight: 1 }}>Cross-Rollup</span>
         </div>
         <div className="flex gap-2">
-          <div className="l1-chip c1 flex-1">
-            <div className="l1-chip-value font-heading text-[#0891b2]">{formatInit(data.initBalance)}</div>
-            <div className="l1-chip-label">INIT</div>
+          <div
+            className="flex-1 text-center"
+            style={{ padding: '8px 6px', border: '2px solid var(--foreground)', borderRadius: '10px', boxShadow: '3px 3px 0 var(--foreground)', background: 'rgba(8,145,178,0.04)' }}
+          >
+            <div className="font-heading" style={{ fontSize: '15px', fontWeight: 900, color: '#0891b2' }}>{formatInit(data.initBalance)}</div>
+            <div className="font-heading" style={{ fontSize: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)' }}>INIT</div>
           </div>
-          <div className="l1-chip c2 flex-1">
-            <div className="l1-chip-value font-heading text-[#6366f1]">{formatInit(data.totalStaked)}</div>
-            <div className="l1-chip-label">Staked</div>
+          <div
+            className="flex-1 text-center"
+            style={{ padding: '8px 6px', border: '2px solid var(--foreground)', borderRadius: '10px', boxShadow: '3px 3px 0 var(--foreground)', background: 'rgba(99,102,241,0.04)' }}
+          >
+            <div className="font-heading" style={{ fontSize: '15px', fontWeight: 900, color: '#6366f1' }}>{formatInit(data.totalStaked)}</div>
+            <div className="font-heading" style={{ fontSize: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)' }}>Staked</div>
           </div>
-          <div className="l1-chip c3 flex-1">
-            <div className="l1-chip-value font-heading text-[#8b5cf6]">{data.validatorCount}</div>
-            <div className="l1-chip-label">Validators</div>
+          <div
+            className="flex-1 text-center"
+            style={{ padding: '8px 6px', border: '2px solid var(--foreground)', borderRadius: '10px', boxShadow: '3px 3px 0 var(--foreground)', background: 'rgba(139,92,246,0.04)' }}
+          >
+            <div className="font-heading" style={{ fontSize: '15px', fontWeight: 900, color: '#8b5cf6' }}>{data.validatorCount}</div>
+            <div className="font-heading" style={{ fontSize: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)' }}>Validators</div>
           </div>
         </div>
       </div>
@@ -95,7 +104,7 @@ export default function L1IdentityCard({ initAddress, variant = "default" }: Pro
 
   return (
     <div className="animate-fade-in-up delay-5 mb-6">
-      <div className="bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-4 hover-pop">
+      <div className="bg-[var(--card)] rounded-2xl p-4" style={{ border: '2px solid var(--foreground)', boxShadow: '4px 4px 0 var(--foreground)' }}>
         <div className="flex items-center gap-2 mb-3">
           <div className="w-5 h-5 rounded-full gradient-accent flex items-center justify-center">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
