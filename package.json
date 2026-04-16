@@ -16,6 +16,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@initia/icons-react": "^2.1.0",
     "@initia/initia.js": "^1.0.21",
     "@initia/interwovenkit-react": "^2.5.1",
     "@tailwindcss/postcss": "^4.2.2",
