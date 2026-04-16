@@ -425,8 +425,7 @@ export default function EditProfileForm({ existingProfile, onSaved }: Props) {
                   <div
                     key={i}
                     className="animate-fade-in-up bg-[var(--surface)] rounded-xl p-3"
-                    style={{ border: '2px solid var(--foreground)', boxShadow: '3px 3px 0 var(--foreground)' }}
-                    style={{ animationDelay: `${i * 40}ms` }}
+                    style={{ border: '2px solid var(--foreground)', boxShadow: '3px 3px 0 var(--foreground)', animationDelay: `${i * 40}ms` }}
                   >
                     {/* Top row: icon + label + delete */}
                     <div className="flex items-center gap-2">
