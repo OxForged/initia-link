@@ -8,7 +8,6 @@ tsconfig.tsbuildinfo
 # Environment & secrets
 .env
 *.pem
-id_ed25519
 
 # Move build artifacts
 contracts/move/profile_registry/build/
