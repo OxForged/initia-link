@@ -1,7 +1,7 @@
 {
   "project_name": "initiaLink",
   "repo_url": "https://github.com/jordi-stack/initia-link",
-  "commit_sha": "887683aa716ae23bd50b0dd5e73def6777c1ef94",
+  "commit_sha": "f8d6e4d0fa5e86bfa50e44e21ca17cbd244b81aa",
   "rollup_chain_id": "initialink-1",
   "deployed_address": "0xE6638AB1AD3530282D4FA9E13D5BC1189EC6125D",
   "vm": "move",
