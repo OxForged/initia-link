@@ -10,6 +10,28 @@ Link-in-bio, but on-chain. Your `.init` username is your profile URL.
 
 **Repo:** [github.com/jordi-stack/initia-link](https://github.com/jordi-stack/initia-link)
 
+## Initia Hackathon Submission
+
+- **Project Name**: initiaLink
+
+### Project Overview
+
+initiaLink is an on-chain link-in-bio platform where your `.init` username is your profile URL. It replaces centralized link aggregators (Linktree, Beacons) for crypto-native creators by storing profiles, the follow graph, tip history, and themes in a single Move module on a dedicated MiniMove appchain. Visitors can tip in native GAS and follow creators directly from their wallet, with zero platform cut and no off-chain database.
+
+### Implementation Detail
+
+- **The Custom Implementation**: Single Move module (`profile_registry`) that owns profiles, a composite-key follow graph, on-chain tip records, and themes (12 presets + custom color picker encoded inside the bio field, so no contract changes are needed to add more). The frontend pairs this with a cross-rollup identity card that reads INIT balance and `mstaking` delegations from initia L1 REST, a guided 4-step onboarding stepper (connect wallet, get GAS, register `.init`, create profile), a two-column edit page with sticky live preview, dynamic Open Graph images per profile, and a discover feed with username search and sort-by-followers/tips.
+- **The Native Feature**: `initia-usernames`. The `.init` username is the URL itself (`initia-link.vercel.app/alice.init`), with no separate domain or ENS record to configure. Both forward resolution (`get_address_from_name`) and reverse resolution (`get_name_from_address`) are called on the L1 `usernames` Move module via BCS-encoded view functions, so even raw hex addresses in the discover feed and dashboard render as the `.init` name creators' communities already recognize.
+
+### How to Run Locally
+
+1. `git clone https://github.com/jordi-stack/initia-link.git && cd initia-link && npm install`
+2. `cp .env.example .env` (preconfigured to point at the live initiaLink appchain at `38.49.213.194`, so no local node is required)
+3. `npm run dev` and open `http://localhost:3000`
+4. Connect your wallet through InterwovenKit; the onboarding stepper will request GAS from the in-app faucet, help you register a `.init` username, and create your first profile
+
+For a full local appchain + deploy from scratch, see [Full setup from scratch](#full-setup-from-scratch) further down.
+
 ## What is this
 
 initiaLink lets you create a profile page tied to your initia username. Add your links and bio, set an avatar. Other users can tip you (native tokens, no platform cut) and follow you. One Move module stores everything, no backend, no database.
